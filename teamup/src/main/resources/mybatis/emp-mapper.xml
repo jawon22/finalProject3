@@ -2,15 +2,41 @@
 <!DOCTYPE mapper
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-    
-    <mapper namespace="emp">
-    <insert id="addEmp">
-    
-  		insert into emp(com_id,dept_no,emp_no,emp_name,emp_pw,emp_tel,emp_position_no) 
+
+<mapper namespace="emp">
+	<insert id="addEmp">
+
+		insert into
+		emp(com_id,dept_no,emp_no,emp_name,emp_pw,emp_tel,emp_position_no)
 		values(#{comId},#{deptNo},emp_seq.nextval,#{empName},#{empPw},#{empTel},#{empPositionNo})
-    
-    </insert>
-    
-    
-    
-    </mapper>
+
+	</insert>
+
+	<update id="updateEmpId">
+		update emp set emp_id= to_char((select emp_join from
+		emp where
+		emp_no=#{empNo}),'YYYY')||
+		to_char((select dept_no from emp
+		where emp_no=#{empNo}),'fm00') ||
+		to_char((select emp_no from emp where
+		emp_no=#{empNo}),'fm000') where emp_no=#{empNo}
+
+	</update>
+
+	<!-- 이게 전체리스트 -->
+	<select id="empList" resultType="EmpDto">
+		select * from emp
+
+	</select>
+
+	<delete id="deleteEmp">
+		delete from emp where emp_no =#{empNo}
+	</delete>
+
+	<!-- 사원 복합수정 -->
+	<update id="empInfoUpdate">
+		update emp set emp_exit = sysdate where emp_no = #{empNo}
+	</update>
+
+
+</mapper>
