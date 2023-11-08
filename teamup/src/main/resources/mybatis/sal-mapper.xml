@@ -7,8 +7,10 @@
     <mapper namespace="sal">
     
     	<insert id="add">
-    		insert into sal(emp_no, sal_annual)
-    		values(#{empNo}, #{salAnnual} )
+    		<![CDATA[
+    		insert into sal(emp_no, sal_annual, sal_time)
+    		values(#{empNo}, #{salAnnual}, trunc(#{salAnnual} / (12*4*40)) )
+    		 ]]>
     	</insert>
     	
     	<select id="list" resultType="SalDto">
