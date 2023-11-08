@@ -2,9 +2,16 @@
 <!DOCTYPE mapper
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
     <mapper namespace="com">
+    
     <insert id="addCom">
     insert into com(com_id,com_pw,com_name,com_post,com_addr,com_tel,com_bs,com_region,com_email) 
 		values(#{comId},#{comPw},#{comName},#{comPost},#{comAddr},#{comTel},#{comBs},#{comRegion},#{comEmail})
     </insert>
+    
+    <insert id="comImage">
+    	insert into image(com_id, attach_no) values(#{comId}, #{attachNo})
+    </insert>
+    
     </mapper>
