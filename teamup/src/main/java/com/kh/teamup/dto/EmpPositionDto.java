@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 public class EmpPositionDto {
 	
 	private int empPositionNo;
+	private String comId;
 	private String empPositionName;
 	private int empPositionOrder;
 

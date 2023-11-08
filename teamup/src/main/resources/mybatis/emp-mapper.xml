@@ -35,10 +35,32 @@
 
 	<!-- 사원 복합수정 -->
 	<update id="empInfoUpdate">
-		update emp set emp_exit = sysdate where emp_no = #{empNo}
+		update emp
+		<set>
+			<if test="empDto.empExit != null">
+				emp_exit = sysdate
+			</if>
+			<if test="empDto.empName != null">
+				emp_name = #{empDto.empName}
+			</if>
+			<if test="empDto.empPw != null">
+				emp_pw = #{empDto.empPw}
+			</if>
+			<if test="empDto.deptNo > 0">
+				dept_no = #{empDto.deptNo}
+			</if>
+			<if test="empDto.empTel != null">
+				emp_tel = #{empDto.empTel}
+			</if>
+			<if test="empDto.empPositionNo > 0">
+				emp_position_no = #{empDto.empPositionNo}
+			</if>
+
+		</set>
+		where emp_no = #{empNo}
 	</update>
-	
-	
+
+
 
 
 </mapper>
