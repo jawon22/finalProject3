@@ -16,5 +16,5 @@ public class EmpDto {
 	private String empTel;
 	private String empJoin;
 	private String empExit;
-	private String empPositionNo;
+	private int empPositionNo;
 }
