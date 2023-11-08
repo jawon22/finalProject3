@@ -19,5 +19,14 @@ public class ApproveDaoImpl implements ApproveDao{
 		return sqlSession.selectList("approve.list");
 	}
 	
+	@Override
+	public void insert(ApproveDto approveDto) { 
+		sqlSession.insert("approve.save",approveDto);
+	}
+	
+	@Override
+	public boolean delete(int empNo) {
+		return sqlSession.delete("approve.cancel",empNo)>0;
+	}
 	
 }

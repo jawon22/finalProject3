@@ -14,6 +14,6 @@ public class ApproveDto {
 	private int deptNo;
 	private String apprTitle, apprContent;
 	private Date apprDate;
-	private int annualNo;
+	private String apprDivision;
 	private int apprReceiver;
 }
