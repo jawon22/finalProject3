@@ -37,6 +37,8 @@
 	<update id="empInfoUpdate">
 		update emp set emp_exit = sysdate where emp_no = #{empNo}
 	</update>
+	
+	
 
 
 </mapper>
