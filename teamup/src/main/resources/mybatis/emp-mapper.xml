@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+    <mapper namespace="emp">
+    <insert id="addEmp">
+    
+  		insert into emp(com_id,dept_no,emp_no,emp_name,emp_pw,emp_tel,emp_position_no) 
+		values(#{comId},#{deptNo},emp_seq.nextval,#{empName},#{empPw},#{empTel},#{empPositionNo})
+    
+    </insert>
+    
+    
+    
+    </mapper>
