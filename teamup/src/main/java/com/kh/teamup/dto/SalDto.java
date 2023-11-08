@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 public class SalDto {
 		private int empNo;
 		private float salAnnual;
-		private float salDaily;
+		private float salTime;
 }

@@ -16,7 +16,28 @@
     	</select>
     	
     	<select id="find" resultType="SalDto">
-    		select * from sal where emp_no = #{emp_no}
+    		select * from sal where emp_no = #{empNo}
     	</select>
     	
+    	<update id="change">
+    		update sal 
+    		set
+    		<if test="salDto.empNo > 0">
+    			emp_no=#{salDto.empNo}
+    		</if>
+    		sal_annual=#{salDto.salAnnual}, sal_time=#{salDto.salTime}
+    		where emp_no=#{empNo}
+    	</update>
+    	
     </mapper>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
