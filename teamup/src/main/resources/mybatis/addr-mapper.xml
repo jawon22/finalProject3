@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="addr">
+
+	<insert id="addAddr">
+		insert into addr(addr_no,my_emp_no,add_emp_no)
+		values(addr_seq.nextval,#{myEmpNo},#{addEmpNo})
+	</insert>
+
+
+	<delete id="deleteAddr">
+		delete from addr where add_emp_no=#{addEmpNo}
+	</delete>
+
+
+
+	<select id="myAddrList" resultType="AddrDto">
+		SELECT
+		e.EMP_POSITION_NO,
+		ep.EMP_POSITION_NAME,
+		e.EMP_NAME
+		FROM
+		addr ad
+		inner JOIN emp e ON
+		e.EMP_NO = ad.ADD_EMP_NO
+		inner JOIN EMP_POSITION ep ON
+		e.EMP_POSITION_NO = ep.EMP_POSITION_NO
+		where MY_EMP_NO=#{myEmpNo} order by ep.EMP_POSITION_ORDER
+	</select>
+	
+<!-- 그냥 전체 조회 -->
+	<select id="list" resultType="AddrDto">
+	select * from addr where MY_EMP_NO=#{myEmpNo}
+	</select>
+
+</mapper>
