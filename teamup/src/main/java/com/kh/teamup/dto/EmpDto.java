@@ -17,4 +17,5 @@ public class EmpDto {
 	private String empJoin;
 	private String empExit;
 	private int empPositionNo;
+	private String empEmail;
 }

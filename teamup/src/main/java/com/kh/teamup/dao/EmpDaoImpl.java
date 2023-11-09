@@ -7,6 +7,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.kh.teamup.VO.EmpComplexSearchVO;
 import com.kh.teamup.dto.EmpDto;
 @Repository
 public class EmpDaoImpl implements EmpDao {
@@ -46,6 +47,13 @@ public class EmpDaoImpl implements EmpDao {
 		Map<String, Object> params = Map.of("empNo",empNo ,"empDto",empDto);
 		//int result =sqlSession.update("emp.updateEmpId",params);
 		sqlSession.update("emp.empInfoUpdate",params);		
+	}
+	
+	
+	@Override
+	public List<EmpComplexSearchVO> complexSearch(EmpComplexSearchVO VO) {
+		
+		return sqlSession.selectList("emp.complexSearch",VO);
 	}
 	
 }

@@ -2,6 +2,7 @@ package com.kh.teamup.dao;
 
 import java.util.List;
 
+import com.kh.teamup.VO.EmpComplexSearchVO;
 import com.kh.teamup.dto.EmpDto;
 
 public interface EmpDao {
@@ -13,5 +14,6 @@ public interface EmpDao {
 	List<EmpDto> empList();
 	void deleteEmp(int empNo);
 	void empInfoUpdate(int empNo, EmpDto empDto);
+	List<EmpComplexSearchVO> complexSearch(EmpComplexSearchVO VO);
 
 }
