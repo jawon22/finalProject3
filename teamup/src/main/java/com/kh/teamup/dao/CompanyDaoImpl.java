@@ -1,5 +1,8 @@
 package com.kh.teamup.dao;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -18,8 +21,11 @@ public class CompanyDaoImpl implements CompanyDao{
 	}
 	
 	@Override
-	public void connect(String comId, int attachNo) {
-		sqlSession.insert("com.comImage", comId);
+	public void connectCom(String comId, int attachNo) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("comId", comId);
+		params.put("attachNo", attachNo);
+		sqlSession.insert("com.comImage", params);
 	}
 	
 }

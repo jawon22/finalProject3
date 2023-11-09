@@ -11,7 +11,7 @@
     </insert>
     
     <insert id="comImage">
-    	insert into image(com_id, attach_no) values(#{comId}, #{attachNo})
+    	insert into company_image(com_id, attach_no) values(#{comId}, #{attachNo})
     </insert>
     
     </mapper>
