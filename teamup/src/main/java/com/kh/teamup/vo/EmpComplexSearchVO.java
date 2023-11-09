@@ -1,4 +1,4 @@
-package com.kh.teamup.dto;
+package com.kh.teamup.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,16 +6,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor @AllArgsConstructor @Builder @Data
-public class EmpDto {
+public class EmpComplexSearchVO {
 	private String comId;
-	private int deptNo;
-	private int empNo;
-	private String empName;
+	private String comName;
+	private int deptNo; 
+	private String deptName;
+	private String empPositionName;
+	private String empName; 
 	private String empId;
-	private String empPw;
 	private String empTel;
-	private String empJoin;
-	private String empExit;
-	private int empPositionNo;
 	private String empEmail;
 }
