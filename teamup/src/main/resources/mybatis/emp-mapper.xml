@@ -55,10 +55,62 @@
 			<if test="empDto.empPositionNo > 0">
 				emp_position_no = #{empDto.empPositionNo}
 			</if>
+			<if test="empDto.empEmail != null">
+				emp_email = #{empDto.empEmail}
+			</if>
 
 		</set>
 		where emp_no = #{empNo}
 	</update>
+
+
+	<select id="complexSearch" resultType="EmpComplexSearchVO">
+
+		select
+		e.COM_ID ,
+		c.com_name,
+		e.dept_no ,
+		d.dept_name,
+		ep.emp_position_name,
+		e.emp_no,
+		e.emp_id,
+		e.EMP_NAME ,
+		e.emp_tel,
+		e.emp_email
+		from
+		emp e
+		left outer join dept d on e.dept_no = d.dept_no
+		left outer join com c on e.com_id = c.com_id
+		left outer join
+		emp_position ep on e.emp_position_no = ep.emp_position_no
+		<where>
+			<if test="deptNo > 0">
+				d.dept_no = #{deptNo}
+			</if>
+
+			<if test="comId != null">
+				e.com_id = #{comId}
+			</if>
+
+			<if test="comName != null">
+				c.com_name = #{comName}
+			</if>
+		</where>
+
+
+
+	</select>
+
+
+	<select id="selectOne" resultType="empDto">
+
+		select * from emp where emp_id = #{empDto.empId}
+
+	</select>
+	
+	<select id="selectIdByNo" resultType="empDto">
+		select * from emp where emp_no = #{empNo}
+	</select>
 
 
 
