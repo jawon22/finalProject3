@@ -36,16 +36,17 @@ public class CompanyRestController {
 	private AttachDao attachDao;
 	
 	
-	@PostMapping("/")
-	public void addCom(@RequestBody CompanyDto companyDto) {
-		
-		companyDao.addCom(companyDto);
-		
-	}
+	//이미지 등록하면서 회사 정보 등록 같이 하니까 일단 주석 처리 했습니당~
+//	@PostMapping("/")
+//	public void addCom(@RequestBody CompanyDto companyDto) {
+//		
+//		companyDao.addCom(companyDto);
+//		
+//	}
 	
-	//회사이미지 등록
+	//회사 등록(+파일 업로드)
 	@PostMapping(value = "/image/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public void upload(@ModelAttribute CompanyImageVO vo) throws IllegalStateException, IOException {
+	public void addCom(@ModelAttribute CompanyImageVO vo) throws IllegalStateException, IOException {
 		log.debug("dto={}", vo);
 		
 		CompanyDto companyDto = vo.getCompanyDto();
@@ -72,5 +73,8 @@ public class CompanyRestController {
 		log.debug("attach={}", attach);
 		
 	} 
+	
+	//파일 다운로드
+	
 
 }
