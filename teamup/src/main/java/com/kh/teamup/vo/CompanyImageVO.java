@@ -1,6 +1,4 @@
-package com.kh.teamup.VO;
-
-import java.sql.Date;
+package com.kh.teamup.vo;
 
 import org.springframework.web.multipart.MultipartFile;
 

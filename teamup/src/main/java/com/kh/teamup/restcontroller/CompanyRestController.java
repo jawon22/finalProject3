@@ -22,11 +22,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.kh.teamup.VO.CompanyImageVO;
 import com.kh.teamup.dao.AttachDao;
 import com.kh.teamup.dao.CompanyDao;
 import com.kh.teamup.dto.AttachDto;
 import com.kh.teamup.dto.CompanyDto;
+import com.kh.teamup.vo.CompanyImageVO;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
