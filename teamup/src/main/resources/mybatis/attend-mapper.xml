@@ -7,24 +7,24 @@
 <mapper namespace="attend">
 	
 	<!-- C 등록 -->
+	<!-- 출근 버튼 눌렀을 때 -->
 	<insert id="save">
-		insert into attend(
-			emp_id, attend_no, attend_start, attend_end
-			) values(#{empId}, attend_seq.nextval, sysdate, null
-		)
+		insert into attend(emp_no, ATTEND_NO, ATTEND_START) values(#{empNo}, attend_seq.nextval, sysdate)
 	</insert>
-	
-	<!-- R 목록, 상세 -->
-	<!-- 사번별로 근태 조회 -->
-	<select id ="findByEmpId" resultType="AttendDto">
-		select * from attend where emp_id = #{empId} 
-		order by attend_no desc
-	</select>
 	
 	<!-- U 수정 -->
 	<!-- 퇴근 버튼 눌렀을 때 -->
 	<update id="update">
-		update attend set attend_end = sysdate where emp_id = #{empId}
+		update attend set attend_end = sysdate where emp_no = #{empNo}
 	</update>
+	
+	<!-- R 목록, 상세 -->
+	<!-- 출근전, 출근중, 퇴근완료 -->	
+	
+		
+	<!-- 사번별로 근태 조회 -->
+	
+	
+	
 	
 </mapper>

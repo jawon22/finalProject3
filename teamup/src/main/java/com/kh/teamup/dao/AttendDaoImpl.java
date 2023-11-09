@@ -2,7 +2,6 @@ package com.kh.teamup.dao;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,19 +14,16 @@ public class AttendDaoImpl implements AttendDao {
 
 	@Autowired SqlSession sqlSession;
 
-	@Override
-	public List<AttendDto> selectListByEmpId(int empId) {
-		return sqlSession.selectList("attend.findByEmpId");
-	}
-
+	//출근
 	@Override
 	public void insert(AttendDto attendDto) {
 		sqlSession.insert("attend.save", attendDto);
 	}
-
+	
+	//퇴근
 	@Override
-	public void update(int attendNo, AttendDto attendDto) {
-		Map<String, Object> param = Map.of("attendNo", attendNo, "attendDto", attendDto);
+	public void update(int empNo, AttendDto attendDto) {
+		Map<String, Object> param = Map.of("empNo", empNo, "attendDto", attendDto);
 		sqlSession.update("attend.update", param);
 	}
 	
