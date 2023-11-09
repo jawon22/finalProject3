@@ -6,21 +6,29 @@
     
 <mapper namespace="approve">
 	
-	<select id="list" resultType="ApproveDto">
+	<select id="sequence" resultType="int">
+		select appr_seq.nextval from dual
+	</select>
+	
+	<select id="find" resultType="ApproveDto">
+		select * from appr where appr_no = #{apprNo}
+	</select>
+	
+	<select id="approveList" resultType="ApproveDto">
 		select * from appr order by appr_date desc
 	</select>
 	
-	<delete id="cancel">
+	<delete id="approveCancel">
 		delete appr where appr_no in(
 			select a.appr_no from appr a 
 		join appr_path ap on a.appr_no = ap.appr_no where ap.path_status ='R'
-		) and appr_sender = #{empNo}
+		) and a.appr_sender = #{empNo} and a.appr_no = #{apprNo}
 	</delete>
 	
-	<insert id="save">
+	<insert id="approveSave">
 		insert into appr(appr_no, appr_sender, dept_no, appr_title, appr_content, appr_date, 
-			appr_division, appr_receiver) values(appr_seq.nextval, #{apprSender}, #{deptNo},
-			#{apprTitle}, #{apprContent}, sysdate, #{apprDivision}, #{apprReceiver})
+			appr_division) values(#{apprNo}, #{apprSender}, #{deptNo},
+			#{apprTitle}, #{apprContent}, sysdate, #{apprDivision})
 	</insert>
 
 <!-- 	<update id="edit"> -->

@@ -15,5 +15,4 @@ public class ApproveDto {
 	private String apprTitle, apprContent;
 	private Date apprDate;
 	private String apprDivision;
-	private int apprReceiver;
 }
