@@ -69,7 +69,10 @@ public class ApproveRestController { //결재 테이블
 		approvePathDao.insert(approvePathDto);
 		
 		// 승인자에 결재선 번호 설정 후 ReceiversDto 꺼낸 뒤 등록
-		approveInputVO.getReceiversDto().setPathNo(approvePathDto.getApprPathNo());
+		// 결재자가 추가될때마다 (결재자 수 + 참조자 수)만큼 인서트 반복 -> 결재자는 프론트에서 직원아이디 값을 받아와 수를 세야할듯?
+		approveInputVO.getReceiversDto().setPathNo(approvePathDto.getApprPathNo()); //승인자테이블에 결재선번호를 설정
+		
+//		List<Integer> receiver = 
 		ReceiversDto receiversDto = approveInputVO.getReceiversDto();
 		receiversDao.insert(receiversDto);
 		
