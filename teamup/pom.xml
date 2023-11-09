@@ -106,6 +106,13 @@
 			<optional>true</optional>
 		</dependency>
 		
+			<!-- 파일 자동화 도구 -->
+		<dependency>
+    		<groupId>commons-io</groupId>
+    		<artifactId>commons-io</artifactId>
+    		<version>2.13.0</version>
+		</dependency>
+		
 	</dependencies>
 
 	<build>

@@ -14,4 +14,11 @@
     	insert into company_image(com_id, attach_no) values(#{comId}, #{attachNo})
     </insert>
     
+    <select id="findImage" resultType="attachDto">
+    	select * from attach where attach_no=(
+    		select attach_no from company_image 
+    		where com_id = #{comId}
+    	)
+    </select>
+    
     </mapper>
