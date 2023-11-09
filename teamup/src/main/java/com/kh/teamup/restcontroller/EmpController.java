@@ -8,6 +8,9 @@ import java.util.Scanner;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -27,7 +30,6 @@ import com.kh.teamup.dao.EmpDao;
 import com.kh.teamup.dto.EmpDto;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 @Tag(name = "사원 관리" ,description = "사원 CRUD") 
@@ -82,6 +84,20 @@ public class EmpController {
 		}
 		
 		scanner.close();
+		
+		String text = buffer.toString();
+		log.debug(text);
+		Document doc = Jsoup.parse(text);
+		
+		Element who = (Element) doc.getElementById("who");
+		who.text(findDto.getEmpName());
+		
+		Element link = doc.getElementById("link");
+		link.attr("href", "#");
+		
+		
+		helper.setText(doc.toString(),true);
+		sender.send(messege);
 		
 		
 	}
