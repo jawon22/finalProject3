@@ -1,4 +1,4 @@
-package com.kh.teamup.VO;
+package com.kh.teamup.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

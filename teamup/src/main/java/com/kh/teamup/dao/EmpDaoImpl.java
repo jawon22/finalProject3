@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 
-import com.kh.teamup.VO.EmpComplexSearchVO;
 import com.kh.teamup.dto.EmpDto;
+import com.kh.teamup.vo.EmpComplexSearchVO;
 @Repository
 public class EmpDaoImpl implements EmpDao {
 	@Autowired

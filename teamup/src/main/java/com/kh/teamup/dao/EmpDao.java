@@ -2,8 +2,8 @@ package com.kh.teamup.dao;
 
 import java.util.List;
 
-import com.kh.teamup.VO.EmpComplexSearchVO;
 import com.kh.teamup.dto.EmpDto;
+import com.kh.teamup.vo.EmpComplexSearchVO;
 
 public interface EmpDao {
 	
