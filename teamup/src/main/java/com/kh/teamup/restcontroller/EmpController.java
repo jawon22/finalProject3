@@ -56,6 +56,8 @@ public class EmpController {
 	@PatchMapping("/{empNo}")
 	public void updateEmpId(@RequestBody EmpDto empDto,@PathVariable int empNo) throws MessagingException, IOException {
 		//사번 생성이루 select 로 사번을 찾고 있으면 메세지 전송한다.
+		//보내기 전에 pw를 랜덤으로 설정
+		//로그인시에 secure
 		empDao.updateEmpId(empNo, empDto);
 		
 		EmpDto findDto = empDao.selectIdByNo(empNo);
