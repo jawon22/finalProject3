@@ -23,7 +23,7 @@ public class SalListRestController {
 	@Autowired
 	private SalDao salDao;
 	
-	@Autowired//추가
+	@Autowired//추가 추가
 	private TaxDao taxDao;
 	
 	
