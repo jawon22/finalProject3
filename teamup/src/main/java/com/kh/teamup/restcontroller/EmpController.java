@@ -109,18 +109,23 @@ public class EmpController {
 		while(scanner.hasNextLine()) {
 			buffer.append(scanner.nextLine());
 		}
-		
 		scanner.close();
 		
 		String text = buffer.toString();
 		log.debug(text);
 		Document doc = Jsoup.parse(text);
 		
-		Element who = (Element) doc.getElementById("who");
+		Element who = doc.getElementById("who");
 		who.text(findDto.getEmpName());
 		
+		Element id = doc.getElementById("id");
+		id.text(findDto.getEmpName());
+		
+		Element pw = doc.getElementById("pw");
+		pw.text(tempPw);
+		
 		Element link = doc.getElementById("link");
-		link.attr("href", "#");
+		link.attr("href", "#");//링크는 병경하면 된다
 		
 		
 		helper.setText(doc.toString(),true);
