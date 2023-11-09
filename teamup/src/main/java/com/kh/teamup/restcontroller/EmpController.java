@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
+import java.util.UUID;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,9 +47,15 @@ public class EmpController {
 	@Autowired
 	private JavaMailSender sender;
 	
+	@Autowired
+	private BCryptPasswordEncoder encoder;
+	
+	
+	
 	@Operation(description = "사원 추가")
-	@PostMapping("/")
+	@PostMapping("/addEmp/")
 	public void addEmp(@RequestBody EmpDto empDto) {
+	
 		empDao.addEmp(empDto);
 		
 	}
@@ -62,9 +70,26 @@ public class EmpController {
 		
 		EmpDto findDto = empDao.selectIdByNo(empNo);
 		
+		//findDto의 비밀번호를 랜덤한 값으로 바꾸는 코드
+		
+		String tempPw=UUID.randomUUID().toString().replace("-", "");//-를 제거
+		tempPw = tempPw.substring(0,10);//tempPw를 앞에서부터 10자리 잘라줌
+		
+		log.debug("임시비번={}",tempPw);
+		
+		//여시서 임시비밀번호를 insert
+		
+		String convert =encoder.encode(tempPw);
+		log.debug("convert={}",convert);
+		empDto.setEmpPw(convert);//이거를 보내주고
+		empDao.empInfoUpdate(empNo, empDto);
+		
+		log.debug("dto={}",empDto);
+		
+		
 		log.debug("findDto={}", findDto);
 		
-		if(findDto == null) return;
+		if(findDto.getEmpEmail() == null) return;
 		
 		MimeMessage messege = sender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(messege,false,"UTF-8");
@@ -140,7 +165,7 @@ public class EmpController {
 		EmpDto findDto = empDao.selecOne(inputDto.getEmpId());
 		
 		
-		boolean isMach = inputDto.getEmpPw().equals(findDto.getEmpPw());
+		boolean isMach =encoder.matches(inputDto.getEmpPw(),findDto.getEmpPw()) ;
 		
 		//log.debug("??={}",isMach);
 		if(!isMach) return ;
