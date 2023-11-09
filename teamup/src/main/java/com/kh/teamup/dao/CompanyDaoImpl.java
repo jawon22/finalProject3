@@ -8,10 +8,18 @@ import com.kh.teamup.dto.CompanyDto;
 
 @Repository
 public class CompanyDaoImpl implements CompanyDao{
+	
 	@Autowired
 	private SqlSession sqlSession;
+	
 	@Override
 	public void addCom(CompanyDto companyDto) {
 		sqlSession.insert("com.addCom",companyDto);
 	}
+	
+	@Override
+	public void connect(String comId, int attachNo) {
+		sqlSession.insert("com.comImage", comId);
+	}
+	
 }

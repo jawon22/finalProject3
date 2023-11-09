@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+    <mapper namespace="attach">
+    
+    	<insert id="save">
+    		insert into attach(
+    			attach_no, attach_name, attach_size, attach_type, attach_time
+    		) values(
+    			attach_seq.nextval, #{attachName}, #{attachSize}, #{attachType}, #{attachTime}
+    		)
+    	</insert>
+    	
+    	<select id="find" resultType="AttachDto">
+    		select * from attach where attach_no=#{attachNo}
+    	</select>
+    	
+    	<delete id="remove">
+    		delete attach where attach_no=#{attachNo}
+    	</delete>
+    
+    </mapper>
