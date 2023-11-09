@@ -4,6 +4,9 @@ import com.kh.teamup.dto.AttachDto;
 
 public interface AttachDao {
 	
+	//어테치 시퀀스
+	int sequence();
+	
 	//이미지 업로드
 	void insert(AttachDto attachDto);
 	
