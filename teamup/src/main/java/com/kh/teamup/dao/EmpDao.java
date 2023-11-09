@@ -15,5 +15,9 @@ public interface EmpDao {
 	void deleteEmp(int empNo);
 	void empInfoUpdate(int empNo, EmpDto empDto);
 	List<EmpComplexSearchVO> complexSearch(EmpComplexSearchVO VO);
+	
+	
+	EmpDto selecOne(String empId);
+	EmpDto selectIdByNo(int empNo);
 
 }

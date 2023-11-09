@@ -56,4 +56,15 @@ public class EmpDaoImpl implements EmpDao {
 		return sqlSession.selectList("emp.complexSearch",VO);
 	}
 	
+	@Override
+	public EmpDto selecOne(String empId) {
+		return sqlSession.selectOne("emp.selectOne",empId);
+	}
+	
+	@Override
+	public EmpDto selectIdByNo(int empNo) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne("emp.selectIdByNo",empNo);
+	}
+	
 }

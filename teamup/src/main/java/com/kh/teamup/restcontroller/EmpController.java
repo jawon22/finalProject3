@@ -1,8 +1,17 @@
 package com.kh.teamup.restcontroller;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.Scanner;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,14 +29,19 @@ import com.kh.teamup.dto.EmpDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 @Tag(name = "사원 관리" ,description = "사원 CRUD") 
-
+@Slf4j
 @RestController
 @CrossOrigin
 @RequestMapping("/emp")
 public class EmpController {
 	@Autowired
 	private EmpDao empDao;
+	
+	
+	@Autowired
+	private JavaMailSender sender;
 	
 	@Operation(description = "사원 추가")
 	@PostMapping("/")
@@ -38,9 +52,37 @@ public class EmpController {
 	
 	@Operation(description = "사번 생성")
 	@PatchMapping("/{empNo}")
-	public void updateEmpId(@RequestBody EmpDto empDto,@PathVariable int empNo) {
-		
+	public void updateEmpId(@RequestBody EmpDto empDto,@PathVariable int empNo) throws MessagingException, IOException {
+		//사번 생성이루 select 로 사번을 찾고 있으면 메세지 전송한다.
 		empDao.updateEmpId(empNo, empDto);
+		
+		EmpDto findDto = empDao.selectIdByNo(empNo);
+		
+		log.debug("findDto={}", findDto);
+		
+		if(findDto == null) return;
+		
+		MimeMessage messege = sender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(messege,false,"UTF-8");
+		
+		helper.setTo(findDto.getEmpEmail());
+		helper.setSubject("임시비밀번호 생성");
+		
+		log.debug("email={}",findDto.getEmpEmail());
+		
+		ClassPathResource resource = new ClassPathResource("templates/email2.html");
+		
+		File targetFile = resource.getFile();
+		
+		Scanner scanner = new Scanner(targetFile);
+		StringBuffer buffer = new StringBuffer();
+		
+		while(scanner.hasNextLine()) {
+			buffer.append(scanner.nextLine());
+		}
+		
+		scanner.close();
+		
 		
 	}
 	@Operation(description = "전체 리스트")
@@ -67,6 +109,26 @@ public class EmpController {
 	@PostMapping("/comflexSearch/")
 	public List<EmpComplexSearchVO> complexSearch(@RequestBody EmpComplexSearchVO VO){
 		return empDao.complexSearch(VO);
+		
+	}
+	
+	////////////////////////////////////////////////////////////////////
+	
+	//true면 session에 저장
+	@Operation(description = "로그인")
+	@PostMapping("login/")
+	public void login(@RequestBody EmpDto inputDto) {
+		//아이디로 조회 
+		EmpDto findDto = empDao.selecOne(inputDto.getEmpId());
+		
+		
+		boolean isMach = inputDto.getEmpPw().equals(findDto.getEmpPw());
+		
+		//log.debug("??={}",isMach);
+		if(!isMach) return ;
+		
+		//isMatch면 session에 저장
+
 		
 	}
 
