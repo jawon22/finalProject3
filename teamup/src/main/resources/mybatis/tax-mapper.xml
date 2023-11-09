@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+    <mapper namespace="tax">
+    
+    	<insert id="add">
+    		insert into tax(tax_no, tax_name, tax_rate) values(tax_seq.nextval, #{taxName}, #{taxRate})
+    	</insert>
+    	
+    	<select id="list" resultType="TaxDto">
+    		select * from tax order by tax_no asc
+    	</select>
+    	
+    	<select id="find" resultType="TaxDto">
+    		select * from tax where tax_no = #{taxNo}
+    	</select>
+    	
+    	<select id="searchByTaxName" resultType="TaxDto">
+    		select * from tax where instr(tax_name, #{taxName} ) > 0
+    	</select>
+    	
+    	<update id="change">
+    		update tax set <if test="taxDto.taxNo > 0"> tax_no = #{taxDto.taxNo}</if>
+    		tax_name = #{taxDto.taxName}, tax_rate = #{taxDto.taxRate}
+    		where tax_no = #{taxNo}
+    	</update>
+    	
+    </mapper>
