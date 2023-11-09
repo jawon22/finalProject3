@@ -18,7 +18,7 @@ import com.kh.teamup.dto.SalDto;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-@Tag(name="급여 관리", description = "급여 정보 관리를 위한 controller")
+@Tag(name="급여 관리", description = "급여 CRU")
 @CrossOrigin
 @RestController
 @RequestMapping("/sal")
