@@ -4,14 +4,19 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
+import java.util.UUID;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +32,6 @@ import com.kh.teamup.dao.EmpDao;
 import com.kh.teamup.dto.EmpDto;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 @Tag(name = "사원 관리" ,description = "사원 CRUD") 
@@ -43,9 +47,15 @@ public class EmpController {
 	@Autowired
 	private JavaMailSender sender;
 	
+	@Autowired
+	private BCryptPasswordEncoder encoder;
+	
+	
+	
 	@Operation(description = "사원 추가")
-	@PostMapping("/")
+	@PostMapping("/addEmp/")
 	public void addEmp(@RequestBody EmpDto empDto) {
+	
 		empDao.addEmp(empDto);
 		
 	}
@@ -54,13 +64,32 @@ public class EmpController {
 	@PatchMapping("/{empNo}")
 	public void updateEmpId(@RequestBody EmpDto empDto,@PathVariable int empNo) throws MessagingException, IOException {
 		//사번 생성이루 select 로 사번을 찾고 있으면 메세지 전송한다.
+		//보내기 전에 pw를 랜덤으로 설정
+		//로그인시에 secure
 		empDao.updateEmpId(empNo, empDto);
 		
 		EmpDto findDto = empDao.selectIdByNo(empNo);
 		
+		//findDto의 비밀번호를 랜덤한 값으로 바꾸는 코드
+		
+		String tempPw=UUID.randomUUID().toString().replace("-", "");//-를 제거
+		tempPw = tempPw.substring(0,10);//tempPw를 앞에서부터 10자리 잘라줌
+		
+		log.debug("임시비번={}",tempPw);
+		
+		//여시서 임시비밀번호를 insert
+		
+		String convert =encoder.encode(tempPw);
+		log.debug("convert={}",convert);
+		empDto.setEmpPw(convert);//이거를 보내주고
+		empDao.empInfoUpdate(empNo, empDto);
+		
+		log.debug("dto={}",empDto);
+		
+		
 		log.debug("findDto={}", findDto);
 		
-		if(findDto == null) return;
+		if(findDto.getEmpEmail() == null) return;
 		
 		MimeMessage messege = sender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(messege,false,"UTF-8");
@@ -82,6 +111,20 @@ public class EmpController {
 		}
 		
 		scanner.close();
+		
+		String text = buffer.toString();
+		log.debug(text);
+		Document doc = Jsoup.parse(text);
+		
+		Element who = (Element) doc.getElementById("who");
+		who.text(findDto.getEmpName());
+		
+		Element link = doc.getElementById("link");
+		link.attr("href", "#");
+		
+		
+		helper.setText(doc.toString(),true);
+		sender.send(messege);
 		
 		
 	}
@@ -122,7 +165,7 @@ public class EmpController {
 		EmpDto findDto = empDao.selecOne(inputDto.getEmpId());
 		
 		
-		boolean isMach = inputDto.getEmpPw().equals(findDto.getEmpPw());
+		boolean isMach =encoder.matches(inputDto.getEmpPw(),findDto.getEmpPw()) ;
 		
 		//log.debug("??={}",isMach);
 		if(!isMach) return ;
