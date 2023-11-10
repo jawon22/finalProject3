@@ -16,15 +16,33 @@
 	<!-- 퇴근 버튼 눌렀을 때 -->
 	<update id="update">
 		update attend set attend_end = sysdate where emp_no = #{empNo}
+		and trunc(attend_start) = trunc(sysdate)
 	</update>
 	
 	<!-- R 목록, 상세 -->
-	<!-- 출근전, 출근중, 퇴근완료 -->	
-	
-		
-	<!-- 사번별로 근태 조회 -->
-	
-	
-	
-	
+	<!-- 사번별로 지정한 기간으로 날짜가 생성되고, 근무시간이 추가돼서 나오는 구문 -->
+	<select id="selectListByEmpNo" resultType="AttendWorkingTimesVO">
+		select
+    		tmp.dt,
+    		att.attend_no,
+    		att.emp_no,
+    		att.attend_start,
+    		att.attend_end,
+    		nvl((att.attend_end - att.attend_start) * 24, 0) as working_times
+		from (
+    		select
+        		trunc(to_date(#{attendBeginDate}, 'YYYY-MM-DD') + (level - 1)) as dt
+    		from dual
+    		<![CDATA[
+    			connect by level
+    			<= to_date(#{attendEndDate}, 'YYYY-MM-DD') - to_date(#{attendBeginDate}, 'YYYY-MM-DD') + 1
+    		]]>
+		) tmp
+		left join (
+    		select *
+    		from attend
+    		where emp_no = #{empNo}
+		) att on to_char(tmp.dt, 'YYYY-MM-DD') = to_char(att.attend_start, 'YYYY-MM-DD')
+		order by tmp.dt desc
+	</select>
 </mapper>
