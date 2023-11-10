@@ -5,8 +5,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,7 +52,7 @@ public class SalListRestController {
 		
 		int annualPay = (int) salDto.getSalAnnual();
 		int timePay = (int)salDto.getSalTime();//해당 사원의 통상시급 
-		int salMonth = timePay * 160;//통상 시급 * 한달근무시간 (근무시간은 갖고와야함)
+		int salMonth = timePay * 132;//통상 시급 * 한달근무시간 (근무시간은 갖고와야함)
 		
 		List<TaxDto> list = taxDao.selectList();
 		Map<String, Float> map = new HashMap<>();
@@ -76,7 +82,6 @@ public class SalListRestController {
 	    else {
 	        work = (int) (salMonth * map.get("소득세3") / 100);
 	    }
-	    log.debug("소득세={}",work);
 		
 		salListDto.setEmpNo(empNo);
 		salListDto.setSalListTotal(salMonth);
@@ -89,6 +94,29 @@ public class SalListRestController {
 		
 		salListDao.insert( salListDto);
 	}
+	
+	@Operation(description = "사원별 급여내역 목록")
+	@GetMapping("/{empNo}")
+	public SalListDto find(@PathVariable int empNo) {
+		return salListDao.selectOne(empNo);
+	}
+	
+	@Operation(description = "사원별 급여내역 상세")
+	@GetMapping("salListNo/{salListNo}")
+	public ResponseEntity<List<SalListDto>>findByEmpSalList(@PathVariable int salListNo){
+		List<SalListDto> salList = salListDao.findByEmpSalList(salListNo);
+		return !salList.isEmpty() ? ResponseEntity.ok(salList) : ResponseEntity.notFound().build();
+		}
+	
+	@Operation(description = "급여내역 삭제")
+	@DeleteMapping("/{empNo}")
+	public ResponseEntity<String> delete(@PathVariable int empNo){
+		return salListDao.delete(empNo) ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+	}
+	
+	
+	
+	
 	
 	
 	

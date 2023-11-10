@@ -5,10 +5,30 @@
     "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
     
     <mapper namespace="salList">
+    
     	<insert id="save">
     		insert into sal_list (sal_list_no, emp_no, sal_list_total, sal_list_health, sal_list_ltcare, sal_list_national,
     									sal_list_emp, sal_list_work, sal_list_local)
     						values( sal_list_seq.nextval, #{empNo}, #{salListTotal}, #{salListHealth},#{salListLtcare},
     									#{salListNational}, #{salListEmp}, #{salListWork}, #{salListLocal})
     	</insert>
+    	
+    	<!-- 사원의  급여 내역 목록 -->
+    	<select id="find" resultType="SalListDto">
+    		select * from sal_list where emp_no = #{empNo}
+    	</select>
+    	
+    	<!-- 사원의 급여 상세 조회 -->
+    	<select id="findByEmpSalList" resultType="SalListDto">
+    		select * from sal_list 
+    		where
+    			<if test="empNo != null">
+    				sal_list_no = #{salListNo}
+    			</if>
+    	</select>
+    	
+    	<delete id="remove">
+    		delete sal_list where emp_no = #{empNo}
+    	</delete>
+    	
     </mapper>
