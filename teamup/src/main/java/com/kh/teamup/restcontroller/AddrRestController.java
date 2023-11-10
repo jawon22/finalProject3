@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/addr")
 @CrossOrigin
 @Slf4j
-public class AddrController {
+public class AddrRestController {
 	@Autowired
 	private AddrDao addrDao;
 	

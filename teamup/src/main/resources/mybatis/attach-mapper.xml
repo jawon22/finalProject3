@@ -5,11 +5,15 @@
     
     <mapper namespace="attach">
     
+    	<select id="sequence" resultType="int">
+    		select attach_seq.nextval from dual
+    	</select>
+    
     	<insert id="save">
     		insert into attach(
-    			attach_no, attach_name, attach_size, attach_type, attach_time
+    			attach_no, attach_name, attach_size, attach_type
     		) values(
-    			attach_seq.nextval, #{attachName}, #{attachSize}, #{attachType}, #{attachTime}
+    			#{attachNo}, #{attachName}, #{attachSize}, #{attachType}
     		)
     	</insert>
     	
