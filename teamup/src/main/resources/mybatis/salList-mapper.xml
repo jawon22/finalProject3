@@ -6,6 +6,9 @@
     
     <mapper namespace="salList">
     	<insert id="save">
-    		
+    		insert into sal_list (sal_list_no, emp_no, sal_list_total, sal_list_health, sal_list_ltcare, sal_list_national,
+    									sal_list_emp, sal_list_work, sal_list_local)
+    						values( sal_list_seq.nextval, #{empNo}, #{salListTotal}, #{salListHealth},#{salListLtcare},
+    									#{salListNational}, #{salListEmp}, #{salListWork}, #{salListLocal})
     	</insert>
     </mapper>

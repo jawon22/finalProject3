@@ -35,6 +35,8 @@ public class SalListTest {
 	    
 	   
 	    log.debug( "salTime ={}",salDto.getSalTime());
+	    int annual = (int) salDto.getSalAnnual();
+	    log.debug("연봉 = {}", annual);
 	    
 	    int timePay =(int) salDto.getSalTime();
 	    
