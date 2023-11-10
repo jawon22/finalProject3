@@ -37,10 +37,17 @@ public class ProfileRestController {
 	//프로필 등록(+파일 업로드)
 	@PostMapping(value = "/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public void addProfile(@ModelAttribute ProfileImageVO vo) throws IllegalStateException, IOException {
-		log.debug("dto={}", vo);
+//		log.debug("dto={}", vo);
+		
+		int profileNo = profileDao.sequence();//profileNo를 가져옴
+//		log.debug("profileNo={}", profileNo);
+		
+		
 		
 		ProfileDto profileDto = vo.getProfileDto();
+		profileDto.setProfileNo(profileNo);
 		profileDao.addProfile(profileDto);
+		
 		
 		MultipartFile attach = vo.getAttach();
 		
@@ -58,9 +65,10 @@ public class ProfileRestController {
 		attachDto.setAttachSize(attach.getSize());
 		attachDto.setAttachType(attach.getContentType());
 		attachDao.insert(attachDto);
+		log.debug("attach={}", attachDto);
+		log.debug("f={}", profileDto);
 		
 		profileDao.connectProfile(profileDto.getProfileNo(), attachNo);
-		log.debug("attach={}", attach);
 	}
 
 }

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.teamup.dao.CompanyDao;
+import com.kh.teamup.dao.ProfileDao;
 import com.kh.teamup.dto.AttachDto;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -27,9 +28,12 @@ public class AttachRestController {
 	@Autowired
 	private CompanyDao companyDao;
 	
-	//파일 다운로드
-		@GetMapping("/image/{comId}")
-		public ResponseEntity<ByteArrayResource> download(@PathVariable String comId) throws IOException{
+	@Autowired
+	private ProfileDao profileDao;
+	
+	//프로필 파일 다운로드
+		@GetMapping("/image/company/{comId}")
+		public ResponseEntity<ByteArrayResource> downloadComImage(@PathVariable String comId) throws IOException{
 			
 			System.out.println("comId = " + comId);
 			AttachDto attachDto = companyDao.findImage(comId);
@@ -56,6 +60,39 @@ public class AttachRestController {
 							)
 					.contentType(MediaType.APPLICATION_OCTET_STREAM)
 					.body(resource);
-			
 		}
+		
+		
+		//프로필 파일 다운로드
+				@GetMapping("/image/profile/{profileNo}")
+				public ResponseEntity<ByteArrayResource> downloadProfileImage(@PathVariable int profileNo) throws IOException{
+					
+//					System.out.println("profileNo = " + profileNo);
+					AttachDto attachDto = profileDao.findImage(profileNo);
+//					System.out.println("attachDto = " + attachDto);
+					
+					String home = System.getProperty("user.home");
+					File dir = new File(home, "upload");
+					File target = new File(dir, String.valueOf(attachDto.getAttachNo()));
+					
+//					System.out.println("파일크기 = " + target.length());
+					
+					byte[] data = FileUtils.readFileToByteArray(target);//실제 파일 정보 불러오기
+//					System.out.println("파일크기2 = " + data.length);
+//					System.out.println("파일크기3 = " + attachDto.getAttachSize());
+					ByteArrayResource resource = new ByteArrayResource(data);
+					
+					return ResponseEntity.ok()
+							.header(HttpHeaders.CONTENT_ENCODING, StandardCharsets.UTF_8.name())
+							.contentLength(attachDto.getAttachSize())
+							.header(HttpHeaders.CONTENT_DISPOSITION, 
+									ContentDisposition.attachment()
+										.filename(attachDto.getAttachName(), StandardCharsets.UTF_8)
+										.build().toString()
+									)
+							.contentType(MediaType.APPLICATION_OCTET_STREAM)
+							.body(resource);
+				}
+		
+		
 }

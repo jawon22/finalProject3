@@ -18,10 +18,14 @@ public class ProfileImageVO {
 	@JsonIgnore
 	public ProfileDto getProfileDto() {
 		return ProfileDto.builder()
+//					.profileNo(profileNo)
+					.empNo(empNo)
 					.profileTitle(profileTitle)
 					.profileContent(profileContent)
 				.build();
 				
 	}
+
+
 	
 }

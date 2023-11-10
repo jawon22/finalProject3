@@ -12,4 +12,6 @@ public interface CompanyDao {
 	AttachDto findImage(String comId);//회사 이미지 화면에 출력
 
 	boolean update(CompanyImageVO companyImageVO);//회사+회사이미지 수정
+
+
 }

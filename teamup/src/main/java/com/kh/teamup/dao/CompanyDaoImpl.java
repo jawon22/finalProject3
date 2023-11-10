@@ -22,7 +22,7 @@ public class CompanyDaoImpl implements CompanyDao{
 		sqlSession.insert("com.addCom",companyDto);
 	}
 	
-	//회사와 회사이미지 연결
+	//회사와 이미지 연결
 	@Override
 	public void connectCom(String comId, int attachNo) {
 		Map<String, Object> params = new HashMap<>();
