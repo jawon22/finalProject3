@@ -17,7 +17,7 @@ public class EmpCalDto {
 	private String calTitle;
 	private String calContent;
 	private String calStatus;
-	
+	private String calColor;
 	
 
 }

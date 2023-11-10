@@ -8,5 +8,7 @@ public interface CalDao {
 	
 	List<EmpCalDto> empCalList(int empNo);
 	void insert(EmpCalDto empCalDto);
+	EmpCalDto selectOne(int calNo);
+	void updateCal(int calNo,EmpCalDto empCalDto);
 
 }
