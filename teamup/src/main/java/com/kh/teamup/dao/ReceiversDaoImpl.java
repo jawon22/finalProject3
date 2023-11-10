@@ -13,6 +13,11 @@ public class ReceiversDaoImpl implements ReceiversDao{
 	private SqlSession sqlSession;
 	
 	@Override
+	public int sequence() {
+		return sqlSession.selectOne("receivers.sequence");
+	}
+	
+	@Override
 	public void insert(ReceiversDto receiversDto) {
 		sqlSession.insert("receivers.receiversSave",receiversDto);
 	}
