@@ -3,23 +3,27 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
     
-    <mapper namespace="emp-profile">
+    <mapper namespace="emp_profile">
+    
+    	<select id="sequence" resultType="int">
+    		select emp_profile_seq.nextval from dual
+    	</select>
     
     	<insert id="addProfile">
     		insert into emp_profile(
     			profile_no, emp_no, profile_title, profile_content
     		) values(
-    			emp_profile_seq.nextval, #{empNo}, #{profileTitle}, #{profileContent}
+    			#{profileNo}, #{empNo}, #{profileTitle}, #{profileContent}
     		)
     	</insert>
     	
     	<insert id="profileImage">
-    		insert into profile_image(profile_no, attach_no) values(#{profileNo}, #{attahchNo})
+    		insert into profile_image(profile_no, attach_no) values(#{profileNo}, #{attachNo})
     	</insert>
     	
     	<select id="findImage" resultType="attachDto">
     		select * from attach where attach_no=(
-    			select atthch_no from profile_image 
+    			select attach_no from profile_image 
     			where profile_no = #{profileNo}
     		)
     	</select>
