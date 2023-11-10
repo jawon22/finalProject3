@@ -95,7 +95,11 @@ public class CompanyRestController {
 		File dir = new File(home, "upload");
 		File target = new File(dir, String.valueOf(attachDto.getAttachNo()));
 		
+//		System.out.println("파일크기 = " + target.length());
+		
 		byte[] data = FileUtils.readFileToByteArray(target);//실제 파일 정보 불러오기
+//		System.out.println("파일크기2 = " + data.length);
+//		System.out.println("파일크기3 = " + attachDto.getAttachSize());
 		ByteArrayResource resource = new ByteArrayResource(data);
 		
 		return ResponseEntity.ok()
@@ -106,6 +110,7 @@ public class CompanyRestController {
 							.filename(attachDto.getAttachName(), StandardCharsets.UTF_8)
 							.build().toString()
 						)
+				.contentType(MediaType.APPLICATION_OCTET_STREAM)
 				.body(resource);
 		
 	}
