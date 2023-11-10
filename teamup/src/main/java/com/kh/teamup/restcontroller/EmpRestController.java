@@ -39,7 +39,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @CrossOrigin
 @RequestMapping("/emp")
-public class EmpController {
+public class EmpRestController {
 	@Autowired
 	private EmpDao empDao;
 	

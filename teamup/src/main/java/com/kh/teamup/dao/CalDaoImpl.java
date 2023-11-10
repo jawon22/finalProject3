@@ -15,9 +15,11 @@ public class CalDaoImpl implements CalDao {
 	private SqlSession sqlSession;
 	
 	@Override
-	public List<EmpCalDto> empList(int empNo) {
-		
-		
-		return sqlSession.selectList("cal.empList",empNo);
+	public List<EmpCalDto> empCalList(int empNo) {
+		return sqlSession.selectList("empcal.empCalList",empNo);
+	}
+	@Override
+	public void insert(EmpCalDto empCalDto) {
+		sqlSession.insert("empcal.add", empCalDto);
 	}
 }

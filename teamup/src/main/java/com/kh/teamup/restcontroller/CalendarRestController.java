@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,39 +11,34 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kh.teamup.dao.AddrDao;
-import com.kh.teamup.dto.AddrDto;
+import com.kh.teamup.dao.CalDao;
+import com.kh.teamup.dto.EmpCalDto;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 
-@Tag(name = "주소록", description = "주소록 CRUD")
+@Tag(name = "캘린더" , description = "일정 CRUD")
 @RestController
-@RequestMapping("/addr")
 @CrossOrigin
+@RequestMapping("/cal_emp")
 @Slf4j
-public class AddrController {
+public class CalendarRestController {
 	@Autowired
-	private AddrDao addrDao;
+	private CalDao calDao;
+	
+	@GetMapping("/list/{empNo}")
+	public List<EmpCalDto> calList(@PathVariable int empNo){
+		return calDao.empCalList(empNo);
+		
+	}
 	
 	@PostMapping("/")
-	public void addrAddr(@RequestBody AddrDto addrDto) {
+	public void addcal(@RequestBody EmpCalDto empCalDto) {
 		
-		addrDao.addAddr(addrDto);
+		
+		log.debug("Dto={}", empCalDto);
+		calDao.insert(empCalDto);
 	}
 	
-	@DeleteMapping("/addr/{addEmpNo}")
-	public void deleteAddr(@PathVariable int addEmpNo) {
-		addrDao.deletAddr(addEmpNo);
-	}
-	
-	@GetMapping("/myAddrList/{myEmpNo}")
-	public List<AddrDto> myAddrList(@PathVariable int myEmpNo){
-		
-		return addrDao.myAddrList(myEmpNo);
-		
-		
-		
-	}
 
 }
