@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,6 +39,16 @@ public class CalendarRestController {
 		
 		log.debug("Dto={}", empCalDto);
 		calDao.insert(empCalDto);
+	}
+	
+	@PatchMapping("/updateCal/{calNo}")
+	public void updateCal(@PathVariable int calNo,@RequestBody EmpCalDto empCalDto) {
+		calDao.updateCal(calNo, empCalDto);
+	}
+	
+	@GetMapping("/detail/{calNo}")
+	public EmpCalDto detail(@PathVariable int calNo) {
+		return calDao.selectOne(calNo);
 	}
 	
 

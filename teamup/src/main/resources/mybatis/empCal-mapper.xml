@@ -10,13 +10,21 @@
 	</select>
 
 	<insert id="add">
-		insert into cal_emp(cal_no, emp_no, cal_title, cal_content,cal_start_date ,cal_end_date )
+		insert into cal_emp(cal_no, emp_no, cal_title, cal_content,cal_start_date ,cal_end_date , cal_color)
 		values
-		<if test="calEndDate != null">
-		(cal_no_seq.nextval, #{empNo}, #{calTitle}, #{calContent},#{calStartDate} ,#{calEndDate})
-		</if>
-		<if test="calEndDate==null">
-		(cal_no_seq.nextval, #{empNo}, #{calTitle}, #{calContent},#{calStartDate} ,null)
-		</if>
+		(cal_no_seq.nextval, #{empNo}, #{calTitle}, #{calContent},#{calStartDate} ,#{calEndDate},#{calColor})
 	</insert>
+	
+	<select id="empCalDetail" resultType="empCalDto">
+		select * from cal_emp where cal_no =#{calNo}
+	</select>
+	
+	<update id="update">
+		update cal_emp set cal_title=#{calTitle} where cal_no=#{calNo}
+	</update>
+	
+	<select id="calDetail" resultType="empCalDto">
+		select * from cal_emp where cal_no=#{calNo}
+	</select>
+	
 </mapper>
