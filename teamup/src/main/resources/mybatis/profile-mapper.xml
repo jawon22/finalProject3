@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+    <mapper namespace="emp-profile">
+    
+    	<insert id="addProfile">
+    		insert into emp_profile(
+    			profile_no, emp_no, profile_title, profile_content
+    		) values(
+    			emp_profile_seq.nextval, #{empNo}, #{profileTitle}, #{profileContent}
+    		)
+    	</insert>
+    	
+    	<insert id="profileImage">
+    		insert into profile_image(profile_no, attach_no) values(#{profileNo}, #{attahchNo})
+    	</insert>
+    	
+    	<select id="findImage" resultType="attachDto">
+    		select * from attach where attach_no=(
+    			select atthch_no from profile_image 
+    			where profile_no = #{profileNo}
+    		)
+    	</select>
+    	
+    	<update id="editProfile">
+    		update emp_profile 
+    		<set>
+    		<if test="profileDto.profileTitle != null">
+    			profile_title = #{profileDto.profileTitle},
+    		</if>
+    		<if test="profileDto.profileContent != null">
+    			profile_content = #{profileDto.profileContent}
+    		</if>
+    		</set>
+    		where profile_no = #{profileNo}
+    	</update>
+    	
+    </mapper>

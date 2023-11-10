@@ -46,7 +46,7 @@
 	    		com_region = #{companyDto.comRegion},
 	    	</if>
 	    	<if test="companyDto.comEmail != null">
-	    		com_Email = #{companyDto.comEmail},
+	    		com_Email = #{companyDto.comEmail}
 	    	</if>
     	</set>
     	where com_id = #{comId}
