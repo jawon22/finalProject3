@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,7 +42,7 @@ public class CalendarRestController {
 		calDao.insert(empCalDto);
 	}
 	
-	@PatchMapping("/updateCal/{calNo}")
+	@PutMapping("/updateCal/{calNo}")
 	public void updateCal(@PathVariable int calNo,@RequestBody EmpCalDto empCalDto) {
 		calDao.updateCal(calNo, empCalDto);
 	}
