@@ -1,6 +1,10 @@
 package com.kh.teamup.restcontroller;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.kh.teamup.dao.ApproveDao;
 import com.kh.teamup.dao.ApprovePathDao;
 import com.kh.teamup.dao.ReceiversDao;
+import com.kh.teamup.dao.ReferrersDao;
 import com.kh.teamup.dto.ApproveDto;
 import com.kh.teamup.dto.ApprovePathDto;
 import com.kh.teamup.dto.ReceiversDto;
+import com.kh.teamup.dto.ReferrersDto;
 import com.kh.teamup.vo.ApproveInputVO;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -33,13 +39,16 @@ import lombok.extern.slf4j.Slf4j;
 public class ApproveRestController { //결재 테이블
 
 	@Autowired
-	private ApproveDao approveDao; //결재Dao
+	private ApproveDao approveDao; //결재 Dao
 	
 	@Autowired
-	private ApprovePathDao approvePathDao; //결재선Dao
+	private ApprovePathDao approvePathDao; //결재선 Dao
 	
 	@Autowired
-	private ReceiversDao receiversDao; //승인자Dao
+	private ReceiversDao receiversDao; //승인자 Dao
+	
+	@Autowired
+	private ReferrersDao referrersDao; //참조자 Dao
 	
 	//조회
 	@GetMapping("/")
@@ -55,6 +64,8 @@ public class ApproveRestController { //결재 테이블
 		
 		int apprNo = approveDao.sequence(); //apprNo를 가져옴
 		int apprPathNo = approvePathDao.sequence();
+		int receiverNo = receiversDao.sequence();
+		int referrerNo = referrersDao.sequence();
 		
 		
 		approveInputVO.getApproveDto().setApprNo(apprNo); //결재에 시퀀스 설정
@@ -68,13 +79,37 @@ public class ApproveRestController { //결재 테이블
 		ApprovePathDto approvePathDto = approveInputVO.getApprovePathDto();
 		approvePathDao.insert(approvePathDto);
 		
-		// 승인자에 결재선 번호 설정 후 ReceiversDto 꺼낸 뒤 등록
-		// 결재자가 추가될때마다 (결재자 수 + 참조자 수)만큼 인서트 반복 -> 결재자는 프론트에서 직원아이디 값을 받아와 수를 세야할듯?
-		approveInputVO.getReceiversDto().setPathNo(approvePathDto.getApprPathNo()); //승인자테이블에 결재선번호를 설정
 		
-//		List<Integer> receiver = 
+		// 승인자가 몇명인지 파악한후 for문으로 insert
 		ReceiversDto receiversDto = approveInputVO.getReceiversDto();
-		receiversDao.insert(receiversDto);
+		List<Integer> receiverList = new ArrayList<>(); //승인자 여러명 list에 저장 , 승인자의 직급을 알아야 하는데.. Map으로 저장?
+		receiverList.add(16);
+		receiverList.add(14);
+		receiverList.add(11);
+		
+		Set<Integer> receiverSet = new TreeSet<>(receiverList); //승인자는 정렬이 필요하므로 TreeSet
+		for(int i=0; i<receiverSet.size(); i++) {
+			approveInputVO.getReceiversDto().setReceiversNo(receiverNo); //시퀀스 설정
+			approveInputVO.getReceiversDto().setPathNo(approvePathDto.getApprPathNo()); //승인자테이블에 결재선 번호를 설정
+			receiversDto.setReceiversReceiver(i);
+			receiversDao.insert(receiversDto);
+		}
+		
+		//만약 참조자가 있다면 몇 명인지 파악한후 for문으로 insert
+		ReferrersDto referrersDto = approveInputVO.getReferrersDto();	
+		List<Integer> referrerList = new ArrayList<>();
+		referrerList.add(27);
+		referrerList.add(28);
+		
+		Set<Integer> referrerSet = new HashSet<>(referrerList); //참조자는 정렬이 필요없으므로 HashSet
+		if(referrerSet.size() !=0) { //사이즈가 0이 아니라면 추가
+			for(int i=0; i<referrerSet.size(); i++) {
+				approveInputVO.getReferrersDto().setReferrersNo(referrerNo); //시퀀스 설정
+				approveInputVO.getReferrersDto().setPathNo(approvePathDto.getApprPathNo()); //참조자테이블에 결재선 번호를 설정
+				referrersDto.setReferrersReferrer(i);
+				referrersDao.insert(referrersDto);
+			}
+		}
 		
 		log.debug("VO={}",approveInputVO);
 	}
