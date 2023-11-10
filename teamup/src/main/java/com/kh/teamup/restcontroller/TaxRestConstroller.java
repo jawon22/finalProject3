@@ -51,6 +51,7 @@ public class TaxRestConstroller {
 		return taxDao.selectList(taxName);
 	}
 	
+	//세금 수정
 	@PutMapping("/{taxNo}")
 	public void update(@RequestBody TaxDto taxDto, @PathVariable int taxNo) {
 		taxDao.edit(taxDto, taxNo);
