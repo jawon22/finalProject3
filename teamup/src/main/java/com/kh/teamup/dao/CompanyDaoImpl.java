@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.kh.teamup.dto.AttachDto;
 import com.kh.teamup.dto.CompanyDto;
+import com.kh.teamup.vo.CompanyImageVO;
 
 @Repository
 public class CompanyDaoImpl implements CompanyDao{
@@ -35,5 +36,12 @@ public class CompanyDaoImpl implements CompanyDao{
 	public AttachDto findImage(String comId) {
 		return sqlSession.selectOne("com.findImage", comId);
 	}
+	
+	//회사정보+이미지 수정 구문
+	@Override
+	public boolean update(CompanyImageVO companyImageVO) {
+		return sqlSession.update("com.editCom", companyImageVO) > 0;
+	}
+		
 	
 }

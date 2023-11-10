@@ -21,4 +21,35 @@
     	)
     </select>
     
+    <update id="editCom">
+    	update com 
+    	<set>
+	    	<if test="companyDto.comPw != null">
+	    		com_pw = #{companyDto.comPw},
+	    	</if>
+	    	<if test="companyDto.comName != null">
+	    		com_name = #{companyDto.comName},
+	    	</if>
+	    	<if test="companyDto.comPost != null">
+	    		com_post  = #{companyDto.comPost},
+	    	</if>
+	    	<if test="companyDto.comAddr != null">
+	    		com_addr = #{companyDto.comAddr},
+	    	</if>
+	    	<if test="companyDto.comTel != null">
+	    		com_tel = #{companyDto.comTel},
+	    	</if>
+	    	<if test="companyDto.comBs != null">
+	    		com_bs = #{companyDto.comBs},
+	    	</if>
+	    	<if test="companyDto.comRegion != null">
+	    		com_region = #{companyDto.comRegion},
+	    	</if>
+	    	<if test="companyDto.comEmail != null">
+	    		com_Email = #{companyDto.comEmail},
+	    	</if>
+    	</set>
+    	where com_id = #{comId}
+    </update>
+    
     </mapper>
