@@ -1,17 +1,14 @@
 package com.kh.teamup.dto;
 
-import java.sql.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
-public class ReceiversDto {
-	private int receiversNo;
+public class ReferrersDto {
+
+	private int referrersNo;
 	private int pathNo;
-	private int receiversReceiver;
-	private String receiversStatus;
-	private Date ReceiversConfirmTime;
-	private String receiversReturnRs;
+	private Integer referrersReferrer;//null도 허용이 되야함
 }

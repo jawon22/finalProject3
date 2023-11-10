@@ -4,24 +4,22 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.kh.teamup.dto.ReceiversDto;
+import com.kh.teamup.dto.ReferrersDto;
 
 @Repository
-public class ReceiversDaoImpl implements ReceiversDao{
+public class ReferrersDaoImpl implements ReferrersDao{
 
 	@Autowired
 	private SqlSession sqlSession;
 	
 	@Override
 	public int sequence() {
-		return sqlSession.selectOne("receivers.sequence");
+		return sqlSession.selectOne("referrers.sequence");
 	}
 	
 	@Override
-	public void insert(ReceiversDto receiversDto) {
-		sqlSession.insert("receivers.receiversSave",receiversDto);
+	public void insert(ReferrersDto referrersDto) {
+		sqlSession.insert("referrers.referrersSave",referrersDto);
 	}
-	
-	
 	
 }
