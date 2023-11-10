@@ -12,10 +12,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -54,7 +56,7 @@ public class CompanyRestController {
 //	}
 	
 	//회사 등록(+파일 업로드)
-	@PostMapping(value = "/image/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@PostMapping(value = "/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public void addCom(@ModelAttribute CompanyImageVO vo) throws IllegalStateException, IOException {
 		log.debug("dto={}", vo);
 		
@@ -83,33 +85,84 @@ public class CompanyRestController {
 		
 	} 
 	
-	//파일 다운로드
-	@GetMapping("/image/{comId}")
-	public ResponseEntity<ByteArrayResource> download(@PathVariable String comId) throws IOException{
+//	//파일 다운로드
+//	@GetMapping("/image/{comId}")
+//	public ResponseEntity<ByteArrayResource> download(@PathVariable String comId) throws IOException{
+//		
+//		System.out.println("comId = " + comId);
+//		AttachDto attachDto = companyDao.findImage(comId);
+//		System.out.println("attachDto = " + attachDto);
+//		
+//		String home = System.getProperty("user.home");
+//		File dir = new File(home, "upload");
+//		File target = new File(dir, String.valueOf(attachDto.getAttachNo()));
+//		
+////		System.out.println("파일크기 = " + target.length());
+//		
+//		byte[] data = FileUtils.readFileToByteArray(target);//실제 파일 정보 불러오기
+////		System.out.println("파일크기2 = " + data.length);
+////		System.out.println("파일크기3 = " + attachDto.getAttachSize());
+//		ByteArrayResource resource = new ByteArrayResource(data);
+//		
+//		return ResponseEntity.ok()
+//				.header(HttpHeaders.CONTENT_ENCODING, StandardCharsets.UTF_8.name())
+//				.contentLength(attachDto.getAttachSize())
+//				.header(HttpHeaders.CONTENT_DISPOSITION, 
+//						ContentDisposition.attachment()
+//							.filename(attachDto.getAttachName(), StandardCharsets.UTF_8)
+//							.build().toString()
+//						)
+//				.contentType(MediaType.APPLICATION_OCTET_STREAM)
+//				.body(resource);
+//		
+//	}
+	
+	
+	//회사 이미지 수정
+	@PutMapping(value = "/{comId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<String> editCom(@ModelAttribute CompanyImageVO vo) throws IllegalStateException, IOException {
 		
-		System.out.println("comId = " + comId);
-		AttachDto attachDto = companyDao.findImage(comId);
-		System.out.println("attachDto = " + attachDto);
+		MultipartFile attach = vo.getAttach();
 		
-		String home = System.getProperty("user.home");
-		File dir = new File(home, "upload");
-		File target = new File(dir, String.valueOf(attachDto.getAttachNo()));
+		CompanyDto companyDto = vo.getCompanyDto();
+		companyDao.update(vo);
 		
-		byte[] data = FileUtils.readFileToByteArray(target);//실제 파일 정보 불러오기
-		ByteArrayResource resource = new ByteArrayResource(data);
+		if(!attach.isEmpty()) {//파일이 있으면
+			//파일 삭제 - 기존 파일이 있을 경우에만 처리
+			AttachDto attachDto = companyDao.findImage(companyDto.getComId());
+			String home = System.getProperty("user.home");
+			File dir = new File(home, "upload");
+			
+			if(attachDto != null) {
+				attachDao.delete(attachDto.getAttachNo());
+				
+				File target = new File(dir, String.valueOf(attachDto.getAttachNo()));
+				target.delete();
+			}
+			
+			//파일 추가 및 연결
+			//파일번호 생성
+			int attachNo = attachDao.sequence();
+			
+			//신규파일 저장
+			File insertTarget = new File(dir, String.valueOf(attachNo));
+			attach.transferTo(insertTarget);
+			
+			//신규파일정보 저장
+			AttachDto insertDto = new AttachDto();
+			insertDto.setAttachNo(attachNo);
+			insertDto.setAttachName(attach.getOriginalFilename());
+			insertDto.setAttachSize(attach.getSize());
+			insertDto.setAttachType(attach.getContentType());
+			attachDao.insert(insertDto);
+			
+			//회사+파일 연결
+			companyDao.connectCom(companyDto.getComId(), attachNo);
+		}
 		
-		return ResponseEntity.ok()
-				.header(HttpHeaders.CONTENT_ENCODING, StandardCharsets.UTF_8.name())
-				.contentLength(attachDto.getAttachSize())
-				.header(HttpHeaders.CONTENT_DISPOSITION, 
-						ContentDisposition.attachment()
-							.filename(attachDto.getAttachName(), StandardCharsets.UTF_8)
-							.build().toString()
-						)
-				.body(resource);
+		return ResponseEntity.ok().body("회사 및 이미지 수정 성공");
 		
 	}
-	
 	
 
 }

@@ -17,7 +17,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @CrossOrigin
 @RequestMapping("/empPosition")
 @RestController
-public class EmpPositionController {
+public class EmpPositionRestController {
 	@Autowired
 	private EmpPositionDao empPositionDao;
 	@GetMapping("/position/")
