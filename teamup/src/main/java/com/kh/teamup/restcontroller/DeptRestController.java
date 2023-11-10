@@ -15,7 +15,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RestController
 @CrossOrigin
 @RequestMapping("dept")
-public class DeptController {
+public class DeptRestController {
 	@Autowired
 	private DeptDao deptDao;
 	

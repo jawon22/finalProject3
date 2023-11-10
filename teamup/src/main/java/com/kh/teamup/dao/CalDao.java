@@ -6,6 +6,7 @@ import com.kh.teamup.dto.EmpCalDto;
 
 public interface CalDao {
 	
-	List<EmpCalDto> empList(int empNo);
+	List<EmpCalDto> empCalList(int empNo);
+	void insert(EmpCalDto empCalDto);
 
 }
