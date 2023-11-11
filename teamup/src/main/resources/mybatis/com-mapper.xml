@@ -12,11 +12,13 @@
 	</insert>
 
 	<insert id="comImage">
-		insert into company_image(com_id, attach_no) values(#{comId}, #{attachNo})
+		insert into company_image(com_id, attach_no)
+		values(#{comId}, #{attachNo})
 	</insert>
 
 	<select id="findImage" resultType="attachDto">
-		select * from attach where attach_no=(
+		select * from attach where
+		attach_no=(
 		select attach_no from company_image
 		where com_id = #{comId}
 		)
@@ -57,11 +59,59 @@
 	</update>
 
 	<select id="find" resultType="CompanyDto">
-		select * from com where com_id=#{comId}
+		select * from com where
+		com_id=#{comId}
 	</select>
-	
+
 	<select id="list" resultType="CompanyDto">
 		select * from com
+	</select>
+
+
+	<select id="search" resultType="EmpComplexSearchVO">
+		select
+		e.COM_ID ,
+		c.com_name,
+		e.dept_no ,
+		d.dept_name,
+		ep.emp_position_name,
+		e.emp_no,
+		e.emp_id,
+		e.EMP_NAME ,
+		s.SAL_ANNUAL ,
+		e.emp_tel,
+		e.emp_email
+		from
+		emp e
+		left outer join dept d on e.dept_no =
+		d.dept_no
+		left outer join com c on e.com_id = c.com_id
+		left outer join
+		sal s on s.EMP_NO = e.EMP_NO
+		left outer join emp_position ep on
+		e.emp_position_no = ep.emp_position_no
+		where c.COM_ID = #{comId}
+
+		<where>
+			<if test="EmpComplexSearchVO.deptNo != null">
+				d.dept_no = #{EmpComplexSearchVO.deptNo}
+			</if>
+			<if test="EmpComplexSearchVO.empName != null">
+				d.dept_no = #{EmpComplexSearchVO.empName}
+			</if>
+			<if test="EmpComplexSearchVO.deptNo != null">
+				d.dept_no = #{EmpComplexSearchVO.deptNo}
+			</if>
+			<if test="EmpComplexSearchVO.deptNo != null">
+				d.dept_no = #{EmpComplexSearchVO.deptNo}
+			</if>
+			<if test="EmpComplexSearchVO.deptNo != null">
+				d.dept_no = #{EmpComplexSearchVO.deptNo}
+			</if>
+		</where>
+
+
+		and e.EMP_NO =14 ;
 	</select>
 
 </mapper>

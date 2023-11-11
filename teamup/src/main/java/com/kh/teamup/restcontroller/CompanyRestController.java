@@ -53,49 +53,54 @@ public class CompanyRestController {
 	private BCryptPasswordEncoder encoder;
 
 	// 이미지 등록하면서 회사 정보 등록 같이 하니까 일단 주석 처리 했습니당~
-//	@PostMapping("/")
-//	public void addCom(@RequestBody CompanyDto companyDto) {
-//		
-//		companyDao.addCom(companyDto);
-//		
-//	}
+	@PostMapping("/")
+	public void addCom(@RequestBody CompanyDto companyDto) {
+	
 
-	// 회사 등록(+파일 업로드)
-	@PostMapping(value = "/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public void addCom(@ModelAttribute CompanyImageVO vo) throws IllegalStateException, IOException {
-		log.debug("dto={}", vo);
+	String convertPw = encoder.encode(companyDto.getComPw());
 
-		CompanyDto companyDto = vo.getCompanyDto();
-
-		String convertPw = encoder.encode(companyDto.getComPw());
-
-		companyDto.setComPw(convertPw);
-
-		log.debug("convert={}", convertPw);
-
-		companyDao.addCom(companyDto);
-
-		MultipartFile attach = vo.getAttach();
-
-		int attachNo = attachDao.sequence();
-
-		String home = System.getProperty("user.home");
-		File dir = new File(home, "upload");
-		dir.mkdirs();
-		File target = new File(dir, String.valueOf(attachNo));
-		attach.transferTo(target);
-
-		AttachDto attachDto = new AttachDto();
-		attachDto.setAttachNo(attachNo);
-		attachDto.setAttachName(attach.getOriginalFilename());
-		attachDto.setAttachSize(attach.getSize());
-		attachDto.setAttachType(attach.getContentType());
-		attachDao.insert(attachDto);
-
-		companyDao.connectCom(companyDto.getComId(), attachNo);
-		log.debug("attach={}", attach);
-
+	companyDto.setComPw(convertPw);
+		
+	companyDao.addCom(companyDto);
+		
 	}
+
+//	// 회사 등록(+파일 업로드)
+//	@PostMapping(value = "/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//	public void addCom(@ModelAttribute CompanyImageVO vo) throws IllegalStateException, IOException {
+//		log.debug("dto={}", vo);
+//
+//		CompanyDto companyDto = vo.getCompanyDto();
+//
+//		String convertPw = encoder.encode(companyDto.getComPw());
+//
+//		companyDto.setComPw(convertPw);
+//
+//		log.debug("convert={}", convertPw);
+//
+//		companyDao.addCom(companyDto);
+//
+//		MultipartFile attach = vo.getAttach();
+//
+//		int attachNo = attachDao.sequence();
+//
+//		String home = System.getProperty("user.home");
+//		File dir = new File(home, "upload");
+//		dir.mkdirs();
+//		File target = new File(dir, String.valueOf(attachNo));
+//		attach.transferTo(target);
+//
+//		AttachDto attachDto = new AttachDto();
+//		attachDto.setAttachNo(attachNo);
+//		attachDto.setAttachName(attach.getOriginalFilename());
+//		attachDto.setAttachSize(attach.getSize());
+//		attachDto.setAttachType(attach.getContentType());
+//		attachDao.insert(attachDto);
+//
+//		companyDao.connectCom(companyDto.getComId(), attachNo);
+//		log.debug("attach={}", attach);
+//
+//	}
 
 //	//파일 다운로드
 //	@GetMapping("/image/{comId}")
