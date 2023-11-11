@@ -20,7 +20,15 @@
 	</select>
 	
 	<update id="update">
-		update cal_emp set cal_title=#{calTitle} where cal_no=#{calNo}
+		update cal_emp set
+		 cal_title=#{empCalDto.calTitle}, 
+		 cal_start_date=#{empCalDto.calStartDate},
+		 cal_end_date=#{empCalDto.calEndDate},
+		 cal_content=#{empCalDto.calContent},
+		 cal_status=#{empCalDto.calStatus},
+		 cal_color=#{empCalDto.calColor} 
+		 
+		 where cal_no=#{calNo}
 	</update>
 	
 	<select id="calDetail" resultType="empCalDto">
