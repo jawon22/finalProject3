@@ -33,6 +33,7 @@ public class CompanyImageVO {
 					.comBs(comBs)
 					.comRegion(comRegion)
 					.comEmail(comEmail)
+					
 				.build();
 	}
 }
