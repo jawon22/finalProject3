@@ -1,4 +1,7 @@
+
 package com.kh.teamup.dao;
+
+import java.util.List;
 
 import com.kh.teamup.dto.AttachDto;
 import com.kh.teamup.dto.CompanyDto;
@@ -13,5 +16,8 @@ public interface CompanyDao {
 
 	boolean update(CompanyImageVO companyImageVO);//회사+회사이미지 수정
 
+	CompanyDto selectOne(String comId);
+
+	List<CompanyDto> selectList();
 
 }

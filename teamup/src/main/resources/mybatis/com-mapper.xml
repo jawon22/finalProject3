@@ -2,54 +2,117 @@
 <!DOCTYPE mapper
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-    
-    <mapper namespace="com">
-    
-    <insert id="addCom">
-    insert into com(com_id,com_pw,com_name,com_post,com_addr,com_tel,com_bs,com_region,com_email) 
-		values(#{comId},#{comPw},#{comName},#{comPost},#{comAddr},#{comTel},#{comBs},#{comRegion},#{comEmail})
-    </insert>
-    
-    <insert id="comImage">
-    	insert into company_image(com_id, attach_no) values(#{comId}, #{attachNo})
-    </insert>
-    
-    <select id="findImage" resultType="attachDto">
-    	select * from attach where attach_no=(
-    		select attach_no from company_image 
-    		where com_id = #{comId}
-    	)
-    </select>
-    
-    <update id="editCom">
-    	update com 
-    	<set>
-	    	<if test="companyDto.comPw != null">
-	    		com_pw = #{companyDto.comPw},
-	    	</if>
-	    	<if test="companyDto.comName != null">
-	    		com_name = #{companyDto.comName},
-	    	</if>
-	    	<if test="companyDto.comPost != null">
-	    		com_post  = #{companyDto.comPost},
-	    	</if>
-	    	<if test="companyDto.comAddr != null">
-	    		com_addr = #{companyDto.comAddr},
-	    	</if>
-	    	<if test="companyDto.comTel != null">
-	    		com_tel = #{companyDto.comTel},
-	    	</if>
-	    	<if test="companyDto.comBs != null">
-	    		com_bs = #{companyDto.comBs},
-	    	</if>
-	    	<if test="companyDto.comRegion != null">
-	    		com_region = #{companyDto.comRegion},
-	    	</if>
-	    	<if test="companyDto.comEmail != null">
-	    		com_Email = #{companyDto.comEmail}
-	    	</if>
-    	</set>
-    	where com_id = #{comId}
-    </update>
-    
-    </mapper>
+
+<mapper namespace="com">
+
+	<insert id="addCom">
+		insert into
+		com(com_id,com_pw,com_name,com_post,com_addr,com_addr2,com_tel,com_bs,com_region,com_email)
+		values(#{comId},#{comPw},#{comName},#{comPost},#{comAddr},#{comAddr2},#{comTel},#{comBs},#{comRegion},#{comEmail})
+	</insert>
+
+	<insert id="comImage">
+		insert into company_image(com_id, attach_no)
+		values(#{comId}, #{attachNo})
+	</insert>
+
+	<select id="findImage" resultType="attachDto">
+		select * from attach where
+		attach_no=(
+		select attach_no from company_image
+		where com_id = #{comId}
+		)
+	</select>
+
+	<update id="editCom">
+		update com
+		<set>
+			<if test="companyDto.comPw != null">
+				com_pw = #{companyDto.comPw},
+			</if>
+			<if test="companyDto.comName != null">
+				com_name = #{companyDto.comName},
+			</if>
+			<if test="companyDto.comPost != null">
+				com_post = #{companyDto.comPost},
+			</if>
+			<if test="companyDto.comAddr != null">
+				com_addr = #{companyDto.comAddr},
+			</if>
+			<if test="companyDto.comAddr2 != null">
+				com_addr = #{companyDto.comAddr2},
+			</if>
+			<if test="companyDto.comTel != null">
+				com_tel = #{companyDto.comTel},
+			</if>
+			<if test="companyDto.comBs != null">
+				com_bs = #{companyDto.comBs},
+			</if>
+			<if test="companyDto.comRegion != null">
+				com_region = #{companyDto.comRegion},
+			</if>
+			<if test="companyDto.comEmail != null">
+				com_Email = #{companyDto.comEmail}
+			</if>
+		</set>
+		where com_id = #{comId}
+	</update>
+
+	<select id="find" resultType="CompanyDto">
+		select * from com where
+		com_id=#{comId}
+	</select>
+
+	<select id="list" resultType="CompanyDto">
+		select * from com
+	</select>
+
+
+	<select id="search" resultType="EmpComplexSearchVO">
+		select
+		e.COM_ID ,
+		c.com_name,
+		e.dept_no ,
+		d.dept_name,
+		ep.emp_position_name,
+		e.emp_no,
+		e.emp_id,
+		e.EMP_NAME ,
+		s.SAL_ANNUAL ,
+		e.emp_tel,
+		e.emp_email
+		from
+		emp e
+		left outer join dept d on e.dept_no =
+		d.dept_no
+		left outer join com c on e.com_id = c.com_id
+		left outer join
+		sal s on s.EMP_NO = e.EMP_NO
+		left outer join emp_position ep on
+		e.emp_position_no = ep.emp_position_no
+		where c.COM_ID = #{comId}
+
+		<where>
+			<if test="EmpComplexSearchVO.deptNo != null">
+				d.dept_no = #{EmpComplexSearchVO.deptNo}
+			</if>
+			<if test="EmpComplexSearchVO.empName != null">
+				d.dept_no = #{EmpComplexSearchVO.empName}
+			</if>
+			<if test="EmpComplexSearchVO.deptNo != null">
+				d.dept_no = #{EmpComplexSearchVO.deptNo}
+			</if>
+			<if test="EmpComplexSearchVO.deptNo != null">
+				d.dept_no = #{EmpComplexSearchVO.deptNo}
+			</if>
+			<if test="EmpComplexSearchVO.deptNo != null">
+				d.dept_no = #{EmpComplexSearchVO.deptNo}
+			</if>
+		</where>
+
+
+		and e.EMP_NO =14 ;
+	</select>
+
+</mapper>
+
