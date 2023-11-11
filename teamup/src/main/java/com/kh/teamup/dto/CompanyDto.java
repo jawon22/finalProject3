@@ -14,6 +14,7 @@ public class CompanyDto {
 	private String comName;
 	private String comPost;
 	private String comAddr;
+	private String comAddr2;
 	private String comTel;
 	private String comBs;
 	private String comRegion;

@@ -42,6 +42,11 @@ public class CompanyDaoImpl implements CompanyDao{
 	public boolean update(CompanyImageVO companyImageVO) {
 		return sqlSession.update("com.editCom", companyImageVO) > 0;
 	}
+	
+	@Override
+	public CompanyDto selectOne(String comId) {
+		return sqlSession.selectOne("com.find",comId);
+	}
 		
 	
 }

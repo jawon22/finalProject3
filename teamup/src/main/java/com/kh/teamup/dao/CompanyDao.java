@@ -1,3 +1,4 @@
+
 package com.kh.teamup.dao;
 
 import com.kh.teamup.dto.AttachDto;
@@ -13,5 +14,6 @@ public interface CompanyDao {
 
 	boolean update(CompanyImageVO companyImageVO);//회사+회사이미지 수정
 
+	CompanyDto selectOne(String comId);
 
 }

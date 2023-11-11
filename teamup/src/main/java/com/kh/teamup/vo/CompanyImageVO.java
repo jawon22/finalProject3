@@ -16,6 +16,7 @@ public class CompanyImageVO {
 	private String comName;
 	private String comPost;
 	private String comAddr;
+	private String comAddr2;
 	private String comTel;
 	private String comBs;
 	private String comRegion;
@@ -29,6 +30,7 @@ public class CompanyImageVO {
 					.comName(comName)
 					.comPost(comPost)
 					.comAddr(comAddr)
+					.comAddr(comAddr2)
 					.comTel(comTel)
 					.comBs(comBs)
 					.comRegion(comRegion)
