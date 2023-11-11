@@ -3,6 +3,7 @@ package com.kh.teamup.restcontroller;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -196,6 +197,11 @@ public class CompanyRestController {
 			return;
 
 
+	}
+	@Operation(description = "로그인용 전체 리스트")
+	@GetMapping("/list")
+	public List<CompanyDto> list(){
+		return companyDao.selectList();
 	}
 
 }

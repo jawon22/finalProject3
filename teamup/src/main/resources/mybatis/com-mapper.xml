@@ -59,6 +59,10 @@
 	<select id="find" resultType="CompanyDto">
 		select * from com where com_id=#{comId}
 	</select>
+	
+	<select id="list" resultType="CompanyDto">
+		select * from com
+	</select>
 
 </mapper>
 

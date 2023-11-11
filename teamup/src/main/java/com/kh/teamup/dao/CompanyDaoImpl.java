@@ -1,6 +1,7 @@
 package com.kh.teamup.dao;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
@@ -46,6 +47,10 @@ public class CompanyDaoImpl implements CompanyDao{
 	@Override
 	public CompanyDto selectOne(String comId) {
 		return sqlSession.selectOne("com.find",comId);
+	}
+	@Override
+	public List<CompanyDto> selectList() {
+		return sqlSession.selectList("com.list");
 	}
 		
 	
