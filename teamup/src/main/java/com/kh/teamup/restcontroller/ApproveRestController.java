@@ -69,6 +69,7 @@ public class ApproveRestController { //결재 테이블
 		
 		
 		approveInputVO.getApproveDto().setApprNo(apprNo); //결재에 시퀀스 설정
+		// fe에서 작성자의 번호가 넘어오면 번호로 작성자의 정보 조회후 인서트
 		ApproveDto approveDto = approveInputVO.getApproveDto(); //approveDto를 꺼낸후
 		approveDao.insert(approveDto);  // 인서트
 		
@@ -82,7 +83,9 @@ public class ApproveRestController { //결재 테이블
 		
 		// 승인자가 몇명인지 파악한후 for문으로 insert
 		ReceiversDto receiversDto = approveInputVO.getReceiversDto();
-		List<Integer> receiverList = new ArrayList<>(); //승인자 여러명 list에 저장 , 승인자의 직급을 알아야 하는데.. Map으로 저장?
+		// fe에서 승인자를 받아야함
+		//승인자 여러명 list에 저장 , 승인자의 직급을 알아야 하는데.. Map으로 저장?
+		List<Integer> receiverList = new ArrayList<>();
 		receiverList.add(16);
 		receiverList.add(14);
 		receiverList.add(11);
@@ -97,6 +100,7 @@ public class ApproveRestController { //결재 테이블
 		
 		//만약 참조자가 있다면 몇 명인지 파악한후 for문으로 insert
 		ReferrersDto referrersDto = approveInputVO.getReferrersDto();	
+		// fe에서 참조자를 받아야함
 		List<Integer> referrerList = new ArrayList<>();
 		referrerList.add(27);
 		referrerList.add(28);
