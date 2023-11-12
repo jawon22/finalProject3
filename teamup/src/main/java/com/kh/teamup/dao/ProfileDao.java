@@ -2,6 +2,8 @@ package com.kh.teamup.dao;
 
 import com.kh.teamup.dto.AttachDto;
 import com.kh.teamup.dto.ProfileDto;
+import com.kh.teamup.vo.ProfileImageVO;
+import com.kh.teamup.vo.ProfileUpdateVO;
 
 public interface ProfileDao {
 	
@@ -12,6 +14,8 @@ public interface ProfileDao {
 	void connectProfile(int profileNo, int attachNo);//프로필과 이미지 연결
 
 	AttachDto findImage(int profileNo);//프로필 이미지 화면에 출력
+
+	boolean update(ProfileUpdateVO vo);//프로필+프로필이미지 수정
 
 	
 }

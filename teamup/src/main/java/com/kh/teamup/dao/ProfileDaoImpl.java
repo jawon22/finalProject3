@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 
 import com.kh.teamup.dto.AttachDto;
 import com.kh.teamup.dto.ProfileDto;
+import com.kh.teamup.vo.ProfileImageVO;
+import com.kh.teamup.vo.ProfileUpdateVO;
 
 @Repository
 public class ProfileDaoImpl implements ProfileDao{
@@ -40,6 +42,12 @@ public class ProfileDaoImpl implements ProfileDao{
 	@Override
 	public AttachDto findImage(int profileNo) {
 		return sqlSession.selectOne("emp_profile.findImage", profileNo);
+	}
+	
+	//프로필 정보 + 이미지 수정 구문
+	@Override
+	public boolean update(ProfileUpdateVO vo) {
+		return sqlSession.update("emp_profile.editProfile", vo) > 0;
 	}
 
 }
