@@ -9,20 +9,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kh.teamup.dao.AttendDao;
 import com.kh.teamup.dao.SalDao;
 import com.kh.teamup.dao.SalListDao;
 import com.kh.teamup.dao.TaxDao;
 import com.kh.teamup.dto.SalDto;
 import com.kh.teamup.dto.SalListDto;
 import com.kh.teamup.dto.TaxDto;
+import com.kh.teamup.vo.AttendWorkingTimesVO;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -41,18 +41,23 @@ public class SalListRestController {
 	@Autowired
 	private SalDao salDao;
 	
-	@Autowired//추가 추가
+	@Autowired
 	private TaxDao taxDao;
+	
+	@Autowired
+	private AttendDao attendDao;
+	
 	
 	@Operation(description = "급여내역저장")
 	@PostMapping("/")
 	public void calculateSalList(@RequestBody SalListDto salListDto, int empNo) {
 		
+		
 		SalDto salDto = salDao.selectOne(empNo);
 		
 		int annualPay = (int) salDto.getSalAnnual();
 		int timePay = (int)salDto.getSalTime();//해당 사원의 통상시급 
-		int salMonth = timePay * 132;//통상 시급 * 한달근무시간 (근무시간은 갖고와야함)
+		int salMonth = timePay * 160;//통상 시급 * 한달근무시간 (근무시간은 갖고와야함)
 		
 		List<TaxDto> list = taxDao.selectList();
 		Map<String, Float> map = new HashMap<>();
@@ -68,10 +73,8 @@ public class SalListRestController {
 		//[3]국민연금
 		int national = (int)(salMonth * map.get("국민연금")/100);
 		//[4]장기요양보험료 = 건보료 * 장기요양보험료율
-		int ltcare = (int)(salMonth * map.get("장기요양보험")/100);
-		//[5]지방소득세 = 근로소득세 * 지방소득세율
-		int local = (int)(salMonth * map.get("지방소득세")/100);
-		//[6]근로소득세 = 연봉에 따라 적용이 다름
+		int ltcare = (int)( health * map.get("장기요양보험")/100 );
+		//[5]근로소득세 = 연봉에 따라 적용이 다름
 		int work;
 	    if (annualPay < 4000000) {
 	        work = (int) (salMonth * map.get("소득세1") / 100);
@@ -82,6 +85,8 @@ public class SalListRestController {
 	    else {
 	        work = (int) (salMonth * map.get("소득세3") / 100);
 	    }
+	    //[6]지방소득세 = 근로소득세 * 지방소득세율
+	    int local = (int)( work * map.get("지방소득세")/100);
 		
 		salListDto.setEmpNo(empNo);
 		salListDto.setSalListTotal(salMonth);
