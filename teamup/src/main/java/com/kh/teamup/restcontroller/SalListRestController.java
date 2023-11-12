@@ -52,12 +52,25 @@ public class SalListRestController {
 	@PostMapping("/")
 	public void calculateSalList(@RequestBody SalListDto salListDto, int empNo) {
 		
+		// attendDao를 통해 근무 시간을 가져옴
+//	    AttendWorkingTimesVO workingTimesVO = new AttendWorkingTimesVO();
+//	    workingTimesVO.setEmpNo(empNo);
+//	    log.debug("근무시간 = {}", workingTimesVO);
+//	    List<AttendWorkingTimesVO> workingTimesList = attendDao.selectListByEmpNo(workingTimesVO);
+
+	    // 근무 시간 계산 로직 추가
+//	    int totalWorkingHours = 0;
+//	    for (AttendWorkingTimesVO vo : workingTimesList) {
+//	        totalWorkingHours += vo.getWorkingTimes();
+//	    }
+
 		
 		SalDto salDto = salDao.selectOne(empNo);
 		
 		int annualPay = (int) salDto.getSalAnnual();
 		int timePay = (int)salDto.getSalTime();//해당 사원의 통상시급 
-		int salMonth = timePay * 160;//통상 시급 * 한달근무시간 (근무시간은 갖고와야함)
+//		int salMonth = timePay * totalWorkingHours;//통상 시급 * 한달근무시간 (근무시간은 갖고와야함)
+		int salMonth = timePay * 160;
 		
 		List<TaxDto> list = taxDao.selectList();
 		Map<String, Float> map = new HashMap<>();
