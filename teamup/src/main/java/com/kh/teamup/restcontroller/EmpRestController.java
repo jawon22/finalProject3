@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.kh.teamup.dao.EmpDao;
 import com.kh.teamup.dto.EmpDto;
 import com.kh.teamup.vo.EmpComplexSearchVO;
+import com.kh.teamup.vo.SearchVO;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -154,7 +155,7 @@ public class EmpRestController {
 	//이름으로 검색하면 문제가 될 수 있음 ->동명이인 일경우 
 	// 그럼 사원 검색에서는 회사까지 조인 그냥 리스트를뽑는 경우 인데 나중에 검색을 추가 한다고 하면 회사까지 해두는게 좋지않은가
 	@Operation(description = "복합 검색")
-	@PostMapping("/comflexSearch/")
+	@PostMapping("/complexSearch/")
 	public List<EmpComplexSearchVO> complexSearch(@RequestBody EmpComplexSearchVO VO){
 		return empDao.complexSearch(VO);
 		
@@ -178,6 +179,14 @@ public class EmpRestController {
 		//isMatch면 session에 저장
 
 		
+	}
+	
+	
+	@PostMapping("/search/")
+	public List<SearchVO> complexSearch(@RequestBody SearchVO searchVO){
+		
+		
+		return empDao.search(searchVO);
 	}
 
 	

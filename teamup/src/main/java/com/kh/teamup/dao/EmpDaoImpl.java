@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.kh.teamup.dto.EmpDto;
 import com.kh.teamup.vo.EmpComplexSearchVO;
+import com.kh.teamup.vo.SearchVO;
 @Repository
 public class EmpDaoImpl implements EmpDao {
 	@Autowired
@@ -73,8 +74,12 @@ public class EmpDaoImpl implements EmpDao {
 	
 	@Override
 	public EmpDto selectIdByNo(int empNo) {
-		// TODO Auto-generated method stub
 		return sqlSession.selectOne("emp.selectIdByNo",empNo);
+	}
+	
+	@Override
+	public List<SearchVO> search(SearchVO searchVO) {
+		return sqlSession.selectList("search.search2", searchVO);
 	}
 	
 }

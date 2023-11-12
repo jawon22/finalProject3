@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="search">
+
+	<select id="search" resultType="searchVO">
+		select
+		e.COM_ID ,
+		c.com_name,
+		e.dept_no ,
+		d.dept_name,
+		ep.emp_position_name,
+		e.emp_no,
+		e.emp_id,
+		e.EMP_NAME,
+		s.SAL_ANNUAL,
+		e.emp_tel,
+		e.emp_email
+		from
+		emp e
+		left outer join dept d on e.dept_no =
+		d.dept_no
+		left outer join com c on e.com_id = c.com_id
+		left outer join
+		sal s on s.EMP_NO = e.EMP_NO
+		left outer join emp_position ep on
+		e.emp_position_no = ep.emp_position_no
+		<where>
+			<if test="comId != null">
+				c.com_id = #{comId}
+			</if>
+			<if test="deptNo != 0">
+				d.dept_no = #{deptNo}
+			</if>
+			<if test="empName != null">
+				e.emp_name = #{empName}
+			</if>
+		</where>
+
+	</select>
+	<select id="search2" resultType="searchVO">
+
+		select
+		e.COM_ID ,
+		c.com_name,
+		e.dept_no ,
+		e.emp_join,
+		d.dept_name,
+		ep.emp_position_name,
+		e.emp_no,
+		e.emp_id,
+		e.EMP_NAME,
+		s.SAL_ANNUAL,
+		e.emp_tel,
+		e.emp_email
+		from
+		emp e
+		left outer join dept d on e.dept_no =
+		d.dept_no
+		left outer join com c on e.com_id = c.com_id
+		left outer join
+		sal s on s.EMP_NO = e.EMP_NO
+		left outer join emp_position ep on
+		e.emp_position_no = ep.emp_position_no
+		<where>
+			<if test="keyword != null and select !=null">
+				${select} LIKE CONCAT(#{keyword}, '%')
+			</if>
+			<if test="comId != null">
+				and c.com_id = #{comId}
+			</if>
+			<if test="deptNo != 0">
+				and d.dept_no = #{deptNo}
+			</if>
+			<if test="empName != null">
+				and e.emp_name = #{empName}
+			</if>
+
+			<if test="joinStart != null">
+				and e.emp_join >= #{joinStart}
+			</if>
+
+			<if test="joinEnd != null">
+   			<![CDATA[
+        		and e.emp_join <= #{joinEnd}
+   			]]>
+			</if>
+
+		</where>
+
+	</select>
+
+</mapper>
