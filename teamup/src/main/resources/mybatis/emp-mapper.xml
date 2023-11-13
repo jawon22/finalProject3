@@ -38,25 +38,25 @@
 		update emp
 		<set>
 			<if test="empDto.empExit != null">
-				emp_exit = sysdate
+				emp_exit = sysdate,
 			</if>
 			<if test="empDto.empName != null">
-				emp_name = #{empDto.empName}
+				emp_name = #{empDto.empName},
 			</if>
 			<if test="empDto.empPw != null">
-				emp_pw = #{empDto.empPw}
+				emp_pw = #{empDto.empPw},
 			</if>
 			<if test="empDto.deptNo > 0">
-				dept_no = #{empDto.deptNo}
+				dept_no = #{empDto.deptNo},
 			</if>
 			<if test="empDto.empTel != null">
-				emp_tel = #{empDto.empTel}
+				emp_tel = #{empDto.empTel},
 			</if>
 			<if test="empDto.empPositionNo > 0">
-				emp_position_no = #{empDto.empPositionNo}
+				emp_position_no = #{empDto.empPositionNo},
 			</if>
 			<if test="empDto.empEmail != null">
-				emp_email = #{empDto.empEmail}
+				emp_email = #{empDto.empEmail},
 			</if>
 
 		</set>
@@ -111,6 +111,7 @@
 	<select id="selectIdByNo" resultType="empDto">
 		select * from emp where emp_no = #{empNo}
 	</select>
+	
 
 
 

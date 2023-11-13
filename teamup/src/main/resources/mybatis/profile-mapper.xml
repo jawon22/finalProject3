@@ -8,18 +8,52 @@
     	<select id="sequence" resultType="int">
     		select emp_profile_seq.nextval from dual
     	</select>
+    	
+<!--     	<insert id="addProfile"> -->
+<!--     		insert into emp_profile( -->
+<!--     			profile_no, emp_no, profile_title, profile_content -->
+<!--     		) values( -->
+<!--     			#{profileNo}, #{empNo},  -->
+<!--     			#{profileTitle},  -->
+<!--     			#{profileContent} -->
+<!--     		) -->
+<!--     	</insert> -->
     
     	<insert id="addProfile">
     		insert into emp_profile(
     			profile_no, emp_no, profile_title, profile_content
     		) values(
-    			#{profileNo}, #{empNo}, #{profileTitle}, #{profileContent}
-    		)
+    			#{profileNo}, #{empNo}, 
+    			<if test="profileTitle == null">
+            		'나를 소개하는 제목을 입력하세요.'
+        		</if>
+        		<if test="profileTitle != null">
+            		#{profileTitle, jdbcType=VARCHAR, javaType=String}
+        		</if>,
+       		 	<if test="profileContent == null">
+            		'나를 소개하는 내용을 입력하세요.'
+        		</if>
+        		<if test="profileContent != null">
+            		#{profileContent, jdbcType=VARCHAR, javaType=String}
+        		</if>
+    			)
     	</insert>
+
+    		<insert id="profileImage">
+    			insert into profile_image(profile_no, attach_no) 
+    			values(
+    				#{profileNo}, 
+    				#{attachNo}
+    				)
+    		</insert>
     	
-    	<insert id="profileImage">
-    		insert into profile_image(profile_no, attach_no) values(#{profileNo}, #{attachNo})
-    	</insert>
+<!--     	<insert id="profileImage"> -->
+<!--     		insert into profile_image(profile_no, attach_no)  -->
+<!--     		values( -->
+<!--     			#{profileNo},  -->
+<!--     			#{attachNo, jdbcType=INTEGER, javaType=Integer, mode=IN, value=1} -->
+<!--     			) -->
+<!--     	</insert> -->
     	
     	<select id="findImage" resultType="attachDto">
     		select * from attach where attach_no=(
@@ -27,6 +61,25 @@
     			where profile_no = #{profileNo}
     		)
     	</select>
+    	
+    	
+    	<select id="joinProfile" resultType="ProfileInfoVO">
+    		select 
+				p.profile_no,
+				e.emp_no,
+				d.dept_name,
+				ep.emp_position_name,
+				e.emp_name,
+				e.emp_tel,
+				e.emp_email,
+				e.emp_join
+			from 
+				emp_profile p 
+				join emp e on e.emp_no = p.emp_no 
+				LEFT JOIN dept d ON e.dept_no = d.dept_no 
+    			LEFT JOIN emp_position ep ON e.emp_position_no = ep.emp_position_no
+    	</select>
+    	
     	
     	<update id="editProfile">
     		update emp_profile 

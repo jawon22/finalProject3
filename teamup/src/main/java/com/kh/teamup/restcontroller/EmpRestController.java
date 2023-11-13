@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.kh.teamup.dao.EmpDao;
 import com.kh.teamup.dto.EmpDto;
 import com.kh.teamup.vo.EmpComplexSearchVO;
+import com.kh.teamup.vo.SearchVO;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -61,7 +63,7 @@ public class EmpRestController {
 	}
 	
 	@Operation(description = "사번 생성")
-	@PatchMapping("/{empNo}")
+	@PutMapping("/updateEmpId/{empNo}")
 	public void updateEmpId(@RequestBody EmpDto empDto,@PathVariable int empNo) throws MessagingException, IOException {
 		//사번 생성이루 select 로 사번을 찾고 있으면 메세지 전송한다.
 		//보내기 전에 pw를 랜덤으로 설정
@@ -154,7 +156,7 @@ public class EmpRestController {
 	//이름으로 검색하면 문제가 될 수 있음 ->동명이인 일경우 
 	// 그럼 사원 검색에서는 회사까지 조인 그냥 리스트를뽑는 경우 인데 나중에 검색을 추가 한다고 하면 회사까지 해두는게 좋지않은가
 	@Operation(description = "복합 검색")
-	@PostMapping("/comflexSearch/")
+	@PostMapping("/complexSearch/")
 	public List<EmpComplexSearchVO> complexSearch(@RequestBody EmpComplexSearchVO VO){
 		return empDao.complexSearch(VO);
 		
@@ -165,20 +167,32 @@ public class EmpRestController {
 	//true면 session에 저장
 	@Operation(description = "로그인")
 	@PostMapping("login/")
-	public void login(@RequestBody EmpDto inputDto) {
+	public boolean login(@RequestBody EmpDto inputDto) {
 		//아이디로 조회 
 		EmpDto findDto = empDao.selecOne(inputDto.getEmpId());
 		
 		
 		boolean isMach =encoder.matches(inputDto.getEmpPw(),findDto.getEmpPw()) ;
 		
-		//log.debug("??={}",isMach);
-		if(!isMach) return ;
+		log.debug("??={}",isMach);
+		return isMach;
 		
 		//isMatch면 session에 저장
 
 		
 	}
-
+	
+	
+	@PostMapping("/search/")
+	public List<SearchVO> complexSearch(@RequestBody SearchVO searchVO){
+		
+		
+		return empDao.search(searchVO);
+	}
+	@GetMapping("/mypage/{empNo}")
+	public EmpDto myPage(@PathVariable int empNo) {
+		return empDao.selectIdByNo(empNo);
+		
+	}
 	
 }

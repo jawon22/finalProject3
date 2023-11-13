@@ -10,5 +10,6 @@ public interface SalDao {
 	List<SalDto> selectList(); //조회
 	SalDto selectOne(int empNo);//상세
 	void edit(int empNo, SalDto salDto);
+	int selectLatesSalNo(int empNo);//최신연봉조회
 
 }

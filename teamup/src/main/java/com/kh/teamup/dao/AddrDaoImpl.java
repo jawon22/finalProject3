@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.kh.teamup.dto.AddrDto;
+import com.kh.teamup.vo.SearchVO;
 
 @Repository
 public class AddrDaoImpl implements AddrDao{
@@ -26,7 +27,7 @@ public class AddrDaoImpl implements AddrDao{
 		
 	}
 	@Override
-	public List<AddrDto> myAddrList(int myEmpNo) {
+	public List<SearchVO> myAddrList(int myEmpNo) {
 		return sqlSession.selectList("addr.myAddrList",myEmpNo);
 	}
 }

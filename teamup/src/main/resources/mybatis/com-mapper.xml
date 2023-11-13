@@ -90,8 +90,6 @@
 		sal s on s.EMP_NO = e.EMP_NO
 		left outer join emp_position ep on
 		e.emp_position_no = ep.emp_position_no
-		where c.COM_ID = #{comId}
-
 		<where>
 			<if test="EmpComplexSearchVO.deptNo != null">
 				d.dept_no = #{EmpComplexSearchVO.deptNo}
@@ -99,19 +97,12 @@
 			<if test="EmpComplexSearchVO.empName != null">
 				d.dept_no = #{EmpComplexSearchVO.empName}
 			</if>
-			<if test="EmpComplexSearchVO.deptNo != null">
-				d.dept_no = #{EmpComplexSearchVO.deptNo}
-			</if>
-			<if test="EmpComplexSearchVO.deptNo != null">
-				d.dept_no = #{EmpComplexSearchVO.deptNo}
-			</if>
-			<if test="EmpComplexSearchVO.deptNo != null">
-				d.dept_no = #{EmpComplexSearchVO.deptNo}
-			</if>
+			
+			c.COM_ID = #{comId}
+
 		</where>
 
 
-		and e.EMP_NO =14 ;
 	</select>
 
 </mapper>

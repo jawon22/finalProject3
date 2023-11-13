@@ -3,6 +3,7 @@ package com.kh.teamup.dao;
 import java.util.List;
 
 import com.kh.teamup.dto.AddrDto;
+import com.kh.teamup.vo.SearchVO;
 
 public interface AddrDao {
 
@@ -10,6 +11,6 @@ public interface AddrDao {
 
 	void deletAddr(int addEmpNo);
 
-	List<AddrDto> myAddrList(int myEmpNo);
+	List<SearchVO> myAddrList(int myEmpNo);
 
 }

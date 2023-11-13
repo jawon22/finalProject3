@@ -22,11 +22,6 @@ public class SalListDaoImpl implements SalListDao{
 		sqlSession.insert("salList.save", salListDto);
 	}
 	
-	@Override//사원별 상세 조회
-	public SalListDto selectOne(int empNo) {
-		return sqlSession.selectOne("salList.find", empNo);
-	}
-	
 	@Override//삭제
 	public boolean delete(int empNo) {
 		return sqlSession.delete("salList.remove", empNo) > 0;
@@ -37,5 +32,13 @@ public class SalListDaoImpl implements SalListDao{
 		List<SalListDto> list = sqlSession.selectList("salList.findByEmpSalList", salListNo);
 		return list;
 	}
+	
+	@Override//사원별 급여내역 목록
+	public List<SalListDto> findByEmpNo(int empNo) {
+		List<SalListDto> list = sqlSession.selectList("salList.findByEmpNo", empNo);
+		return list;
+	}
+	
+
 
 }
