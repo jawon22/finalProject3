@@ -13,11 +13,6 @@
     									#{salListNational}, #{salListEmp}, #{salListWork}, #{salListLocal})
     	</insert>
     	
-    	<!-- 사원의  급여 내역 목록 -->
-    	<select id="find" resultType="SalListDto">
-    		select * from sal_list where emp_no = #{empNo}
-    	</select>
-    	
     	<!-- 사원의 급여 상세 조회 -->
     	<select id="findByEmpSalList" resultType="SalListDto">
     		select * from sal_list 
@@ -25,6 +20,16 @@
     			<if test="empNo != null">
     				sal_list_no = #{salListNo}
     			</if>
+    	</select>
+    	
+    	<!-- 사원의 급여내역 목록 조회 -->
+    	<select id="findByEmpNo" resultType="SalListDto">
+    		select * from sal_list 
+    		where
+    			<if test="empNo != null">
+    				emp_no = #{empNo}
+    			</if>
+    		order by sal_list_no desc
     	</select>
     	
     	<delete id="remove">

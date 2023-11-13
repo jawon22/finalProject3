@@ -113,10 +113,11 @@ public class SalListRestController {
 		salListDao.insert( salListDto);
 	}
 	
-	@Operation(description = "사원별 급여내역 목록")
-	@GetMapping("/{empNo}")
-	public SalListDto find(@PathVariable int empNo) {
-		return salListDao.selectOne(empNo);
+	@Operation(description = "사원별 급여내역 목록")//수정 필요 selectOne이 아님! 
+	@GetMapping("/empNo/{empNo}")
+	public ResponseEntity<List<SalListDto>>findByEmpNo(@PathVariable int empNo){
+		List<SalListDto> list = salListDao.findByEmpNo(empNo);
+		return !list.isEmpty() ? ResponseEntity.ok(list) : ResponseEntity.notFound().build();
 	}
 	
 	@Operation(description = "사원별 급여내역 상세")
