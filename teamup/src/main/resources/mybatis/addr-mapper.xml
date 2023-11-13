@@ -17,7 +17,7 @@
 
 
 
-	<select id="myAddrList" resultType="AddrDto">
+	<select id="myAddrList" resultType="SearchVO">
 		SELECT
 		e.EMP_POSITION_NO,
 		ep.EMP_POSITION_NAME,
@@ -28,7 +28,7 @@
 		e.EMP_NO = ad.ADD_EMP_NO
 		inner JOIN EMP_POSITION ep ON
 		e.EMP_POSITION_NO = ep.EMP_POSITION_NO
-		where MY_EMP_NO=#{myEmpNo} order by ep.EMP_POSITION_ORDER
+		where MY_EMP_NO=#{myEmpNo} order by ep.EMP_POSITION_ORDER, e.emp_name
 	</select>
 	
 <!-- 그냥 전체 조회 -->
