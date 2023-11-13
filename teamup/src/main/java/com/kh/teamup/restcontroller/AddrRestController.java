@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.teamup.dao.AddrDao;
 import com.kh.teamup.dto.AddrDto;
+import com.kh.teamup.vo.SearchVO;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +40,7 @@ public class AddrRestController {
 	}
 	
 	@GetMapping("/myAddrList/{myEmpNo}")
-	public List<AddrDto> myAddrList(@PathVariable int myEmpNo){
+	public List<SearchVO> myAddrList(@PathVariable int myEmpNo){
 		
 		return addrDao.myAddrList(myEmpNo);
 		
