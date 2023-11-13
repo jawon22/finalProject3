@@ -119,12 +119,25 @@ public class ApproveRestController { //결재 테이블
 	}
 	
 	
-	//삭제
+	//삭제(결재)
 	// 로그인했을때의 사원 아이디를 리코일 저장소를 통해 비교 + 진행상태가 R일 경우만
-	@DeleteMapping("/empNo/{empNo}") //아이디를 받아서 비교해야함 -> react에서 리코일로
-	public ResponseEntity<String> delete(@PathVariable int empNo){ //여기도 아직 고민
-		boolean result = approveDao.delete(empNo);
-		if(result) {
+	@DeleteMapping("/apprNo/{apprNo}") //아이디를 받아서 비교해야함 -> react에서 리코일로
+	public ResponseEntity<String> delete(@PathVariable int apprNo){ //여기도 아직 고민
+		ApproveDto targetDto = approveDao.selectOne(apprNo);
+		
+		//클릭한 결재의 해당하는 결재자와 리액트에서 로그인했을때의 저장된 사용자가 같은지 비교
+		
+		// 결재의 진행상태가 "R"인지 확인해야함
+		List<ApprovePathDto> targetDto2 = approvePathDao.selectByApprNo(targetDto.getApprNo());
+		List<ReceiversDto> targetDto3 = receiversDao.selectByPathNo(targetDto2.get(0).getApprPathNo());
+
+		boolean isIng= false;
+		for(int i=0; i<targetDto3.size(); i++) {
+			isIng = targetDto3.get(i).getReceiversStatus().equals("R");
+		}
+		
+		boolean result = approveDao.delete(apprNo);
+		if(result &&isIng) {
 			return ResponseEntity.ok().build();
 		}
 		return ResponseEntity.notFound().build();
