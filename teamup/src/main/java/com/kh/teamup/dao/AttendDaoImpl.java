@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.kh.teamup.dto.AttendDto;
+import com.kh.teamup.vo.AttendWorkingSearchVO;
 import com.kh.teamup.vo.AttendWorkingTimesVO;
 
 @Repository
@@ -29,7 +30,7 @@ public class AttendDaoImpl implements AttendDao {
 	}
 
 	@Override
-	public List<AttendWorkingTimesVO> selectListByEmpNo(AttendWorkingTimesVO VO) {
+	public List<AttendWorkingTimesVO> selectListByEmpNo(AttendWorkingSearchVO VO) {
 		return sqlSession.selectList("attend.selectListByEmpNo",VO);
 	}
 	
