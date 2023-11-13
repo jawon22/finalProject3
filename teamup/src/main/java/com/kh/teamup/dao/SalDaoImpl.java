@@ -42,6 +42,10 @@ public class SalDaoImpl implements SalDao{
 		if(result == 0) throw new NoTargetException();
 	}
 
+	@Override//사원의 최신 연봉 조회
+	public int selectLatesSalNo(int empNo) {
+		return sqlSession.selectOne("sal.selectLatesSalNo", empNo);
+	}
 	
 	
 	

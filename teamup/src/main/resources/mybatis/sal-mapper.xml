@@ -31,6 +31,13 @@
     		where emp_no=#{empNo}
     	</update>
     	
+    	 <select id="selectLatestSalNo" parameterType="int" resultType="int">
+		        select max(sal_no)
+		        from sal
+		        where emp_no = #{empNo}
+		    </select>
+    	
+    	
     </mapper>
     
     
