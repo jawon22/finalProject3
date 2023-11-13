@@ -52,12 +52,25 @@ public class SalListRestController {
 	@PostMapping("/")
 	public void calculateSalList(@RequestBody SalListDto salListDto, int empNo) {
 		
+		// attendDao를 통해 근무 시간을 가져옴
+//	    AttendWorkingTimesVO workingTimesVO = new AttendWorkingTimesVO();
+//	    workingTimesVO.setEmpNo(empNo);
+//	    log.debug("근무시간 = {}", workingTimesVO);
+//	    List<AttendWorkingTimesVO> workingTimesList = attendDao.selectListByEmpNo(workingTimesVO);
+
+	    // 근무 시간 계산 로직 추가
+//	    int totalWorkingHours = 0;
+//	    for (AttendWorkingTimesVO vo : workingTimesList) {
+//	        totalWorkingHours += vo.getWorkingTimes();
+//	    }
+
 		
 		SalDto salDto = salDao.selectOne(empNo);
 		
 		int annualPay = (int) salDto.getSalAnnual();
 		int timePay = (int)salDto.getSalTime();//해당 사원의 통상시급 
-		int salMonth = timePay * 160;//통상 시급 * 한달근무시간 (근무시간은 갖고와야함)
+//		int salMonth = timePay * totalWorkingHours;//통상 시급 * 한달근무시간 (근무시간은 갖고와야함)
+		int salMonth = timePay * 160;
 		
 		List<TaxDto> list = taxDao.selectList();
 		Map<String, Float> map = new HashMap<>();
@@ -100,10 +113,11 @@ public class SalListRestController {
 		salListDao.insert( salListDto);
 	}
 	
-	@Operation(description = "사원별 급여내역 목록")
-	@GetMapping("/{empNo}")
-	public SalListDto find(@PathVariable int empNo) {
-		return salListDao.selectOne(empNo);
+	@Operation(description = "사원별 급여내역 목록")//수정 필요 selectOne이 아님! 
+	@GetMapping("/empNo/{empNo}")
+	public ResponseEntity<List<SalListDto>>findByEmpNo(@PathVariable int empNo){
+		List<SalListDto> list = salListDao.findByEmpNo(empNo);
+		return !list.isEmpty() ? ResponseEntity.ok(list) : ResponseEntity.notFound().build();
 	}
 	
 	@Operation(description = "사원별 급여내역 상세")
