@@ -38,5 +38,7 @@ public class SalListDaoImpl implements SalListDao{
 		List<SalListDto> list = sqlSession.selectList("salList.findByEmpNo", empNo);
 		return list;
 	}
+	
+
 
 }

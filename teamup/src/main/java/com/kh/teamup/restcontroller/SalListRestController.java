@@ -52,15 +52,6 @@ public class SalListRestController {
 	@PostMapping("/")
 	public void calculateSalList( @RequestBody TotalWorkingTimeByMonthVO vo) {
 		
-		// attendDao를 통해 근무 시간을 가져옴
-//	    AttendWorkingTimesVO workingTimesVO = new AttendWorkingTimesVO();
-//	    workingTimesVO.setEmpNo(empNo);
-//	    log.debug("근무시간 = {}", workingTimesVO);
-//	    List<AttendWorkingTimesVO> workingTimesList = attendDao.selectListByEmpNo(workingTimesVO);
-
-
-
-		
 		
 		SalDto salDto = salDao.selectOne(vo.getEmpNo());
 		
