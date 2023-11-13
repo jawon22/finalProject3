@@ -23,5 +23,6 @@ public interface EmpDao {
 	
 	
 	List<SearchVO> search(SearchVO searchVO);
+	EmpDto selectOne(int empNo);
 
 }

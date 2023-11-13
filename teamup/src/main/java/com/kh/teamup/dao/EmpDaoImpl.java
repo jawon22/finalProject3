@@ -82,4 +82,9 @@ public class EmpDaoImpl implements EmpDao {
 		return sqlSession.selectList("search.search2", searchVO);
 	}
 	
+	@Override
+	public EmpDto selectOne(int empNo) {
+		return sqlSession.selectOne("emp.findEmp",empNo);
+	}
+	
 }

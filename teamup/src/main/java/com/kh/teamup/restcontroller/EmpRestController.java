@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -62,7 +63,7 @@ public class EmpRestController {
 	}
 	
 	@Operation(description = "사번 생성")
-	@PatchMapping("/{empNo}")
+	@PutMapping("/updateEmpId/{empNo}")
 	public void updateEmpId(@RequestBody EmpDto empDto,@PathVariable int empNo) throws MessagingException, IOException {
 		//사번 생성이루 select 로 사번을 찾고 있으면 메세지 전송한다.
 		//보내기 전에 pw를 랜덤으로 설정
@@ -166,15 +167,15 @@ public class EmpRestController {
 	//true면 session에 저장
 	@Operation(description = "로그인")
 	@PostMapping("login/")
-	public void login(@RequestBody EmpDto inputDto) {
+	public boolean login(@RequestBody EmpDto inputDto) {
 		//아이디로 조회 
 		EmpDto findDto = empDao.selecOne(inputDto.getEmpId());
 		
 		
 		boolean isMach =encoder.matches(inputDto.getEmpPw(),findDto.getEmpPw()) ;
 		
-		//log.debug("??={}",isMach);
-		if(!isMach) return ;
+		log.debug("??={}",isMach);
+		return isMach;
 		
 		//isMatch면 session에 저장
 
@@ -188,6 +189,10 @@ public class EmpRestController {
 		
 		return empDao.search(searchVO);
 	}
-
+	@GetMapping("/mypage/{empNo}")
+	public EmpDto myPage(@PathVariable int empNo) {
+		return empDao.selectIdByNo(empNo);
+		
+	}
 	
 }
