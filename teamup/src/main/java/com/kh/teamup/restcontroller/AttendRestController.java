@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.teamup.dao.AttendDao;
 import com.kh.teamup.dto.AttendDto;
+import com.kh.teamup.vo.AttendWorkingSearchVO;
 import com.kh.teamup.vo.AttendWorkingTimesVO;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -45,10 +45,9 @@ public class AttendRestController {
 	
 	// @GetMapping - 조회
 	@PostMapping("/find/")
-	public List<AttendWorkingTimesVO> find(@RequestBody AttendWorkingTimesVO VO){
-		log.debug("vo = {}",VO);
-		return attendDao.selectListByEmpNo(VO);
-		
+	public List<AttendWorkingTimesVO> find(@RequestBody AttendWorkingSearchVO VO){
+		List<AttendWorkingTimesVO> list = attendDao.selectListByEmpNo(VO);
+		return list;
 	}
 
 }
