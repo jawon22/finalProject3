@@ -36,8 +36,8 @@ public class ApproveDaoImpl implements ApproveDao{
 	}
 	
 	@Override
-	public boolean delete(int empNo) { //결재 삭제(취소)
-		return sqlSession.delete("approve.approveCancel",empNo)>0;
+	public boolean delete(int apprNo) { //결재 삭제(취소)
+		return sqlSession.delete("approve.approveCancel",apprNo)>0;
 	}
 	
 }
