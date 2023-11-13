@@ -48,7 +48,7 @@ public class SalListRestController {
 	private AttendDao attendDao;
 	
 	
-	@Operation(description = "급여내역저장")
+	@Operation(description = "사원별 연월지정하여 급여내역저장")
 	@PostMapping("/")
 	public void calculateSalList( @RequestBody TotalWorkingTimeByMonthVO vo) {
 		
@@ -106,7 +106,7 @@ public class SalListRestController {
 		salListDao.insert( salListDto);
 	}
 	
-	@Operation(description = "사원별 급여내역 목록")//수정 필요 selectOne이 아님! 
+	@Operation(description = "사원별 급여내역 목록")
 	@GetMapping("/empNo/{empNo}")
 	public ResponseEntity<List<SalListDto>>findByEmpNo(@PathVariable int empNo){
 		List<SalListDto> list = salListDao.findByEmpNo(empNo);
