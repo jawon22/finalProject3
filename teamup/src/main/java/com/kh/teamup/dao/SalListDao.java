@@ -8,7 +8,8 @@ public interface SalListDao {
 
 	void insert(SalListDto salListDto);
 	boolean delete(int empNo);
-	List<SalListDto> findByEmpSalList(int salListNo);
-	List<SalListDto> findByEmpNo(int empNo);
+	List<SalListDto> findByEmpSalList(int salListNo);//급여내역상세
+	List<SalListDto> findByEmpNo(int empNo);//급여내역 목록
+
 
 }

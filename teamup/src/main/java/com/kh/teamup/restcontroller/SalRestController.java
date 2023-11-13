@@ -50,6 +50,12 @@ public class SalRestController {
 	public void update(@RequestBody SalDto salDto, @PathVariable int empNo) {
 		salDao.edit(empNo, salDto);
 	}
+	
+	//사원의 최신 연봉 조회
+	@GetMapping("/maxSalNo/{empNo}")
+	public SalDto selectLatesSalNo(@PathVariable int empNo) {
+		return salDao.selectOne(empNo);
+	}
 
 }
 

@@ -44,4 +44,34 @@
 		) ATT ON to_char(TMP.DT, 'YYYY-MM-DD') = to_char(ATT.attend_start, 'YYYY-MM-DD')
 		ORDER BY TMP.DT desc
 	</select>
+	
+	<select id="selectByEmpTotalWorkingTime" resultType="int">
+		SELECT
+		    --TO_CHAR(TMP.DT, 'YYYY-MM') AS year_month,
+		    SUM(NVL((ATT.attend_end - ATT.attend_start) * 24, 0)) AS total_working_times
+		FROM (
+		    SELECT
+		        trunc(to_date(#{yearMonth}, 'YYYY-MM')) AS DT
+		    FROM dual
+		) TMP
+		LEFT JOIN (
+		    SELECT *
+		    FROM attend
+		    WHERE (TO_CHAR(attend_start, 'YYYY-MM') = #{yearMonth}
+		           OR TO_CHAR(attend_end, 'YYYY-MM') = #{yearMonth})
+		    AND emp_no = #{empNo}
+		) ATT ON TO_CHAR(TMP.DT, 'YYYY-MM') = TO_CHAR(ATT.attend_start, 'YYYY-MM')
+		GROUP BY TO_CHAR(TMP.DT, 'YYYY-MM')
+	</select>
+	
+	
+	
+	
 </mapper>
+
+
+
+
+
+
+
