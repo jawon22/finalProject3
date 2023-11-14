@@ -1,5 +1,7 @@
 package com.kh.teamup.restcontroller;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,9 +18,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.teamup.dao.AttendDao;
+import com.kh.teamup.dao.EmpDao;
 import com.kh.teamup.dao.SalDao;
 import com.kh.teamup.dao.SalListDao;
 import com.kh.teamup.dao.TaxDao;
+import com.kh.teamup.dto.EmpDto;
 import com.kh.teamup.dto.SalDto;
 import com.kh.teamup.dto.SalListDto;
 import com.kh.teamup.dto.TaxDto;
@@ -47,64 +51,82 @@ public class SalListRestController {
 	@Autowired
 	private AttendDao attendDao;
 	
+	@Autowired
+	private EmpDao empDao;
+	
 	
 	@Operation(description = "사원별 연월지정하여 급여내역저장")
 	@PostMapping("/")
 	public void calculateSalList( @RequestBody TotalWorkingTimeByMonthVO vo) {
 		
-		
-		SalDto salDto = salDao.selectOne(vo.getEmpNo());
-		
-		int annualPay = (int) salDto.getSalAnnual();
-		int timePay = (int)salDto.getSalTime();//해당 사원의 통상시급 
-		
-		// 근무 시간 계산 로직 추가
-		int totalWorkingHours = attendDao.totalWorkingTimeByMonth(vo);
-//		int salMonth = timePay * totalWorkingHours;//통상 시급 * 한달근무시간 (근무시간은 갖고와야함)
-		int salMonth = timePay * totalWorkingHours;
-		
-		List<TaxDto> list = taxDao.selectList();
-		Map<String, Float> map = new HashMap<>();
-		for(TaxDto dto : list) {//taxDto에서 세금명과 세율만 갖고옴
-			map.put(dto.getTaxName(), dto.getTaxRate());
+		List<EmpDto> empList = empDao.empList();
+		 int successCount = 0;
+		for(EmpDto empDto : empList) {
+			
+			// 현재 연월 계산
+			LocalDate currentDate = LocalDate.now();
+			DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM");
+			String currentYearMonth = currentDate.format(dateFormatter);
+
+			// 이전 달 계산
+			LocalDate previousMonth = currentDate.minusMonths(1);
+			String previousYearMonth = previousMonth.format(dateFormatter);
+			log.debug("저번달 = {}", previousYearMonth);
+			
+//			TotalWorkingTimeByMonthVO twVo = new TotalWorkingTimeByMonthVO();
+			
+			vo.setEmpNo(empDto.getEmpNo());
+			vo.setYearMonth(previousYearMonth);
+
+	        SalDto salDto = salDao.selectOne(vo.getEmpNo());
+	        int annualPay = (int) salDto.getSalAnnual();
+	        int timePay = (int) salDto.getSalTime();
+
+	        int totalWorkingHours = attendDao.totalWorkingTimeByMonth(vo);
+	        
+	        int salMonth = timePay * totalWorkingHours;
+	        log.debug("총근무시간 = {}", totalWorkingHours);
+	        
+	        List<TaxDto> list = taxDao.selectList();
+	        Map<String, Float> map = new HashMap<>();
+	        for (TaxDto dto : list) {
+	            map.put(dto.getTaxName(), dto.getTaxRate());
+	        }
+	        log.debug("세금 ={}", map);
+	        
+	        int health = (int) (salMonth * map.get("건강보험") / 100);
+	        int emp = (int) (salMonth * map.get("고용보험") / 100);
+	        int national = (int) (salMonth * map.get("국민연금") / 100);
+	        int ltcare = (int) (health * map.get("장기요양보험") / 100);
+
+	        int work;
+	        if (annualPay < 4000000) {
+	            work = (int) (salMonth * map.get("소득세1") / 100);
+	        } else if (annualPay < 6000000) {
+	            work = (int) (salMonth * map.get("소득세2") / 100);
+	        } else {
+	            work = (int) (salMonth * map.get("소득세3") / 100);
+	        }
+
+	        int local = (int) (work * map.get("지방소득세") / 100);
+
+	        SalListDto salListDto = new SalListDto();
+
+	        salListDto.setEmpNo(vo.getEmpNo());
+	        salListDto.setSalListTotal(salMonth);
+	        salListDto.setSalListHealth(health);
+	        salListDto.setSalListEmp(emp);
+	        salListDto.setSalListNational(national);
+	        salListDto.setSalListLtcare(ltcare);
+	        salListDto.setSalListLocal(local);
+	        salListDto.setSalListWork(work);
+
+	        successCount++;
+	        salListDao.insert(salListDto);
 		}
-		
-		//세금 종류별 금액 계산
-		//[1]건강보험	
-		int health = (int)(salMonth * map.get("건강보험")/100);
-		//[2]고용보험
-		int emp = (int)(salMonth * map.get("고용보험")/100);
-		//[3]국민연금
-		int national = (int)(salMonth * map.get("국민연금")/100);
-		//[4]장기요양보험료 = 건보료 * 장기요양보험료율
-		int ltcare = (int)( health * map.get("장기요양보험")/100 );
-		//[5]근로소득세 = 연봉에 따라 적용이 다름
-		int work;
-	    if (annualPay < 4000000) {
-	        work = (int) (salMonth * map.get("소득세1") / 100);
-	    }
-	    else if (annualPay < 6000000) {
-	        work = (int) (salMonth * map.get("소득세2") / 100);
-	    }
-	    else {
-	        work = (int) (salMonth * map.get("소득세3") / 100);
-	    }
-	    //[6]지방소득세 = 근로소득세 * 지방소득세율
-	    int local = (int)( work * map.get("지방소득세")/100);
-		
-	    SalListDto salListDto = new SalListDto();
-	    
-		salListDto.setEmpNo(vo.getEmpNo());
-		salListDto.setSalListTotal(salMonth);
-		salListDto.setSalListHealth(health);
-		salListDto.setSalListEmp(emp);
-		salListDto.setSalListNational(national);
-		salListDto.setSalListLtcare(ltcare);
-		salListDto.setSalListLocal(local);
-		salListDto.setSalListWork(work);
-		
-		salListDao.insert( salListDto);
+		log.debug("성공 사원 = {}", successCount);
 	}
+
 	
 	@Operation(description = "사원별 급여내역 목록")
 	@GetMapping("/empNo/{empNo}")
@@ -113,7 +135,7 @@ public class SalListRestController {
 		return !list.isEmpty() ? ResponseEntity.ok(list) : ResponseEntity.notFound().build();
 	}
 	
-	@Operation(description = "사원별 급여내역 상세")
+	@Operation(description = "사원별 급여내역 상세")//급여내역No로 굳이 상세를 조회하진 않는데..
 	@GetMapping("salListNo/{salListNo}")
 	public ResponseEntity<List<SalListDto>>findByEmpSalList(@PathVariable int salListNo){
 		List<SalListDto> salList = salListDao.findByEmpSalList(salListNo);

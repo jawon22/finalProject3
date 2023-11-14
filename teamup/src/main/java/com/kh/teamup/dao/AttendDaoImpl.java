@@ -35,10 +35,12 @@ public class AttendDaoImpl implements AttendDao {
 		return sqlSession.selectList("attend.selectListByEmpNo",VO);
 	}
 	
-	//사원별 월 총급여 계산
+	//사원별 월별 총근무시간 계산
 	@Override
 	public int totalWorkingTimeByMonth(TotalWorkingTimeByMonthVO vo) {
 		return sqlSession.selectOne("attend.selectByEmpTotalWorkingTime",vo);
 	}
+	
+
 	
 }

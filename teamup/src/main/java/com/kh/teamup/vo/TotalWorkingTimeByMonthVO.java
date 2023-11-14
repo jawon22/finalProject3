@@ -11,5 +11,4 @@ import lombok.NoArgsConstructor;
 public class TotalWorkingTimeByMonthVO {
 	private int empNo;
 	private String yearMonth;
-	
 }
