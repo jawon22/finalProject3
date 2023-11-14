@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.kh.teamup.dto.EmpDto;
 import com.kh.teamup.vo.EmpComplexSearchVO;
+import com.kh.teamup.vo.EmpSearchBydeptComVO;
 import com.kh.teamup.vo.SearchVO;
 
 public interface EmpDao {
@@ -26,6 +27,8 @@ public interface EmpDao {
 	
 	List<SearchVO> search(SearchVO searchVO);
 	EmpDto selectOne(int empNo);
+
+	List<EmpSearchBydeptComVO> selectListByDeptCom(EmpSearchBydeptComVO empSearchBydeptComVO);
 	
 	
 

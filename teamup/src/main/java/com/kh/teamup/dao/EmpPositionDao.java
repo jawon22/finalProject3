@@ -8,4 +8,6 @@ public interface EmpPositionDao {
 
 	List<EmpPositionDto> selectList();
 
+	void addPosition(EmpPositionDto empPositionDto);
+
 }
