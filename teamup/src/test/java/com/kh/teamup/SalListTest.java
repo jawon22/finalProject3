@@ -1,5 +1,7 @@
 package com.kh.teamup;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,25 +46,39 @@ public class SalListTest {
 	@Test
 	void test() {
 		List<EmpDto> empList = empDao.empList();
+		 int successCount = 0;
 		for(EmpDto empDto : empList) {
+			
+			// 현재 연월 계산
+			LocalDate currentDate = LocalDate.now();
+			DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM");
+			String currentYearMonth = currentDate.format(dateFormatter);
+
+			// 이전 달 계산
+			LocalDate previousMonth = currentDate.minusMonths(1);
+			String previousYearMonth = previousMonth.format(dateFormatter);
+			log.debug("저번달 = {}", previousYearMonth);
+			
 			TotalWorkingTimeByMonthVO vo = new TotalWorkingTimeByMonthVO();
 	        vo.setEmpNo(empDto.getEmpNo());
+	        vo.setYearMonth(previousYearMonth);
 
 	        SalDto salDto = salDao.selectOne(vo.getEmpNo());
-
 	        int annualPay = (int) salDto.getSalAnnual();
 	        int timePay = (int) salDto.getSalTime();
 
 	        int totalWorkingHours = attendDao.totalWorkingTimeByMonth(vo);
-
+	        
 	        int salMonth = timePay * totalWorkingHours;
-
+	        log.debug("총근무시간 = {}", totalWorkingHours);
+	        
 	        List<TaxDto> list = taxDao.selectList();
 	        Map<String, Float> map = new HashMap<>();
 	        for (TaxDto dto : list) {
 	            map.put(dto.getTaxName(), dto.getTaxRate());
 	        }
-
+	        log.debug("세금 ={}", map);
+	        
 	        int health = (int) (salMonth * map.get("건강보험") / 100);
 	        int emp = (int) (salMonth * map.get("고용보험") / 100);
 	        int national = (int) (salMonth * map.get("국민연금") / 100);
@@ -90,7 +106,9 @@ public class SalListTest {
 	        salListDto.setSalListLocal(local);
 	        salListDto.setSalListWork(work);
 
+	        successCount++;
 	        salListDao.insert(salListDto);
 		}
+		log.debug("성공 사원 = {}", successCount);
 	}
 }

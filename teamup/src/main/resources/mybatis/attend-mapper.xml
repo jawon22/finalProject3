@@ -45,6 +45,8 @@
 		ORDER BY TMP.DT desc
 	</select>
 	
+	<!-- R 목록, 상세 -->
+	<!-- 사번별로 연월을 기준으로 해당 달의 총 근무시간이 나오는 구문 -->
 	<select id="selectByEmpTotalWorkingTime" resultType="int">
 		SELECT
 		    --TO_CHAR(TMP.DT, 'YYYY-MM') AS year_month,
