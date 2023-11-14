@@ -81,7 +81,7 @@ public class EmpRestController {
 		profileDto.setProfileNo(profileNo);
 		profileDto.setEmpNo(empNo);
 		profileDto.setProfileTitle("나를 소개하는 제목을 입력하세요.");
-		profileDto.setProfileContent("나를 소개하는 내용을 입력하세요.");
+		profileDto.setProfileContent("나를 소개하는 내용을 입력하세요."); 
 		
 		profileDao.addProfile(profileDto);
 		
