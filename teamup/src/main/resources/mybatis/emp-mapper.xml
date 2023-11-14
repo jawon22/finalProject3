@@ -121,7 +121,7 @@
 	</select>
 
 	<select id="selectBydeptAndCom" resultType="EmpSearchBydeptComVO">
-		select ep.EMP_POSITION_NAME ,e.EMP_NAME ,e.EMP_TEL ,e.EMP_EMAIL from emp e
+		select e.dept_no, e.com_id, ep.EMP_POSITION_NAME ,e.EMP_NAME ,e.EMP_TEL ,e.EMP_EMAIL from emp e
 		left outer join EMP_POSITION ep on e.EMP_Position_NO = ep.EMP_POSITION_no
 		where e.DEPT_NO =#{deptNo} and e.com_id=#{comId}
 		order by ep.emp_position_order
