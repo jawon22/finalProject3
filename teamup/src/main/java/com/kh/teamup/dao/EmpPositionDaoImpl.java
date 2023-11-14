@@ -9,12 +9,18 @@ import org.springframework.stereotype.Repository;
 import com.kh.teamup.dto.EmpPositionDto;
 
 @Repository
-public class EmpPositionDaoImpl implements EmpPositionDao{
-	
+public class EmpPositionDaoImpl implements EmpPositionDao {
+
 	@Autowired
 	private SqlSession sqlSession;
+
 	@Override
 	public List<EmpPositionDto> selectList() {
 		return sqlSession.selectList("position.list");
 	}
-}	
+
+	@Override
+	public void addPosition(EmpPositionDto empPositionDto) {
+		sqlSession.insert("position.addPosition",empPositionDto);
+	}
+}

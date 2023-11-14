@@ -6,14 +6,15 @@
 <mapper namespace="emp">
 
 	<select id="sequence" resultType="int">
-		select emp_seq.nextval from dual
+		select emp_seq.nextval from
+		dual
 	</select>
-	
+
 	<insert id="addEmp">
 
 		insert into
-		emp(com_id,dept_no,emp_no,emp_name,emp_pw,emp_tel,emp_position_no)
-		values(#{comId},#{deptNo},#{empNo},#{empName},#{empPw},#{empTel},#{empPositionNo})
+		emp(com_id,dept_no,emp_no,emp_name,emp_pw,emp_tel,emp_position_no,emp_email)
+		values(#{comId},#{deptNo},#{empNo},#{empName},#{empPw},#{empTel},#{empPositionNo},#{empEmail})
 
 	</insert>
 
@@ -109,14 +110,23 @@
 
 	<select id="selectOne" resultType="empDto">
 
-		select * from emp where emp_id = #{empDto.empId}
+		select * from emp where emp_id
+		= #{empDto.empId}
 
 	</select>
-	
+
 	<select id="selectIdByNo" resultType="empDto">
-		select * from emp where emp_no = #{empNo}
+		select * from emp where
+		emp_no = #{empNo}
 	</select>
-	
+
+	<select id="selectBydeptAndCom" resultType="EmpSearchBydeptComVO">
+		select ep.EMP_POSITION_NAME ,e.EMP_NAME ,e.EMP_TEL ,e.EMP_EMAIL from emp e
+		left outer join EMP_POSITION ep on e.EMP_Position_NO = ep.EMP_POSITION_no
+		where e.DEPT_NO =#{deptNo} and e.com_id=#{comId}
+		order by ep.emp_position_order
+	</select>
+
 
 
 

@@ -19,7 +19,7 @@ import com.kh.teamup.dto.SalDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-@Tag(name="급여 관리", description = "급여 CRU")
+@Tag(name="연봉 관리", description = "연봉 CRU")
 @CrossOrigin
 @RestController
 @RequestMapping("/sal")

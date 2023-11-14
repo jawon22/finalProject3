@@ -13,10 +13,11 @@
 		d.dept_name,
 		count(emp_no) as emp_count
 		from dept d
-		inner join com c on d.COM_ID =c.COM_ID
-		inner join emp e on d.DEPT_NO = e.DEPT_NO
+		left outer join com c on d.COM_ID =c.COM_ID
+		left outer join emp e on d.DEPT_NO = e.DEPT_NO
 		where c.com_id = #{comId} 
 		group by d.dept_no, d.dept_name
+		order by dept_name
 
 	</select>
 	

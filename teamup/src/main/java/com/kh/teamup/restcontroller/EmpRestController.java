@@ -1,21 +1,12 @@
 package com.kh.teamup.restcontroller;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Scanner;
-import java.util.UUID;
 
 import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -24,7 +15,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,7 +25,9 @@ import com.kh.teamup.dao.ProfileDao;
 import com.kh.teamup.dto.AttachDto;
 import com.kh.teamup.dto.EmpDto;
 import com.kh.teamup.dto.ProfileDto;
+import com.kh.teamup.service.EmpService;
 import com.kh.teamup.vo.EmpComplexSearchVO;
+import com.kh.teamup.vo.EmpSearchBydeptComVO;
 import com.kh.teamup.vo.SearchVO;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -62,13 +54,15 @@ public class EmpRestController {
 	
 	@Autowired
 	private BCryptPasswordEncoder encoder;
+	@Autowired
+	private EmpService empService;
 	
 	
 	
 	@Transactional
 	@Operation(description = "사원 추가")
 	@PostMapping("/addEmp/")
-	public void addEmp(@RequestBody EmpDto empDto) {
+	public void addEmp(@RequestBody EmpDto empDto) throws MessagingException, IOException {
 	
 		int empNo = empDao.sequence();
 		empDto.setEmpNo(empNo);
@@ -99,83 +93,91 @@ public class EmpRestController {
 	    
 	    // 프로필과 이미지 연결
 	    profileDao.connectProfile(profileNo, attachNo);
+	    
+	    EmpDto findDto = empDao.selectIdByNo(empNo);
+	    
+	    
+	    
+	    log.debug("findDto={}",findDto);
+	    
+	    empService.updateEmpId(empNo, findDto);
 		
 		
 	}
 	
-	@Operation(description = "사번 생성")
-	@PutMapping("/updateEmpId/{empNo}")
-	public void updateEmpId(@RequestBody EmpDto empDto,@PathVariable int empNo) throws MessagingException, IOException {
-		//사번 생성이루 select 로 사번을 찾고 있으면 메세지 전송한다.
-		//보내기 전에 pw를 랜덤으로 설정
-		//로그인시에 secure
-		empDao.updateEmpId(empNo, empDto);
-		
-		EmpDto findDto = empDao.selectIdByNo(empNo);
-		
-		//findDto의 비밀번호를 랜덤한 값으로 바꾸는 코드
-		
-		String tempPw=UUID.randomUUID().toString().replace("-", "");//-를 제거
-		tempPw = tempPw.substring(0,10);//tempPw를 앞에서부터 10자리 잘라줌
-		
-		log.debug("임시비번={}",tempPw);
-		
-		//여시서 임시비밀번호를 insert
-		
-		String convert =encoder.encode(tempPw);
-		log.debug("convert={}",convert);
-		empDto.setEmpPw(convert);//이거를 보내주고
-		empDao.empInfoUpdate(empNo, empDto);
-		
-		log.debug("dto={}",empDto);
-		
-		
-		log.debug("findDto={}", findDto);
-		
-		if(findDto.getEmpEmail() == null) return;
-		
-		MimeMessage messege = sender.createMimeMessage();
-		MimeMessageHelper helper = new MimeMessageHelper(messege,false,"UTF-8");
-		
-		helper.setTo(findDto.getEmpEmail());
-		helper.setSubject("임시비밀번호 생성");
-		
-		log.debug("email={}",findDto.getEmpEmail());
-		
-		ClassPathResource resource = new ClassPathResource("templates/email2.html");
-		
-		File targetFile = resource.getFile();
-		
-		Scanner scanner = new Scanner(targetFile);
-		StringBuffer buffer = new StringBuffer();
-		
-		while(scanner.hasNextLine()) {
-			buffer.append(scanner.nextLine());
-		}
-		scanner.close();
-		
-		String text = buffer.toString();
-		log.debug(text);
-		Document doc = Jsoup.parse(text);
-		
-		Element who = doc.getElementById("who");
-		who.text(findDto.getEmpName());
-		
-		Element id = doc.getElementById("id");
-		id.text(findDto.getEmpName());
-		
-		Element pw = doc.getElementById("pw");
-		pw.text(tempPw);
-		
-		Element link = doc.getElementById("link");
-		link.attr("href", "#");//링크는 병경하면 된다
-		
-		
-		helper.setText(doc.toString(),true);
-		sender.send(messege);
-		
-		
-	}
+//	@Operation(description = "사번 생성")
+//	@PutMapping("/updateEmpId/{empNo}")
+//	public void updateEmpId(@RequestBody EmpDto empDto,@PathVariable int empNo) throws MessagingException, IOException {
+//		//사번 생성이루 select 로 사번을 찾고 있으면 메세지 전송한다.
+//		//보내기 전에 pw를 랜덤으로 설정
+//		//로그인시에 secure
+//		empDao.updateEmpId(empNo, empDto);
+//		
+//		EmpDto findDto = empDao.selectIdByNo(empNo);
+//		
+//		//findDto의 비밀번호를 랜덤한 값으로 바꾸는 코드
+//		
+//		String tempPw=UUID.randomUUID().toString().replace("-", "");//-를 제거
+//		tempPw = tempPw.substring(0,10);//tempPw를 앞에서부터 10자리 잘라줌
+//		
+//		log.debug("임시비번={}",tempPw);
+//		
+//		//여시서 임시비밀번호를 insert
+//		
+//		String convert =encoder.encode(tempPw);
+//		log.debug("convert={}",convert);
+//		empDto.setEmpPw(convert);//이거를 보내주고
+//		empDao.empInfoUpdate(empNo, empDto);
+//		
+//		log.debug("dto={}",empDto);
+//		
+//		
+//		log.debug("findDto={}", findDto);
+//		
+//		if(findDto.getEmpEmail() == null) return;
+//		
+//		MimeMessage messege = sender.createMimeMessage();
+//		MimeMessageHelper helper = new MimeMessageHelper(messege,false,"UTF-8");
+//		
+//		helper.setTo(findDto.getEmpEmail());
+//		helper.setSubject("임시비밀번호 생성");
+//		
+//		log.debug("email={}",findDto.getEmpEmail());
+//		
+//		ClassPathResource resource = new ClassPathResource("templates/email2.html");
+//		
+//		File targetFile = resource.getFile();
+//		
+//		Scanner scanner = new Scanner(targetFile);
+//		StringBuffer buffer = new StringBuffer();
+//		
+//		while(scanner.hasNextLine()) {
+//			buffer.append(scanner.nextLine());
+//		}
+//		scanner.close();
+//		
+//		String text = buffer.toString();
+//		log.debug(text);
+//		Document doc = Jsoup.parse(text);
+//		
+//		Element who = doc.getElementById("who");
+//		who.text(findDto.getEmpName());
+//		
+//		Element id = doc.getElementById("id");
+//		id.text(findDto.getEmpName());
+//		
+//		Element pw = doc.getElementById("pw");
+//		pw.text(tempPw);
+//		
+//		Element link = doc.getElementById("link");
+//		link.attr("href", "#");//링크는 병경하면 된다
+//		
+//		
+//		helper.setText(doc.toString(),true);
+//		sender.send(messege);
+//		
+//		
+//	}
 	@Operation(description = "전체 리스트")
 	@GetMapping("/")
 	public List<EmpDto> empList(){
@@ -234,6 +236,11 @@ public class EmpRestController {
 	public EmpDto myPage(@PathVariable int empNo) {
 		return empDao.selectIdByNo(empNo);
 		
+	}
+	
+	@PostMapping("/empListByDeptCom")
+	public List<EmpSearchBydeptComVO> listByDeptCom(@RequestBody EmpSearchBydeptComVO empSearchBydeptComVO) {
+		return empDao.selectListByDeptCom(empSearchBydeptComVO);
 	}
 	
 }
