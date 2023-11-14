@@ -12,5 +12,7 @@ public class EmpSearchBydeptComVO {
 	private String empTel;
 	private String empEmail;
 	private String empId;
+	private String comId;
+	private int deptNo;
 
 }
