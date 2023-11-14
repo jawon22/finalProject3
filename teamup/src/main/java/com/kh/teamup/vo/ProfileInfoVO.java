@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class ProfileInfoVO {
+	private int attachNo;
 	private int profileNo;
 	private int empNo;
 	private String deptName;
