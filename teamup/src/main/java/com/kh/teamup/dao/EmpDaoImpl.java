@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.kh.teamup.dto.EmpDto;
 import com.kh.teamup.vo.EmpComplexSearchVO;
+import com.kh.teamup.vo.EmpSearchBydeptComVO;
 import com.kh.teamup.vo.SearchVO;
 @Repository
 public class EmpDaoImpl implements EmpDao {
@@ -33,6 +34,8 @@ public class EmpDaoImpl implements EmpDao {
 		
 		sqlSession.insert("emp.addEmp",empDto);
 	}
+	
+	
 	
 	
 	
@@ -90,6 +93,11 @@ public class EmpDaoImpl implements EmpDao {
 	@Override
 	public EmpDto selectOne(int empNo) {
 		return sqlSession.selectOne("emp.findEmp",empNo);
+	}
+	
+	@Override
+	public List<EmpSearchBydeptComVO> selectListByDeptCom(EmpSearchBydeptComVO empSearchBydeptComVO) {
+		return sqlSession.selectList("emp.selectBydeptAndCom",empSearchBydeptComVO);
 	}
 	
 }

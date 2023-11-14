@@ -9,4 +9,9 @@
     	select * from emp_position 
     	</select>
     	
+    	<insert id="addPosition">
+    	insert into emp_position(emp_position_no, emp_position_name, emp_position_order,com_id)
+    	values(emp_position_seq.nextval,#{empPositionName},#{empPositionOrder},#{comId})
+    	</insert>
+    	
     </mapper>
