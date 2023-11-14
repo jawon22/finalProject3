@@ -39,7 +39,9 @@
 				e.emp_name,
 				e.emp_tel,
 				e.emp_email,
-				e.emp_join
+				e.emp_join,
+				p.profile_title,
+				p.profile_content 
 			from 
 				emp_profile p 
 				join emp e on e.emp_no = p.emp_no 
