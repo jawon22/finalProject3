@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kh.teamup.vo.AttendWorkingSearchVO;
 import com.kh.teamup.vo.AttendWorkingTimesVO;
 
@@ -20,7 +22,7 @@ public class AttendWorkingTimesTest {
 	private SqlSession sqlSession;
 	
 	@Test
-	public void test() {
+	public void test() throws JsonProcessingException {
 //		Map<String, Object> params = new HashMap<>();
 //		params.put("empNo", 11);
 //		params.put("attendBeginDate", "2023-10-01");
@@ -29,13 +31,13 @@ public class AttendWorkingTimesTest {
 		
 		AttendWorkingSearchVO awtvo = AttendWorkingSearchVO.builder()
 					.empNo(11)
-					.attendBeginDate("2023-10-01")
-					.attendEndDate("2023-10-31")
 				.build();
-		List<AttendWorkingTimesVO> list = sqlSession.selectList("attend.selectListByEmpNo", awtvo);
+		List<AttendWorkingTimesVO> list = sqlSession.selectList("attend.findSysdate", awtvo);
 		log.debug("list size = {}", list.size());
+		ObjectMapper mapper = new ObjectMapper();
 		for(AttendWorkingTimesVO vo : list) {
-			log.debug("vo = {}", vo);
+//			log.debug("vo = {}", vo);
+			log.debug("json = {}", mapper.writeValueAsString(vo));
 		}
 	}
 	
