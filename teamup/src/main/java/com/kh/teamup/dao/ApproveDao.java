@@ -11,7 +11,7 @@ public interface ApproveDao {
 	List<ApproveDto> selectList(); //조회
 	void insert(ApproveDto approveDto); //등록
 	
-	boolean delete(int empNo); //삭제
+	boolean delete(int apprNo); //삭제
 	
 
 }

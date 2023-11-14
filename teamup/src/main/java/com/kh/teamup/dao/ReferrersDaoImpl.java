@@ -1,5 +1,7 @@
 package com.kh.teamup.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -20,6 +22,11 @@ public class ReferrersDaoImpl implements ReferrersDao{
 	@Override
 	public void insert(ReferrersDto referrersDto) {
 		sqlSession.insert("referrers.referrersSave",referrersDto);
+	}
+	
+	@Override
+	public List<ReferrersDto> selectByPathNo(int pathNo) {
+		return sqlSession.selectList("referrers.findByPathNo",pathNo);
 	}
 	
 }
