@@ -1,10 +1,13 @@
 package com.kh.teamup.service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.kh.teamup.dao.AttendDao;
@@ -39,15 +42,28 @@ public class RegularSalInsertServiceImpl implements RegularSalInsertService{
 	@Autowired
 	private AttendDao attendDao;
 	
-	//스케줄러 메소드
-//	@Scheduled(cron = "0 0 10 * * ?")//매달 10일날 실행
+	//스케줄러
+	@Scheduled(cron = "0 0 10 * * ?")//매달 10일날 실행
 	@Override
 		public void insertSalForAllEmp() {
+		
 			List<EmpDto> empList = empDao.empList();
+			
 			for(EmpDto empDto : empList) {
-				TotalWorkingTimeByMonthVO vo = new TotalWorkingTimeByMonthVO();
-		        vo.setEmpNo(empDto.getEmpNo());
+				// 현재 연월 계산
+				LocalDate currentDate = LocalDate.now();
+				DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM");
+				String currentYearMonth = currentDate.format(dateFormatter);
 
+				// 이전 달 계산
+				LocalDate previousMonth = currentDate.minusMonths(1);
+				String previousYearMonth = previousMonth.format(dateFormatter);
+				
+				TotalWorkingTimeByMonthVO vo = new TotalWorkingTimeByMonthVO();
+				
+		        vo.setEmpNo(empDto.getEmpNo());
+		        vo.setYearMonth(previousYearMonth);
+		        
 		        SalDto salDto = salDao.selectOne(vo.getEmpNo());
 
 		        int annualPay = (int) salDto.getSalAnnual();

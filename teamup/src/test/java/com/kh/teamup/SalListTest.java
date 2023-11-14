@@ -46,7 +46,6 @@ public class SalListTest {
 	@Test
 	void test() {
 		List<EmpDto> empList = empDao.empList();
-		 int successCount = 0;
 		for(EmpDto empDto : empList) {
 			
 			// 현재 연월 계산
@@ -63,10 +62,11 @@ public class SalListTest {
 	        vo.setEmpNo(empDto.getEmpNo());
 	        vo.setYearMonth(previousYearMonth);
 
+	        log.debug("vo = {}", vo);
 	        SalDto salDto = salDao.selectOne(vo.getEmpNo());
+	        log.debug("salDto = {}", salDto);
 	        int annualPay = (int) salDto.getSalAnnual();
 	        int timePay = (int) salDto.getSalTime();
-
 	        int totalWorkingHours = attendDao.totalWorkingTimeByMonth(vo);
 	        
 	        int salMonth = timePay * totalWorkingHours;
@@ -106,9 +106,7 @@ public class SalListTest {
 	        salListDto.setSalListLocal(local);
 	        salListDto.setSalListWork(work);
 
-	        successCount++;
 	        salListDao.insert(salListDto);
 		}
-		log.debug("성공 사원 = {}", successCount);
 	}
 }

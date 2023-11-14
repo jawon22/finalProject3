@@ -60,7 +60,7 @@ public class SalListRestController {
 	public void calculateSalList( @RequestBody TotalWorkingTimeByMonthVO vo) {
 		
 		List<EmpDto> empList = empDao.empList();
-		 int successCount = 0;
+
 		for(EmpDto empDto : empList) {
 			
 			// 현재 연월 계산
@@ -71,9 +71,7 @@ public class SalListRestController {
 			// 이전 달 계산
 			LocalDate previousMonth = currentDate.minusMonths(1);
 			String previousYearMonth = previousMonth.format(dateFormatter);
-			log.debug("저번달 = {}", previousYearMonth);
-			
-//			TotalWorkingTimeByMonthVO twVo = new TotalWorkingTimeByMonthVO();
+//			log.debug("저번달 = {}", previousYearMonth);
 			
 			vo.setEmpNo(empDto.getEmpNo());
 			vo.setYearMonth(previousYearMonth);
@@ -85,28 +83,28 @@ public class SalListRestController {
 	        int totalWorkingHours = attendDao.totalWorkingTimeByMonth(vo);
 	        
 	        int salMonth = timePay * totalWorkingHours;
-	        log.debug("총근무시간 = {}", totalWorkingHours);
+//	        log.debug("총근무시간 = {}", totalWorkingHours);
 	        
 	        List<TaxDto> list = taxDao.selectList();
 	        Map<String, Float> map = new HashMap<>();
 	        for (TaxDto dto : list) {
 	            map.put(dto.getTaxName(), dto.getTaxRate());
 	        }
-	        log.debug("세금 ={}", map);
+//	        log.debug("세금 ={}", map);
 	        
 	        int health = (int) (salMonth * map.get("건강보험") / 100);
 	        int emp = (int) (salMonth * map.get("고용보험") / 100);
 	        int national = (int) (salMonth * map.get("국민연금") / 100);
 	        int ltcare = (int) (health * map.get("장기요양보험") / 100);
 
-	        int work;
-	        if (annualPay < 4000000) {
-	            work = (int) (salMonth * map.get("소득세1") / 100);
-	        } else if (annualPay < 6000000) {
-	            work = (int) (salMonth * map.get("소득세2") / 100);
-	        } else {
-	            work = (int) (salMonth * map.get("소득세3") / 100);
-	        }
+	        int work;//연봉에 따른 소득세 설정
+		        if (annualPay < 4000000) {
+		            work = (int) (salMonth * map.get("소득세1") / 100);
+		        } else if (annualPay < 6000000) {
+		            work = (int) (salMonth * map.get("소득세2") / 100);
+		        } else {
+		            work = (int) (salMonth * map.get("소득세3") / 100);
+		        }
 
 	        int local = (int) (work * map.get("지방소득세") / 100);
 
@@ -121,10 +119,8 @@ public class SalListRestController {
 	        salListDto.setSalListLocal(local);
 	        salListDto.setSalListWork(work);
 
-	        successCount++;
 	        salListDao.insert(salListDto);
 		}
-		log.debug("성공 사원 = {}", successCount);
 	}
 
 	
