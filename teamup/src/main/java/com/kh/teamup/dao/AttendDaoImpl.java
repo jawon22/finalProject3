@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.kh.teamup.dto.AttendDto;
 import com.kh.teamup.vo.AttendWorkingSearchVO;
+import com.kh.teamup.vo.AttendWorkingSysdateVO;
 import com.kh.teamup.vo.AttendWorkingTimesVO;
 import com.kh.teamup.vo.TotalWorkingTimeByMonthVO;
 
@@ -29,18 +30,22 @@ public class AttendDaoImpl implements AttendDao {
 		Map<String, Object> param = Map.of("empNo", empNo, "attendDto", attendDto);
 		sqlSession.update("attend.update", param);
 	}
+	
+	@Override
+	public List<AttendWorkingTimesVO> findSysdate(AttendWorkingSysdateVO VO) {
+		return sqlSession.selectList("attend.findSysdate",VO);
+	}
 
 	@Override
-	public List<AttendWorkingTimesVO> selectListByEmpNo(AttendWorkingSearchVO VO) {
-		return sqlSession.selectList("attend.selectListByEmpNo",VO);
+	public List<AttendWorkingTimesVO> findSearch(AttendWorkingSearchVO VO) {
+		return sqlSession.selectList("attend.findSearch",VO);
 	}
 	
+
 	//사원별 월별 총근무시간 계산
 	@Override
 	public int totalWorkingTimeByMonth(TotalWorkingTimeByMonthVO vo) {
 		return sqlSession.selectOne("attend.selectByEmpTotalWorkingTime",vo);
 	}
-	
 
-	
 }

@@ -11,11 +11,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kh.teamup.dao.AttendDao;
 import com.kh.teamup.dto.AttendDto;
 import com.kh.teamup.vo.AttendWorkingSearchVO;
+import com.kh.teamup.vo.AttendWorkingSysdateVO;
 import com.kh.teamup.vo.AttendWorkingTimesVO;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,6 +34,7 @@ public class AttendRestController {
 	private AttendDao attendDao;
 	
 	//출근시간 찍히기
+	@Operation(description = "출근 버튼")
 	@PostMapping("/") //등록
 	public void insert(@RequestBody AttendDto attendDto) {
 		attendDao.insert(attendDto);
@@ -37,17 +42,26 @@ public class AttendRestController {
 	
 	//퇴근시간 찍히기
 	// @PutMapping - 전체 수정
+	@Operation(description = "퇴근 버튼")
 	@PatchMapping("/{empNo}") // 일부 수정
 	public void update(@RequestBody AttendDto attendDto, @PathVariable int empNo) {
 		attendDao.update(empNo, attendDto);
 	}
 	
-	
-	// @GetMapping - 조회
-	@PostMapping("/find/")
-	public List<AttendWorkingTimesVO> find(@RequestBody AttendWorkingSearchVO VO){
-		List<AttendWorkingTimesVO> list = attendDao.selectListByEmpNo(VO);
+	@Operation(description = "현재 달의 1일부터 현재 달의 오늘일까지")
+	@PostMapping("/findSysdate")
+	public List<AttendWorkingTimesVO> findSysdate(@RequestBody AttendWorkingSysdateVO VO) throws JsonProcessingException{
+		List<AttendWorkingTimesVO> list = attendDao.findSysdate(VO);
 		return list;
 	}
+	
+	
+	@Operation(description = "사용자가 월을 직접 입력하여 근태내역 보여주기")
+	@PostMapping("/findSearch")
+	public List<AttendWorkingTimesVO> findMonth(@RequestBody AttendWorkingSearchVO VO){
+		List<AttendWorkingTimesVO> list = attendDao.findSearch(VO);
+		return list;
+	}
+	
 
 }
