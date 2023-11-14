@@ -8,6 +8,8 @@ import com.kh.teamup.vo.SearchVO;
 
 public interface EmpDao {
 	
+	int sequence();//시퀀스
+	
 	void addEmp(EmpDto empDto);
 	//login 아이디 생성
 	void updateEmpId(int empNo,EmpDto empDto);
@@ -24,5 +26,7 @@ public interface EmpDao {
 	
 	List<SearchVO> search(SearchVO searchVO);
 	EmpDto selectOne(int empNo);
+	
+	
 
 }

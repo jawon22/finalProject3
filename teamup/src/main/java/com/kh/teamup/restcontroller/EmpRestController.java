@@ -17,6 +17,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,8 +29,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kh.teamup.dao.AttachDao;
 import com.kh.teamup.dao.EmpDao;
+import com.kh.teamup.dao.ProfileDao;
+import com.kh.teamup.dto.AttachDto;
 import com.kh.teamup.dto.EmpDto;
+import com.kh.teamup.dto.ProfileDto;
 import com.kh.teamup.vo.EmpComplexSearchVO;
 import com.kh.teamup.vo.SearchVO;
 
@@ -45,6 +50,12 @@ public class EmpRestController {
 	@Autowired
 	private EmpDao empDao;
 	
+	@Autowired
+	private ProfileDao profileDao;
+	
+	@Autowired
+	private AttachDao attachDao;
+	
 	
 	@Autowired
 	private JavaMailSender sender;
@@ -54,11 +65,41 @@ public class EmpRestController {
 	
 	
 	
+	@Transactional
 	@Operation(description = "사원 추가")
 	@PostMapping("/addEmp/")
 	public void addEmp(@RequestBody EmpDto empDto) {
 	
+		int empNo = empDao.sequence();
+		empDto.setEmpNo(empNo);
+		
 		empDao.addEmp(empDto);
+		
+		//사원 등록할 때 기본 프로필도 같이 등록
+		ProfileDto profileDto = new ProfileDto();
+		int profileNo = profileDao.sequence();
+		profileDto.setProfileNo(profileNo);
+		profileDto.setEmpNo(empNo);
+		profileDto.setProfileTitle("나를 소개하는 제목을 입력하세요.");
+		profileDto.setProfileContent("나를 소개하는 내용을 입력하세요."); 
+		
+		profileDao.addProfile(profileDto);
+		
+		
+		//사원 등록할 때 기본 이미지 같이 등록
+		int defaultImageNo = 1; // 기본 이미지의 번호를 설정하세요.
+	    int attachNo = attachDao.sequence();
+	    
+	    AttachDto attachDto = new AttachDto();
+	    attachDto.setAttachNo(attachNo);
+	    attachDto.setAttachName("profileImage.png"); // 이미지 파일명은 적절하게 설정하세요.
+	    attachDto.setAttachSize(0); // 이미지 크기는 0 또는 적절한 크기로 설정하세요.
+	    attachDto.setAttachType("image/jpeg"); // 이미지 타입은 적절한 타입으로 설정하세요.
+	    attachDao.insert(attachDto);
+	    
+	    // 프로필과 이미지 연결
+	    profileDao.connectProfile(profileNo, attachNo);
+		
 		
 	}
 	

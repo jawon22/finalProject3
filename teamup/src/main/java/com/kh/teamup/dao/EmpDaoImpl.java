@@ -19,6 +19,11 @@ public class EmpDaoImpl implements EmpDao {
 	private BCryptPasswordEncoder encoder;
 	
 	
+	@Override
+	public int sequence() {
+		return sqlSession.selectOne("emp.sequence");
+	}
+	
 	
 	@Override
 	public void addEmp(EmpDto empDto) {
