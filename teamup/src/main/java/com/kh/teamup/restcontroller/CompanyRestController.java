@@ -198,7 +198,7 @@ public class CompanyRestController {
 		boolean isMatch = encoder.matches( inputDto.getComPw(),findDto.getComPw());
 		
 		log.debug("match={}", isMatch);
-		
+
 		return isMatch;
 
 
