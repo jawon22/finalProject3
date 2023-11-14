@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.teamup.dao.AttendDao;
@@ -132,11 +133,20 @@ public class SalListRestController {
 	}
 	
 	@Operation(description = "사원별 급여내역 상세")//급여내역No로 굳이 상세를 조회하진 않는데..
-	@GetMapping("salListNo/{salListNo}")
+	@GetMapping("/salListNo/{salListNo}")
 	public ResponseEntity<List<SalListDto>>findByEmpSalList(@PathVariable int salListNo){
 		List<SalListDto> salList = salListDao.findByEmpSalList(salListNo);
 		return !salList.isEmpty() ? ResponseEntity.ok(salList) : ResponseEntity.notFound().build();
 		}
+	
+	@GetMapping("/salListYearMonth/{empNo}")
+	public List<TotalWorkingTimeByMonthVO> findByEmpMonthSalList(@PathVariable int empNo, @RequestParam String yearMonth){  
+		TotalWorkingTimeByMonthVO vo = new TotalWorkingTimeByMonthVO();
+        vo.setEmpNo(empNo);
+        vo.setYearMonth(yearMonth);
+		List<TotalWorkingTimeByMonthVO> list = salListDao.findByEmpMonthSalList(vo);
+		return list;
+	}
 	
 	@Operation(description = "급여내역 삭제")
 	@DeleteMapping("/{empNo}")

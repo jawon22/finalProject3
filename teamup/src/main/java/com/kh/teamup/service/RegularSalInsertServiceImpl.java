@@ -43,7 +43,8 @@ public class RegularSalInsertServiceImpl implements RegularSalInsertService{
 	private AttendDao attendDao;
 	
 	//스케줄러
-	@Scheduled(cron = "0 0 10 * * ?")//매달 10일날 실행
+//	@Scheduled(cron = "0 0 10 * * ?")//매달 10일날 실행
+//	@Scheduled(fixedRate = 30000)//1초(1000ms)에 한번씩 실행
 	@Override
 		public void insertSalForAllEmp() {
 		
