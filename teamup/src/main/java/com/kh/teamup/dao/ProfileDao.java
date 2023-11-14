@@ -1,8 +1,11 @@
 package com.kh.teamup.dao;
 
+import java.util.List;
+
 import com.kh.teamup.dto.AttachDto;
 import com.kh.teamup.dto.ProfileDto;
 import com.kh.teamup.vo.ProfileImageVO;
+import com.kh.teamup.vo.ProfileInfoVO;
 import com.kh.teamup.vo.ProfileUpdateVO;
 
 public interface ProfileDao {
@@ -16,6 +19,8 @@ public interface ProfileDao {
 	AttachDto findImage(int profileNo);//프로필 이미지 화면에 출력
 
 	boolean update(ProfileUpdateVO vo);//프로필+프로필이미지 수정
+
+	List<ProfileInfoVO> selectList(int empNo);
 
 	
 }

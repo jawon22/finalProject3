@@ -10,6 +10,10 @@
 		select receivers_seq.nextval from dual
 	</select>
 	
+	<select id="findByPathNo" resultType="ReceiversDto">
+		select * from receivers where path_no = #{pathNo}
+	</select>
+	
 	<insert id="receiversSave">
 		insert into receivers(receivers_no, path_no, receivers_receiver) 
 		values(#{receiversNo}, #{pathNo}, #{receiversReceiver})

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.kh.teamup.dto.AttendDto;
 import com.kh.teamup.vo.AttendWorkingSearchVO;
 import com.kh.teamup.vo.AttendWorkingTimesVO;
+import com.kh.teamup.vo.TotalWorkingTimeByMonthVO;
 
 @Repository
 public class AttendDaoImpl implements AttendDao {
@@ -32,6 +33,12 @@ public class AttendDaoImpl implements AttendDao {
 	@Override
 	public List<AttendWorkingTimesVO> selectListByEmpNo(AttendWorkingSearchVO VO) {
 		return sqlSession.selectList("attend.selectListByEmpNo",VO);
+	}
+	
+	//사원별 월 총급여 계산
+	@Override
+	public int totalWorkingTimeByMonth(TotalWorkingTimeByMonthVO vo) {
+		return sqlSession.selectOne("attend.selectByEmpTotalWorkingTime",vo);
 	}
 	
 }

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.kh.teamup.dao.SalDao;
 import com.kh.teamup.dto.SalDto;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Tag(name="급여 관리", description = "급여 CRU")
@@ -28,27 +29,38 @@ public class SalRestController {
 	private SalDao salDao;
 	
 	//등록
+	@Operation(description = "연봉 등록")
 	@PostMapping("/")
 	public void insert(@RequestBody SalDto salDto) {
 		salDao.insert(salDto);
 	}
 	
 	//조회
+	@Operation(description = "전사원 연봉 목록")
 	@GetMapping("/")
 	public List<SalDto> list(){
 		return salDao.selectList();
 	}
 	
 	//상세조회
+	@Operation(description = "사원의 연봉")
 	@GetMapping("/{empNo}")
 	public SalDto find(@PathVariable int empNo) {
 		return salDao.selectOne(empNo);
 	}
 	
 	//수정
+	@Operation(description = "사원의 연봉 수정")
 	@PutMapping("/{empNo}")
 	public void update(@RequestBody SalDto salDto, @PathVariable int empNo) {
 		salDao.edit(empNo, salDto);
+	}
+	
+	//사원의 최신 연봉 조회
+	@Operation(description = "사원의 최신 연봉 조회")
+	@GetMapping("/maxSalNo/{empNo}")
+	public SalDto selectLatesSalNo(@PathVariable int empNo) {
+		return salDao.selectOne(empNo);
 	}
 
 }

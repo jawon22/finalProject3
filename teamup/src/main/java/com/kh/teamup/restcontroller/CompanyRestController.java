@@ -182,7 +182,7 @@ public class CompanyRestController {
 
 	@Operation(description = "로그인")
 	@PostMapping("/login")
-	public void login(@RequestBody CompanyDto inputDto) {
+	public boolean login(@RequestBody CompanyDto inputDto) {
 
 		// 해독
 		CompanyDto findDto = companyDao.selectOne(inputDto.getComId());
@@ -198,8 +198,8 @@ public class CompanyRestController {
 		boolean isMatch = encoder.matches( inputDto.getComPw(),findDto.getComPw());
 		
 		log.debug("match={}", isMatch);
-		if (!isMatch)
-			return;
+
+		return isMatch;
 
 
 	}

@@ -9,6 +9,11 @@
 	<select id="sequence" resultType="int">
 		select appr_path_seq.nextval from dual
 	</select>
+	
+	<select id="findByApprNo" resultType="ApprovePathDto">
+		select * from appr_path where appr_no = #{apprNo} 
+	</select>
+
 
 	<insert id="approvePathSave">
 		insert into appr_path(appr_path_no, appr_no, appr_sender) 

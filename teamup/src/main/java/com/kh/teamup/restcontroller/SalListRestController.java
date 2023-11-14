@@ -22,7 +22,7 @@ import com.kh.teamup.dao.TaxDao;
 import com.kh.teamup.dto.SalDto;
 import com.kh.teamup.dto.SalListDto;
 import com.kh.teamup.dto.TaxDto;
-import com.kh.teamup.vo.AttendWorkingTimesVO;
+import com.kh.teamup.vo.TotalWorkingTimeByMonthVO;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -48,29 +48,20 @@ public class SalListRestController {
 	private AttendDao attendDao;
 	
 	
-	@Operation(description = "급여내역저장")
+	@Operation(description = "사원별 연월지정하여 급여내역저장")
 	@PostMapping("/")
-	public void calculateSalList(@RequestBody SalListDto salListDto, int empNo) {
+	public void calculateSalList( @RequestBody TotalWorkingTimeByMonthVO vo) {
 		
-		// attendDao를 통해 근무 시간을 가져옴
-//	    AttendWorkingTimesVO workingTimesVO = new AttendWorkingTimesVO();
-//	    workingTimesVO.setEmpNo(empNo);
-//	    log.debug("근무시간 = {}", workingTimesVO);
-//	    List<AttendWorkingTimesVO> workingTimesList = attendDao.selectListByEmpNo(workingTimesVO);
-
-	    // 근무 시간 계산 로직 추가
-//	    int totalWorkingHours = 0;
-//	    for (AttendWorkingTimesVO vo : workingTimesList) {
-//	        totalWorkingHours += vo.getWorkingTimes();
-//	    }
-
 		
-		SalDto salDto = salDao.selectOne(empNo);
+		SalDto salDto = salDao.selectOne(vo.getEmpNo());
 		
 		int annualPay = (int) salDto.getSalAnnual();
 		int timePay = (int)salDto.getSalTime();//해당 사원의 통상시급 
+		
+		// 근무 시간 계산 로직 추가
+		int totalWorkingHours = attendDao.totalWorkingTimeByMonth(vo);
 //		int salMonth = timePay * totalWorkingHours;//통상 시급 * 한달근무시간 (근무시간은 갖고와야함)
-		int salMonth = timePay * 160;
+		int salMonth = timePay * totalWorkingHours;
 		
 		List<TaxDto> list = taxDao.selectList();
 		Map<String, Float> map = new HashMap<>();
@@ -101,7 +92,9 @@ public class SalListRestController {
 	    //[6]지방소득세 = 근로소득세 * 지방소득세율
 	    int local = (int)( work * map.get("지방소득세")/100);
 		
-		salListDto.setEmpNo(empNo);
+	    SalListDto salListDto = new SalListDto();
+	    
+		salListDto.setEmpNo(vo.getEmpNo());
 		salListDto.setSalListTotal(salMonth);
 		salListDto.setSalListHealth(health);
 		salListDto.setSalListEmp(emp);
@@ -113,7 +106,7 @@ public class SalListRestController {
 		salListDao.insert( salListDto);
 	}
 	
-	@Operation(description = "사원별 급여내역 목록")//수정 필요 selectOne이 아님! 
+	@Operation(description = "사원별 급여내역 목록")
 	@GetMapping("/empNo/{empNo}")
 	public ResponseEntity<List<SalListDto>>findByEmpNo(@PathVariable int empNo){
 		List<SalListDto> list = salListDao.findByEmpNo(empNo);

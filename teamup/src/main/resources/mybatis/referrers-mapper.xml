@@ -9,7 +9,12 @@
  	<select id="sequence" resultType="int">
  		select referrers_seq.nextval from dual
  	</select>
- 
+ 	
+ 	<select id="findByPathNo" resultType="ReferrersDto">
+ 		select * from referrers where path_no = #{pathNo}
+ 	</select>
+
+
  	<insert id="referrersSave">
  		insert into referrers(referrers_no, path_no, referrers_referrer) 
  		values(#{referrersNo}, #{pathNo}, #{referrersReferrer})

@@ -19,10 +19,7 @@
 	</select>
 	
 	<delete id="approveCancel">
-		delete appr where appr_no in(
-			select a.appr_no from appr a 
-		join appr_path ap on a.appr_no = ap.appr_no where ap.path_status ='R'
-		) and a.appr_sender = #{empNo} and a.appr_no = #{apprNo}
+		delete appr where appr_no = #{apprNo}
 	</delete>
 	
 	<insert id="approveSave">
