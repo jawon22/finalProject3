@@ -28,10 +28,10 @@ public class AttachRestController {
 	@Autowired
 	private CompanyDao companyDao;
 	
-	@Autowired
+	@Autowired//ㅂㄷ
 	private ProfileDao profileDao;
 	
-	//프로필 파일 다운로드
+	//프로필 파일 다운로드  
 		@GetMapping("/image/company/{comId}")
 		public ResponseEntity<ByteArrayResource> downloadComImage(@PathVariable String comId) throws IOException{
 			

@@ -1,11 +1,10 @@
 package com.kh.teamup.vo;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import lombok.Data;
 
 @Data
 public class ProfileInfoVO {
+	private int attachNo;
 	private int profileNo;
 	private int empNo;
 	private String deptName;
@@ -14,4 +13,6 @@ public class ProfileInfoVO {
 	private String empTel;
 	private String empEmail;
 	private String empJoin;
+	private String profileTitle;
+	private String profileContent;
 }
