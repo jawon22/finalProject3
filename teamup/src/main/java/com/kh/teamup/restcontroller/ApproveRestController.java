@@ -64,54 +64,63 @@ public class ApproveRestController { //결재 테이블
 		
 		int apprNo = approveDao.sequence(); //apprNo를 가져옴
 		int apprPathNo = approvePathDao.sequence();
-		int receiverNo = receiversDao.sequence();
-		int referrerNo = referrersDao.sequence();
+//		int receiverNo = receiversDao.sequence();
+//		int referrerNo = referrersDao.sequence();
 		
+		approveInputVO.getApproveDto().setApprNo(apprNo);//결재에 시퀀스 설정
 		
-		approveInputVO.getApproveDto().setApprNo(apprNo); //결재에 시퀀스 설정
 		// fe에서 작성자의 번호가 넘어오면 번호로 작성자의 정보 조회후 인서트
 		ApproveDto approveDto = approveInputVO.getApproveDto(); //approveDto를 꺼낸후
 		approveDao.insert(approveDto);  // 인서트
+		log.debug("approveDto={}",approveDto);
 		
 //		// 결재선에 등록자 설정, 결재번호 설정 후 approvePathDto를 꺼낸 뒤 등록
-		approveInputVO.getApprovePathDto().setApprPathNo(apprPathNo);
-		approveInputVO.getApprovePathDto().setApprNo(approveDto.getApprNo());
-		approveInputVO.getApprovePathDto().setApprSender(approveDto.getApprSender());
 		ApprovePathDto approvePathDto = approveInputVO.getApprovePathDto();
-		approvePathDao.insert(approvePathDto);
+		if(approvePathDto == null) {
+			approvePathDto = new ApprovePathDto();
+			approveInputVO.setApprovePathDto(approvePathDto);
+		}
 		
+		approvePathDto.setApprPathNo(apprPathNo);
+		approvePathDto.setApprNo(approveDto.getApprNo());
+		approvePathDto.setApprSender(approveDto.getApprSender());
+		approvePathDao.insert(approvePathDto);
+		log.debug("approvePathDto={}",approvePathDto);
 		
 		// 승인자가 몇명인지 파악한후 for문으로 insert
-		ReceiversDto receiversDto = approveInputVO.getReceiversDto();
-		// fe에서 승인자를 받아야함
-		//승인자 여러명 list에 저장 , 승인자의 직급을 알아야 하는데.. Map으로 저장?
-		List<Integer> receiverList = new ArrayList<>();
-		receiverList.add(16);
-		receiverList.add(14);
-		receiverList.add(11);
+		List<ReceiversDto> receiversDto = approveInputVO.getReceiversDto();
+		List<Integer> receivers = new ArrayList<>();
 		
-		Set<Integer> receiverSet = new TreeSet<>(receiverList); //승인자는 정렬이 필요하므로 TreeSet
-		for(int i=0; i<receiverSet.size(); i++) {
-			approveInputVO.getReceiversDto().setReceiversNo(receiverNo); //시퀀스 설정
-			approveInputVO.getReceiversDto().setPathNo(approvePathDto.getApprPathNo()); //승인자테이블에 결재선 번호를 설정
-			receiversDto.setReceiversReceiver(i);
-			receiversDao.insert(receiversDto);
+		for(int i=0; i<receiversDto.size();i++) {
+			receivers.add(i, receiversDto.get(i).getReceiversReceiver());
+		}
+		
+		for(int i=0; i<receiversDto.size(); i++) {
+			int receiverNo = receiversDao.sequence(); //시퀀스를 여기서 뽑아야함 (승인자가 많으면 바꿔야하므로)
+			
+			receiversDto.get(i).setReceiversNo(receiverNo); //시퀀스 설정
+			receiversDto.get(i).setPathNo(approvePathDto.getApprPathNo()); //승인자테이블에 결재선 번호를 설정
+			receiversDto.get(i).setReceiversReceiver(receivers.get(i));
+			log.debug("dto= {}", receiversDto.get(i));
+			receiversDao.insert(receiversDto.get(i));
 		}
 		
 		//만약 참조자가 있다면 몇 명인지 파악한후 for문으로 insert
-		ReferrersDto referrersDto = approveInputVO.getReferrersDto();	
-		// fe에서 참조자를 받아야함
-		List<Integer> referrerList = new ArrayList<>();
-		referrerList.add(27);
-		referrerList.add(28);
+		List<ReferrersDto> referrersDto = approveInputVO.getReferrersDto();	
+		List<Integer> referers = new ArrayList<>();
 		
-		Set<Integer> referrerSet = new HashSet<>(referrerList); //참조자는 정렬이 필요없으므로 HashSet
-		if(referrerSet.size() !=0) { //사이즈가 0이 아니라면 추가
-			for(int i=0; i<referrerSet.size(); i++) {
-				approveInputVO.getReferrersDto().setReferrersNo(referrerNo); //시퀀스 설정
-				approveInputVO.getReferrersDto().setPathNo(approvePathDto.getApprPathNo()); //참조자테이블에 결재선 번호를 설정
-				referrersDto.setReferrersReferrer(i);
-				referrersDao.insert(referrersDto);
+		for(int i =0; i<referrersDto.size();i++) {
+			referers.add(i, referrersDto.get(i).getReferrersReferrer());
+		}
+		
+		if(referrersDto.size() !=0) { //사이즈가 0이 아니라면 추가
+			for(int i=0; i<referrersDto.size(); i++) {
+				int referrerNo = referrersDao.sequence(); // 여기도 마찬가지
+				
+				referrersDto.get(i).setReferrersNo(referrerNo); //시퀀스 설정
+				referrersDto.get(i).setPathNo(approvePathDto.getApprPathNo()); //참조자테이블에 결재선 번호를 설정
+				referrersDto.get(i).setReferrersReferrer(referers.get(i));
+				referrersDao.insert(referrersDto.get(i));
 			}
 		}
 		

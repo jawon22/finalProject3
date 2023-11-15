@@ -15,7 +15,7 @@
 	</select>
 	
 	<select id="approveList" resultType="ApproveDto">
-		select * from appr order by appr_date desc
+		select * from appr order by appr_date_start desc
 	</select>
 	
 	<delete id="approveCancel">
@@ -23,9 +23,9 @@
 	</delete>
 	
 	<insert id="approveSave">
-		insert into appr(appr_no, appr_sender, dept_no, appr_title, appr_content, appr_date, 
-			appr_division) values(#{apprNo}, #{apprSender}, #{deptNo},
-			#{apprTitle}, #{apprContent}, sysdate, #{apprDivision})
+		insert into appr(appr_no, appr_sender, dept_no, appr_title, appr_content, appr_date_start, 
+			appr_date_end, appr_division) values(#{apprNo}, #{apprSender}, #{deptNo},
+			#{apprTitle}, #{apprContent}, #{apprDateStart}, #{apprDateEnd}, #{apprDivision})
 	</insert>
 
 <!-- 	<update id="edit"> -->
