@@ -15,12 +15,10 @@
     	
     	<!-- 사원의 급여 상세 조회 -->
     	<select id="findByEmpSalList" resultType="SalListDto">
-    		select * from sal_list 
-    		where
-    			<if test="empNo != null">
-    				sal_list_no = #{salListNo}
-    			</if>
-    	</select>
+		    select * from sal_list
+		    where emp_no = #{empNo}
+		    and sal_list_date = #{salListDate}
+		</select>
     	
     	
     	<!-- 사원의 급여내역 목록 조회 -->

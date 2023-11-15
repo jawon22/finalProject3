@@ -128,20 +128,13 @@ public class SalListRestController {
 		return !list.isEmpty() ? ResponseEntity.ok(list) : ResponseEntity.notFound().build();
 	}
 	
-	@Operation(description = "사원별 급여내역 상세-salListNo기준")
-	@GetMapping("/salListNo/{salListNo}")
-	public SalListDto findByEmpSalList(@PathVariable int salListNo){
-		return salListDao.selectOne(salListNo);
+	@Operation(description = "사원별 급여내역 상세(salListDate기준)")
+	//@PostMapping("/salListDate")
+	@GetMapping("/salListDate/empNo/{empNo}/salListDate/{salListDate}")
+	public SalListDto findByEmpSalList(@ParameterObject @ModelAttribute SalListDetailYearMonthVO vo){
+//	public SalListDto findByEmpSalList(@RequestBody SalListDetailYearMonthVO vo){
+		return salListDao.selectOne(vo);
 		}
-	
-	@Operation(description = "연월에 따른 급여내역 상세 ")
-	@GetMapping("/salListNo/yearMonth/{empNo}/{yearMonth}")
-	public SalListDetailYearMonthVO findByYearMonth(
-			@ParameterObject
-			@ModelAttribute TotalWorkingTimeByMonthVO vo) {
-		SalListDetailYearMonthVO result = salListDao.selectOne(vo);
-		return result;
-	}
 	
 	
 	@Operation(description = "급여내역 삭제")

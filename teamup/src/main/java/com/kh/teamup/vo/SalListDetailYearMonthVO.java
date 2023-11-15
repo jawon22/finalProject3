@@ -7,8 +7,6 @@ import lombok.NoArgsConstructor;
 
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
 public class SalListDetailYearMonthVO {
-	private int salListNo, empNo;
-	private int salListTotal, salListHealth, salListLtcare, salListNational, salListEmp, salListWork, salListLocal;
-	private int attendNo, attendEmpNo;
-	private String attendMonth;
+	private int empNo;
+	private String salListDate;
 }

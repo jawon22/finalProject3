@@ -30,17 +30,9 @@ public class SalListDaoImpl implements SalListDao{
 		return sqlSession.delete("salList.remove", empNo) > 0;
 	}
 	
-	@Override//급여내역 상세 (salListNo기준)
-	public SalListDto selectOne(int salListNo) {
-		SalListDto salListDto = sqlSession.selectOne("salList.findByEmpSalList", salListNo);
-		if(salListDto == null) throw new NoTargetException();
-		return salListDto;
-	}
-	
-	@Override//급여내역 상세(연월로 검색)
-	public SalListDetailYearMonthVO selectOne(TotalWorkingTimeByMonthVO vo) {
-		if(vo == null)throw new NoTargetException();
-		return sqlSession.selectOne("salList.findByEmpMonthSalList", vo);
+	@Override
+	public SalListDto selectOne(SalListDetailYearMonthVO vo) {
+		return sqlSession.selectOne("salList.findByEmpSalList", vo);
 	}
 	
 	@Override//사원별 급여내역 목록
