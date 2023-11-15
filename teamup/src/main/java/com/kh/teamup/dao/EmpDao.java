@@ -33,6 +33,8 @@ public interface EmpDao {
 	void updateDept(String empId, EmpDto empDto);
 
 	void changeEmpId(String empId);
+
+	void updateExit(String empId, EmpDto empDto);
 	
 	
 

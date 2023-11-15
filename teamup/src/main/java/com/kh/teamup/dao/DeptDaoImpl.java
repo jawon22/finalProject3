@@ -33,4 +33,9 @@ public class DeptDaoImpl implements DeptDao {
 		
 		sqlSession.update("dept.update", params);
 	}
+	
+	@Override
+	public void deleteDept(int deptNo) {
+		sqlSession.delete("dept.deleteDept", deptNo);
+	}
 }

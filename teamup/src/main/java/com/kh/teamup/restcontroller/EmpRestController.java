@@ -318,4 +318,10 @@ public class EmpRestController {
 		
 	}
 	
+	@PutMapping("/updateExit/{empId}")
+	public void updateExit(@PathVariable String empId,@RequestBody EmpDto empDto) {
+		
+		empDao.updateExit(empId, empDto);
+	}
+	
 }

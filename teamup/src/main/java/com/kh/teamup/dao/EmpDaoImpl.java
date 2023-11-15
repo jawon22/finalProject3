@@ -112,4 +112,10 @@ public class EmpDaoImpl implements EmpDao {
 		sqlSession.update("emp.changeEmpId",empId);
 	}
 	
+	@Override
+	public void updateExit(String empId, EmpDto empDto) {
+		Map<String, Object> params = Map.of("empId",empId ,"empDto",empDto);
+		sqlSession.update("emp.updateExit",params);
+	}
+	
 }

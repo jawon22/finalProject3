@@ -123,7 +123,7 @@
 	<select id="selectBydeptAndCom"
 		resultType="EmpSearchBydeptComVO">
 		select e.dept_no, e.com_id, ep.EMP_POSITION_NAME
-		,e.EMP_NAME ,e.EMP_TEL ,e.emp_email, e.emp_id from emp e
+		,e.EMP_NAME ,e.EMP_TEL ,e.emp_email, e.emp_id ,e.emp_join, e.emp_exit from emp e
 		left outer
 		join EMP_POSITION ep on e.EMP_Position_NO = ep.EMP_POSITION_no
 		where
@@ -154,7 +154,10 @@
 	<update id="changeDetp">
 		update emp set dept_no = #{empDto.deptNo} where emp_id=#{empId}
 	</update>
-	
+
+	<update id="updateExit">
+		update emp set emp_exit= #{empDto.empExit} where emp_id=#{empId}
+	</update>
 
 
 
