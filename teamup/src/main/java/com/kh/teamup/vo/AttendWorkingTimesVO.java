@@ -1,6 +1,7 @@
 package com.kh.teamup.vo;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,6 +13,6 @@ public class AttendWorkingTimesVO {
 	private int attendNo; //근태번호 
 	private int empNo; //사번 번호 검색할 때 필요한 외래키
 	private Date dt;
-	private Date attendStart, attendEnd;
+	private Timestamp attendStart, attendEnd;
 	private int workingTimes; //근무시간
 }

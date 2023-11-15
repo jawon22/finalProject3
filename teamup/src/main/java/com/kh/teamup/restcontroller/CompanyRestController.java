@@ -2,27 +2,19 @@ package com.kh.teamup.restcontroller;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.http.ContentDisposition;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,6 +22,7 @@ import com.kh.teamup.dao.AttachDao;
 import com.kh.teamup.dao.CompanyDao;
 import com.kh.teamup.dto.AttachDto;
 import com.kh.teamup.dto.CompanyDto;
+import com.kh.teamup.service.EmpService;
 import com.kh.teamup.vo.CompanyImageVO;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -51,6 +44,7 @@ public class CompanyRestController {
 	private AttachDao attachDao;
 	@Autowired
 	private BCryptPasswordEncoder encoder;
+
 
 	// 이미지 등록하면서 회사 정보 등록 같이 하니까 일단 주석 처리 했습니당~
 	@PostMapping("/")
@@ -198,7 +192,7 @@ public class CompanyRestController {
 		boolean isMatch = encoder.matches( inputDto.getComPw(),findDto.getComPw());
 		
 		log.debug("match={}", isMatch);
-		
+
 		return isMatch;
 
 

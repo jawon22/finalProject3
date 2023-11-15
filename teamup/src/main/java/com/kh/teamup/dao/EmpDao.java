@@ -4,9 +4,12 @@ import java.util.List;
 
 import com.kh.teamup.dto.EmpDto;
 import com.kh.teamup.vo.EmpComplexSearchVO;
+import com.kh.teamup.vo.EmpSearchBydeptComVO;
 import com.kh.teamup.vo.SearchVO;
 
 public interface EmpDao {
+	
+	int sequence();//시퀀스
 	
 	void addEmp(EmpDto empDto);
 	//login 아이디 생성
@@ -24,5 +27,9 @@ public interface EmpDao {
 	
 	List<SearchVO> search(SearchVO searchVO);
 	EmpDto selectOne(int empNo);
+
+	List<EmpSearchBydeptComVO> selectListByDeptCom(EmpSearchBydeptComVO empSearchBydeptComVO);
+	
+	
 
 }

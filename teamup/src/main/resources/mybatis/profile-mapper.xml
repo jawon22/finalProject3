@@ -9,51 +9,18 @@
     		select emp_profile_seq.nextval from dual
     	</select>
     	
-<!--     	<insert id="addProfile"> -->
-<!--     		insert into emp_profile( -->
-<!--     			profile_no, emp_no, profile_title, profile_content -->
-<!--     		) values( -->
-<!--     			#{profileNo}, #{empNo},  -->
-<!--     			#{profileTitle},  -->
-<!--     			#{profileContent} -->
-<!--     		) -->
-<!--     	</insert> -->
     
     	<insert id="addProfile">
     		insert into emp_profile(
-    			profile_no, emp_no, profile_title, profile_content
-    		) values(
-    			#{profileNo}, #{empNo}, 
-    			<if test="profileTitle == null">
-            		'나를 소개하는 제목을 입력하세요.'
-        		</if>
-        		<if test="profileTitle != null">
-            		#{profileTitle, jdbcType=VARCHAR, javaType=String}
-        		</if>,
-       		 	<if test="profileContent == null">
-            		'나를 소개하는 내용을 입력하세요.'
-        		</if>
-        		<if test="profileContent != null">
-            		#{profileContent, jdbcType=VARCHAR, javaType=String}
-        		</if>
-    			)
+    			profile_no, emp_no, profile_title, profile_content) 
+    			values(#{profileNo}, #{empNo}, #{profileTitle}, #{profileContent})
     	</insert>
 
-    		<insert id="profileImage">
-    			insert into profile_image(profile_no, attach_no) 
-    			values(
-    				#{profileNo}, 
-    				#{attachNo}
-    				)
-    		</insert>
-    	
-<!--     	<insert id="profileImage"> -->
-<!--     		insert into profile_image(profile_no, attach_no)  -->
-<!--     		values( -->
-<!--     			#{profileNo},  -->
-<!--     			#{attachNo, jdbcType=INTEGER, javaType=Integer, mode=IN, value=1} -->
-<!--     			) -->
-<!--     	</insert> -->
+    	<insert id="profileImage">
+    		insert into profile_image(profile_no, attach_no) 
+    		values(#{profileNo}, #{attachNo})
+    	</insert>
+
     	
     	<select id="findImage" resultType="attachDto">
     		select * from attach where attach_no=(
@@ -72,12 +39,17 @@
 				e.emp_name,
 				e.emp_tel,
 				e.emp_email,
-				e.emp_join
+				e.emp_join,
+				p.profile_title,
+				p.profile_content, 
+				a.attach_no
 			from 
 				emp_profile p 
 				join emp e on e.emp_no = p.emp_no 
 				LEFT JOIN dept d ON e.dept_no = d.dept_no 
-    			LEFT JOIN emp_position ep ON e.emp_position_no = ep.emp_position_no
+    			LEFT JOIN emp_position ep ON e.emp_position_no = ep.emp_position_no 
+    			left join profile_image pi on pi.profile_no = p.profile_no 
+    			left join attach a on a.attach_no = pi.attach_no
     	</select>
     	
     	
