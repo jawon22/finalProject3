@@ -19,6 +19,15 @@
 		    where emp_no = #{empNo}
 		    and sal_list_date = #{salListDate}
 		</select>
+		
+		<!-- 사원의 최신 급여 상세  조회 -->
+		<select id="findByEmpSalListRecent" resultType="SalListDto">
+					    SELECT * FROM (
+					        SELECT * FROM sal_list
+					        WHERE emp_no = #{empNo}
+					        ORDER BY sal_list_date DESC	   
+		<![CDATA[ ) WHERE ROWNUM <= 1]]>		    	    
+		</select>
     	
     	
     	<!-- 사원의 급여내역 목록 조회 -->
