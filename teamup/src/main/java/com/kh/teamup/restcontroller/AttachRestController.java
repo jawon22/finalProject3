@@ -64,7 +64,7 @@ public class AttachRestController {
 		
 		
 		//프로필 파일 다운로드
-				@GetMapping("/image/profile/{profileNo}")
+				@GetMapping("/image/profile/{profileNo}") 
 				public ResponseEntity<ByteArrayResource> downloadProfileImage(@PathVariable int profileNo) throws IOException{
 					
 //					System.out.println("profileNo = " + profileNo);

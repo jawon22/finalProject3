@@ -53,17 +53,50 @@
     	</select>
     	
     	
-    	<update id="editProfile">
+<!--     	<update id="editProfile"> -->
+<!--     		update emp_profile  -->
+<!--     		<set> -->
+<!--     		<if test="vo.empTel != null"> -->
+<!--     			emp_tel = #{vo.empTel}, -->
+<!--     		</if> -->
+<!--     		<if test="vo.empEmail != null"> -->
+<!--     			emp_email = #{vo.empEmail}, -->
+<!--     		</if> -->
+<!--     		<if test="vo.profileTitle != null"> -->
+<!--     			profile_title = #{vo.profileTitle}, -->
+<!--     		</if> -->
+<!--     		<if test="vo.profileContent != null"> -->
+<!--     			profile_content = #{vo.profileContent} -->
+<!--     		</if> -->
+<!--     		</set> -->
+<!--     		where emp_no = #{empNo} -->
+<!--     	</update> -->
+
+		<update id="editEmp">
+			update emp 
+			<set>
+				<if test="vo.empTel != null"> -->
+    				emp_tel = #{vo.empTel},
+    			</if>
+    			<if test="vo.empEmail != null">
+    				emp_email = #{vo.empEmail},
+    			</if>
+			</set>
+    		where emp_no = #{empNo}
+		</update>
+		
+		<update id="editProfile">
     		update emp_profile 
     		<set>
-    		<if test="profileDto.profileTitle != null">
-    			profile_title = #{profileDto.profileTitle},
+    		<if test="vo.profileTitle != null">
+    			profile_title = #{vo.profileTitle},
     		</if>
-    		<if test="profileDto.profileContent != null">
-    			profile_content = #{profileDto.profileContent}
+    		<if test="vo.profileContent != null">
+    			profile_content = #{vo.profileContent}
     		</if>
     		</set>
-    		where profile_no = #{profileNo}
+    		where emp_no = #{empNo}
     	</update>
+
     	
     </mapper>
