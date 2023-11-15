@@ -11,7 +11,7 @@
 		select
 		d.dept_no,
 		d.dept_name,
-		count(emp_no) as emp_count
+		count(CASE WHEN emp_exit IS NULL THEN emp_no END) as emp_count
 		from dept d
 		left outer join com c on d.COM_ID =c.COM_ID
 		left outer join emp e on d.DEPT_NO = e.DEPT_NO
@@ -24,6 +24,11 @@
 	<update id="update">
 	update dept set dept_name = #{deptDto.deptName} where dept_no=#{deptNo}
 	</update>
+	
+	<delete id="deleteDept">
+		delete from dept where dept_no = #{deptNo}
+	</delete>
+	
 
 
 </mapper>

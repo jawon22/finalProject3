@@ -12,4 +12,6 @@ public interface DeptDao {
 	
 	void deptUpdate(int deptNo,DeptDto deptDto);
 
+	void deleteDept(int deptNo);
+
 }

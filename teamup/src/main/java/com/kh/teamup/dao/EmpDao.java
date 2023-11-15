@@ -29,6 +29,12 @@ public interface EmpDao {
 	EmpDto selectOne(int empNo);
 
 	List<EmpSearchBydeptComVO> selectListByDeptCom(EmpSearchBydeptComVO empSearchBydeptComVO);
+
+	void updateDept(String empId, EmpDto empDto);
+
+	void changeEmpId(String empId);
+
+	void updateExit(String empId, EmpDto empDto);
 	
 	
 

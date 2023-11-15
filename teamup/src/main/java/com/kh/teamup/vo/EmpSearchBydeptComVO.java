@@ -1,5 +1,7 @@
 package com.kh.teamup.vo;
 
+import java.sql.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,6 +15,8 @@ public class EmpSearchBydeptComVO {
 	private String empEmail;
 	private String empId;
 	private String comId;
+	private Date empJoin;
+	private Date empExit;
 	private int deptNo;
 
 }
