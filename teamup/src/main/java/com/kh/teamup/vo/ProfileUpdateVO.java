@@ -10,16 +10,16 @@ import lombok.Data;
 @Data
 public class ProfileUpdateVO {
 	private MultipartFile attach;
-	private int profileNo;
-//	private int empNo;
+	private String empTel;
+	private String empEmail;
 	private String profileTitle;
 	private String profileContent;
 	
 	@JsonIgnore
-	public ProfileDto getProfileDto() {
-		return ProfileDto.builder()
-					.profileNo(profileNo)
-//					.empNo(empNo)
+	public ProfileInfoVO getProfileInfoVO() {
+		return ProfileInfoVO.builder()
+					.empTel(empTel)
+					.empEmail(empEmail)
 					.profileTitle(profileTitle)
 					.profileContent(profileContent)
 				.build();

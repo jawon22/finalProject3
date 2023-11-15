@@ -48,9 +48,21 @@ public class ProfileDaoImpl implements ProfileDao{
 	
 	//프로필 정보 + 이미지 수정 구문
 	@Override
-	public boolean update(ProfileUpdateVO vo) {
-		return sqlSession.update("emp_profile.editProfile", vo) > 0;
+	public boolean updateProfile(ProfileInfoVO profileInfoVO, int empNo) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("vo", profileInfoVO);
+		params.put("empNo", empNo);
+		return sqlSession.update("emp_profile.editProfile", params) > 0;
 	}
+	
+	@Override
+	public boolean updateEmp(ProfileInfoVO profileInfoVO, int empNo) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("vo", profileInfoVO);
+		params.put("empNo", empNo);
+		return sqlSession.update("emp_profile.editEmp", params) > 0;
+	}
+	
 	
 	@Override
 	public List<ProfileInfoVO> selectList(int empNo) {

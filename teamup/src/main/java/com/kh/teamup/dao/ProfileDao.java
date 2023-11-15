@@ -18,9 +18,12 @@ public interface ProfileDao {
 
 	AttachDto findImage(int profileNo);//프로필 이미지 화면에 출력
 
-	boolean update(ProfileUpdateVO vo);//프로필+프로필이미지 수정
+	boolean updateProfile(ProfileInfoVO profileInfoVO, int empNo);//프로필+프로필이미지 수정
+	
+	boolean updateEmp(ProfileInfoVO profileInfoVO, int empNo);//프로필에 받는 회원정보 수정
 
 	List<ProfileInfoVO> selectList(int empNo);
+
 
 	
 }
