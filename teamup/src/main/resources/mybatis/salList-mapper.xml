@@ -8,9 +8,9 @@
     
     	<insert id="save">
     		insert into sal_list (sal_list_no, emp_no, sal_list_total, sal_list_health, sal_list_ltcare, sal_list_national,
-    									sal_list_emp, sal_list_work, sal_list_local)
+    									sal_list_emp, sal_list_work, sal_list_local, sal_list_date)
     						values( sal_list_seq.nextval, #{empNo}, #{salListTotal}, #{salListHealth},#{salListLtcare},
-    									#{salListNational}, #{salListEmp}, #{salListWork}, #{salListLocal})
+    									#{salListNational}, #{salListEmp}, #{salListWork}, #{salListLocal}, #{salListDate})
     	</insert>
     	
     	<!-- 사원의 급여 상세 조회 -->
@@ -22,34 +22,6 @@
     			</if>
     	</select>
     	
-    	<!--연월에 따른 사원의 급여 상세 조회  -->
-    	<select id="findByEmpMonthSalList" resultType="TotalWorkingTimeByMonthVO">
-    	SELECT *
-			FROM (
-			    SELECT
-			        sl.sal_list_no,
-			        sl.emp_no,
-			        sl.sal_list_total,
-			        sl.sal_list_health,
-			        sl.sal_list_ltcare,
-			        sl.sal_list_national,
-			        sl.sal_list_emp,
-			        sl.sal_list_work,
-			        sl.sal_list_local,
-			        a.attend_no,
-			        a.emp_no AS attend_emp_no,
-			        TO_CHAR(a.attend_start, 'YYYY-MM') AS attend_month,
-			        ROW_NUMBER() OVER (ORDER BY a.attend_start) AS rnum
-			    FROM
-			        sal_list sl
-			    INNER JOIN
-			        attend a ON sl.emp_no = a.emp_no
-			    WHERE
-			        sl.emp_no = #{empNo}
-			        AND TO_CHAR(a.attend_start, 'YYYY-MM') = #{yearMonth}
-			)
-			WHERE rnum = 1;
-    	</select>
     	
     	<!-- 사원의 급여내역 목록 조회 -->
     	<select id="findByEmpNo" resultType="SalListDto">

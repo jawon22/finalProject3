@@ -1,21 +1,20 @@
 package com.kh.teamup.restcontroller;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.teamup.dao.AttendDao;
@@ -23,10 +22,10 @@ import com.kh.teamup.dao.EmpDao;
 import com.kh.teamup.dao.SalDao;
 import com.kh.teamup.dao.SalListDao;
 import com.kh.teamup.dao.TaxDao;
-import com.kh.teamup.dto.EmpDto;
 import com.kh.teamup.dto.SalDto;
 import com.kh.teamup.dto.SalListDto;
 import com.kh.teamup.dto.TaxDto;
+import com.kh.teamup.vo.SalListDetailYearMonthVO;
 import com.kh.teamup.vo.TotalWorkingTimeByMonthVO;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -73,6 +72,7 @@ public class SalListRestController {
 					
 					// 근무 시간 계산 로직 추가
 					int totalWorkingHours = attendDao.totalWorkingTimeByMonth(vo);
+					log.debug("vo ={}", vo);
 			//		int salMonth = timePay * totalWorkingHours;//통상 시급 * 한달근무시간 (근무시간은 갖고와야함)
 					int salMonth = timePay * totalWorkingHours;
 					log.debug("총근무시간 ={}", totalWorkingHours);
@@ -115,6 +115,7 @@ public class SalListRestController {
 					salListDto.setSalListLtcare(ltcare);
 					salListDto.setSalListLocal(local);
 					salListDto.setSalListWork(work);
+					salListDto.setSalListDate(vo.getYearMonth());
 					
 					salListDao.insert( salListDto);
 	}
@@ -127,21 +128,21 @@ public class SalListRestController {
 		return !list.isEmpty() ? ResponseEntity.ok(list) : ResponseEntity.notFound().build();
 	}
 	
-	@Operation(description = "사원별 급여내역 상세")//급여내역No로 굳이 상세를 조회하진 않는데..
+	@Operation(description = "사원별 급여내역 상세-salListNo기준")
 	@GetMapping("/salListNo/{salListNo}")
-	public ResponseEntity<List<SalListDto>>findByEmpSalList(@PathVariable int salListNo){
-		List<SalListDto> salList = salListDao.findByEmpSalList(salListNo);
-		return !salList.isEmpty() ? ResponseEntity.ok(salList) : ResponseEntity.notFound().build();
+	public SalListDto findByEmpSalList(@PathVariable int salListNo){
+		return salListDao.selectOne(salListNo);
 		}
 	
-	@GetMapping("/salListYearMonth/{empNo}")
-	public List<TotalWorkingTimeByMonthVO> findByEmpMonthSalList(@PathVariable int empNo, @RequestParam String yearMonth){  
-		TotalWorkingTimeByMonthVO vo = new TotalWorkingTimeByMonthVO();
-        vo.setEmpNo(empNo);
-        vo.setYearMonth(yearMonth);
-		List<TotalWorkingTimeByMonthVO> list = salListDao.findByEmpMonthSalList(vo);
-		return list;
+	@Operation(description = "연월에 따른 급여내역 상세 ")
+	@GetMapping("/salListNo/yearMonth/{empNo}/{yearMonth}")
+	public SalListDetailYearMonthVO findByYearMonth(
+			@ParameterObject
+			@ModelAttribute TotalWorkingTimeByMonthVO vo) {
+		SalListDetailYearMonthVO result = salListDao.selectOne(vo);
+		return result;
 	}
+	
 	
 	@Operation(description = "급여내역 삭제")
 	@DeleteMapping("/{empNo}")

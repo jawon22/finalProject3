@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.kh.teamup.dto.SalListDto;
+import com.kh.teamup.error.NoTargetException;
+import com.kh.teamup.vo.SalListDetailYearMonthVO;
 import com.kh.teamup.vo.TotalWorkingTimeByMonthVO;
 
 import lombok.extern.slf4j.Slf4j;
@@ -28,17 +30,18 @@ public class SalListDaoImpl implements SalListDao{
 		return sqlSession.delete("salList.remove", empNo) > 0;
 	}
 	
-	@Override//사원별 급여내역 상세
-	public List<SalListDto> findByEmpSalList(int salListNo) {
-		List<SalListDto> list = sqlSession.selectList("salList.findByEmpSalList", salListNo);
-		return list;
+	@Override//급여내역 상세 (salListNo기준)
+	public SalListDto selectOne(int salListNo) {
+		SalListDto salListDto = sqlSession.selectOne("salList.findByEmpSalList", salListNo);
+		if(salListDto == null) throw new NoTargetException();
+		return salListDto;
 	}
 	
-	@Override
-	public List<TotalWorkingTimeByMonthVO> findByEmpMonthSalList(TotalWorkingTimeByMonthVO vo) {
+	@Override//급여내역 상세(연월로 검색)
+	public SalListDetailYearMonthVO selectOne(TotalWorkingTimeByMonthVO vo) {
+		if(vo == null)throw new NoTargetException();
 		return sqlSession.selectOne("salList.findByEmpMonthSalList", vo);
 	}
-	
 	
 	@Override//사원별 급여내역 목록
 	public List<SalListDto> findByEmpNo(int empNo) {
