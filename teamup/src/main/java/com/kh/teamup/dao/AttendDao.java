@@ -9,14 +9,20 @@ import com.kh.teamup.vo.AttendWorkingTimesVO;
 import com.kh.teamup.vo.TotalWorkingTimeByMonthVO;
 
 public interface AttendDao {
-	//사번으로 근태목록 조회
+	//근태번호 시퀀스
+	public int sequence();
 	//출근(등록)
 	void insert(AttendDto attendDto);
+	///empNo를 이용하여 오늘자 출근내역을 불러오는 명령
+	public AttendDto findTodayAttendByEmpNo(int empNo);
 	//퇴근(수정)
-	void update(int attendNo, AttendDto attendDto);
-	//현재 날짜를 받아서 현재 달의 1일부터 현재 달의 오늘일까지 보여주는 구문
+//	void update(int attendNo, AttendDto attendDto);
+	void update(AttendDto attendDto);
+	//근태번호로 근태 상세 조회
+	AttendDto findAttendNo(int attendNo); 
+	//목록(이번년도 이번월 1일부터~현재까지)
 	List<AttendWorkingTimesVO>findSysdate(AttendWorkingSysdateVO VO);	
-	//한 달 간격으로, 모두 나올 필요가 없음 애초에 가장 최근부터 한 달만 보이게, 날짜 선택이 가능하게
+	//목록(사용자가 년도와 월 선택)
 	List<AttendWorkingTimesVO>findSearch(AttendWorkingSearchVO VO);	
 	
 	int totalWorkingTimeByMonth(TotalWorkingTimeByMonthVO vo);
