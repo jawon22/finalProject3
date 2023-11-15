@@ -13,6 +13,6 @@ public class ApproveDto {
 	private int apprSender;
 	private int deptNo;
 	private String apprTitle, apprContent;
-	private Date apprDate;
+	private Date apprDateStart, apprDateEnd;
 	private String apprDivision;
 }
