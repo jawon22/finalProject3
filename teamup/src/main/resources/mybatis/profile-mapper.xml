@@ -50,6 +50,7 @@
     			LEFT JOIN emp_position ep ON e.emp_position_no = ep.emp_position_no 
     			left join profile_image pi on pi.profile_no = p.profile_no 
     			left join attach a on a.attach_no = pi.attach_no
+    		where e.emp_no=#{empNo}
     	</select>
     	
     	

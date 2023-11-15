@@ -94,7 +94,7 @@ public class ProfileRestController {
 		
 		if(!attach.isEmpty()) {//파일이 있으면
 			//파일 삭제 - 기존 파일이 있을 경우에만 처리
-			AttachDto attachDto = profileDao.findImage(profileInfoVO.getProfileNo());
+			AttachDto attachDto = profileDao.findImage(profileInfoVO.getEmpNo());
 			String home = System.getProperty("user.home");
 			File dir = new File(home, "upload");
 			
@@ -130,9 +130,8 @@ public class ProfileRestController {
 	}
 	
 	@GetMapping("/{empNo}")
-	public List<ProfileInfoVO> list(@PathVariable int empNo){
-		return profileDao.selectList(empNo);
+	public ProfileInfoVO findProfile(@PathVariable int empNo){
+		return profileDao.selectOne(empNo);
 	} 
-	
 
 }

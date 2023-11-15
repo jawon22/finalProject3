@@ -1,7 +1,6 @@
 package com.kh.teamup.dao;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
@@ -65,8 +64,8 @@ public class ProfileDaoImpl implements ProfileDao{
 	
 	
 	@Override
-	public List<ProfileInfoVO> selectList(int empNo) {
-		return sqlSession.selectList("emp_profile.joinProfile", empNo);
+	public ProfileInfoVO selectOne(int empNo) {
+		return sqlSession.selectOne("emp_profile.joinProfile", empNo);
 	}
 
 }
