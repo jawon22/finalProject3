@@ -18,5 +18,5 @@ public class SalListDto {
 	private int salListEmp;
 	private int salListWork;
 	private int salListLocal;
-		
+	private String salListDate;
 }
