@@ -59,69 +59,64 @@ public class SalListRestController {
 	@Operation(description = "사원별 연월지정하여 급여내역저장")
 	@PostMapping("/")
 	public void calculateSalList( @RequestBody TotalWorkingTimeByMonthVO vo) {
-		
-		List<EmpDto> empList = empDao.empList();
 
-		for(EmpDto empDto : empList) {
-			
-			// 현재 연월 계산
-			LocalDate currentDate = LocalDate.now();
-			DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM");
-			String currentYearMonth = currentDate.format(dateFormatter);
+					// attendDao를 통해 근무 시간을 가져옴
+			//	    AttendWorkingTimesVO workingTimesVO = new AttendWorkingTimesVO();
+			//	    workingTimesVO.setEmpNo(empNo);
+			//	    log.debug("근무시간 = {}", workingTimesVO);
+			//	    List<AttendWorkingTimesVO> workingTimesList = attendDao.selectListByEmpNo(workingTimesVO);
 
-			// 이전 달 계산
-			LocalDate previousMonth = currentDate.minusMonths(1);
-			String previousYearMonth = previousMonth.format(dateFormatter);
-//			log.debug("저번달 = {}", previousYearMonth);
-			
-			vo.setEmpNo(empDto.getEmpNo());
-			vo.setYearMonth(previousYearMonth);
-
-	        SalDto salDto = salDao.selectOne(vo.getEmpNo());
-	        int annualPay = (int) salDto.getSalAnnual();
-	        int timePay = (int) salDto.getSalTime();
-
-	        int totalWorkingHours = attendDao.totalWorkingTimeByMonth(vo);
-	        
-	        int salMonth = timePay * totalWorkingHours;
-//	        log.debug("총근무시간 = {}", totalWorkingHours);
-	        
-	        List<TaxDto> list = taxDao.selectList();
-	        Map<String, Float> map = new HashMap<>();
-	        for (TaxDto dto : list) {
-	            map.put(dto.getTaxName(), dto.getTaxRate());
-	        }
-//	        log.debug("세금 ={}", map);
-	        
-	        int health = (int) (salMonth * map.get("건강보험") / 100);
-	        int emp = (int) (salMonth * map.get("고용보험") / 100);
-	        int national = (int) (salMonth * map.get("국민연금") / 100);
-	        int ltcare = (int) (health * map.get("장기요양보험") / 100);
-
-	        int work;//연봉에 따른 소득세 설정
-		        if (annualPay < 4000000) {
-		            work = (int) (salMonth * map.get("소득세1") / 100);
-		        } else if (annualPay < 6000000) {
-		            work = (int) (salMonth * map.get("소득세2") / 100);
-		        } else {
-		            work = (int) (salMonth * map.get("소득세3") / 100);
-		        }
-
-	        int local = (int) (work * map.get("지방소득세") / 100);
-
-	        SalListDto salListDto = new SalListDto();
-
-	        salListDto.setEmpNo(vo.getEmpNo());
-	        salListDto.setSalListTotal(salMonth);
-	        salListDto.setSalListHealth(health);
-	        salListDto.setSalListEmp(emp);
-	        salListDto.setSalListNational(national);
-	        salListDto.setSalListLtcare(ltcare);
-	        salListDto.setSalListLocal(local);
-	        salListDto.setSalListWork(work);
-
-	        salListDao.insert(salListDto);
-		}
+					SalDto salDto = salDao.selectOne(vo.getEmpNo());
+					
+					int annualPay = (int) salDto.getSalAnnual();
+					int timePay = (int)salDto.getSalTime();//해당 사원의 통상시급 
+					
+					// 근무 시간 계산 로직 추가
+					int totalWorkingHours = attendDao.totalWorkingTimeByMonth(vo);
+			//		int salMonth = timePay * totalWorkingHours;//통상 시급 * 한달근무시간 (근무시간은 갖고와야함)
+					int salMonth = timePay * totalWorkingHours;
+					log.debug("총근무시간 ={}", totalWorkingHours);
+					List<TaxDto> list = taxDao.selectList();
+					Map<String, Float> map = new HashMap<>();
+					for(TaxDto dto : list) {//taxDto에서 세금명과 세율만 갖고옴
+						map.put(dto.getTaxName(), dto.getTaxRate());
+					}
+					
+					//세금 종류별 금액 계산
+					//[1]건강보험	
+					int health = (int)(salMonth * map.get("건강보험")/100);
+					//[2]고용보험
+					int emp = (int)(salMonth * map.get("고용보험")/100);
+					//[3]국민연금
+					int national = (int)(salMonth * map.get("국민연금")/100);
+					//[4]장기요양보험료 = 건보료 * 장기요양보험료율
+					int ltcare = (int)( health * map.get("장기요양보험")/100 );
+					//[5]근로소득세 = 연봉에 따라 적용이 다름
+					int work;
+				    if (annualPay < 4000000) {
+				        work = (int) (salMonth * map.get("소득세1") / 100);
+				    }
+				    else if (annualPay < 6000000) {
+				        work = (int) (salMonth * map.get("소득세2") / 100);
+				    }
+				    else {
+				        work = (int) (salMonth * map.get("소득세3") / 100);
+				    }
+				    //[6]지방소득세 = 근로소득세 * 지방소득세율
+				    int local = (int)( work * map.get("지방소득세")/100);
+					
+				    SalListDto salListDto = new SalListDto();
+				    
+					salListDto.setEmpNo(vo.getEmpNo());
+					salListDto.setSalListTotal(salMonth);
+					salListDto.setSalListHealth(health);
+					salListDto.setSalListEmp(emp);
+					salListDto.setSalListNational(national);
+					salListDto.setSalListLtcare(ltcare);
+					salListDto.setSalListLocal(local);
+					salListDto.setSalListWork(work);
+					
+					salListDao.insert( salListDto);
 	}
 
 	
