@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.kh.teamup.dto.SalListDto;
+import com.kh.teamup.vo.TotalWorkingTimeByMonthVO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,6 +33,12 @@ public class SalListDaoImpl implements SalListDao{
 		List<SalListDto> list = sqlSession.selectList("salList.findByEmpSalList", salListNo);
 		return list;
 	}
+	
+	@Override
+	public List<TotalWorkingTimeByMonthVO> findByEmpMonthSalList(TotalWorkingTimeByMonthVO vo) {
+		return sqlSession.selectOne("salList.findByEmpMonthSalList", vo);
+	}
+	
 	
 	@Override//사원별 급여내역 목록
 	public List<SalListDto> findByEmpNo(int empNo) {
