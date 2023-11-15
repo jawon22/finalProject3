@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -300,6 +301,21 @@ public class EmpRestController {
 	@PostMapping("/empListByDeptCom")
 	public List<EmpSearchBydeptComVO> listByDeptCom(@RequestBody EmpSearchBydeptComVO empSearchBydeptComVO) {
 		return empDao.selectListByDeptCom(empSearchBydeptComVO);
+	}
+	
+	
+	
+	@PutMapping("/updateDept/{empId}")
+	public void updateDept(@PathVariable String empId,@RequestBody EmpDto empDto) {
+		//부서 이동시키고
+		empDao.updateDept(empId, empDto);
+		log.debug("dto={}",empDto);
+		log.debug("id={}",empId);
+
+		//이동시킨 부서로 사원번호 이전
+		
+		empDao.changeEmpId(empId);
+		
 	}
 	
 }

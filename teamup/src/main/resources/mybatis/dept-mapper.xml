@@ -24,6 +24,7 @@
 	<update id="update">
 	update dept set dept_name = #{deptDto.deptName} where dept_no=#{deptNo}
 	</update>
+	
 
 
 </mapper>

@@ -23,4 +23,10 @@ public class EmpPositionDaoImpl implements EmpPositionDao {
 	public void addPosition(EmpPositionDto empPositionDto) {
 		sqlSession.insert("position.addPosition",empPositionDto);
 	}
+	
+	@Override
+	public List<EmpPositionDto> listByCom(String comId) {
+		return sqlSession.selectList("position.listByCom",comId);
+	}
+	
 }

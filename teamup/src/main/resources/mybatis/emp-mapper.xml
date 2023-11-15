@@ -120,12 +120,41 @@
 		emp_no = #{empNo}
 	</select>
 
-	<select id="selectBydeptAndCom" resultType="EmpSearchBydeptComVO">
-		select e.dept_no, e.com_id, ep.EMP_POSITION_NAME ,e.EMP_NAME ,e.EMP_TEL ,e.EMP_EMAIL from emp e
-		left outer join EMP_POSITION ep on e.EMP_Position_NO = ep.EMP_POSITION_no
-		where e.DEPT_NO =#{deptNo} and e.com_id=#{comId}
-		order by ep.emp_position_order
+	<select id="selectBydeptAndCom"
+		resultType="EmpSearchBydeptComVO">
+		select e.dept_no, e.com_id, ep.EMP_POSITION_NAME
+		,e.EMP_NAME ,e.EMP_TEL ,e.emp_email, e.emp_id from emp e
+		left outer
+		join EMP_POSITION ep on e.EMP_Position_NO = ep.EMP_POSITION_no
+		where
+		e.DEPT_NO =#{deptNo} and e.com_id=#{comId}
+		order by
+		ep.emp_position_order
 	</select>
+
+	<!-- 부서이동시 아이디변경 -->
+	
+	
+	
+	
+	
+	<update id="changeEmpId">
+		update emp set emp_id= to_char((select emp_join from
+		emp where
+		emp_id=#{empId}),'YYYY')||
+		to_char((select dept_no from emp
+		where emp_id=#{empId}),'fm00') ||
+		to_char((select emp_no from emp where
+		emp_id=#{empId}),'fm000') where emp_id=#{empId}
+
+	</update>
+	
+	
+		
+	<update id="changeDetp">
+		update emp set dept_no = #{empDto.deptNo} where emp_id=#{empId}
+	</update>
+	
 
 
 

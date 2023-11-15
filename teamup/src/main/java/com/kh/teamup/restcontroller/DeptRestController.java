@@ -45,5 +45,8 @@ public class DeptRestController {
 		deptDao.deptUpdate(deptNo,deptDto);
 		
 	}
+	
+	
+
 
 }
