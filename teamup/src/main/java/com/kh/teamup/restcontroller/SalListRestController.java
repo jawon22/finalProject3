@@ -136,6 +136,11 @@ public class SalListRestController {
 		return salListDao.selectOne(vo);
 		}
 	
+	@GetMapping("/salListDate/empNo/{empNo}")
+	public SalListDto findByEmpSalListRecent(@PathVariable int empNo) {
+		return salListDao.selectOne(empNo);
+	}
+	
 	
 	@Operation(description = "급여내역 삭제")
 	@DeleteMapping("/{empNo}")

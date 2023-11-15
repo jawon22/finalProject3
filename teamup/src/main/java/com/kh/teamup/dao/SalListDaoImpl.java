@@ -41,6 +41,11 @@ public class SalListDaoImpl implements SalListDao{
 		return list;
 	}
 	
+	@Override
+	public SalListDto selectOne(int empNo) {
+		return sqlSession.selectOne("salList.findByEmpSalListRecent", empNo);
+	}
+	
 
 
 }
