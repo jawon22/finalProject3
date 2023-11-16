@@ -9,6 +9,10 @@
     		select emp_profile_seq.nextval from dual
     	</select>
     	
+    	<select id="findProfileNo" resultType="int">
+    		select profile_no from emp_profile where emp_no = #{empNo}
+    	</select>
+    	
     
     	<insert id="addProfile">
     		insert into emp_profile(
@@ -29,8 +33,31 @@
     		)
     	</select>
     	
+    	<select id="joinProfileAll" resultType="ProfileInfoVO">
+    		select 
+				p.profile_no,
+				e.emp_no,
+				d.dept_name,
+				ep.emp_position_name,
+				e.emp_name,
+				e.emp_tel,
+				e.emp_email,
+				e.emp_join,
+				p.profile_title,
+				p.profile_content, 
+				a.attach_no
+			from 
+				emp_profile p 
+				join emp e on e.emp_no = p.emp_no 
+				LEFT JOIN dept d ON e.dept_no = d.dept_no 
+    			LEFT JOIN emp_position ep ON e.emp_position_no = ep.emp_position_no 
+    			left join profile_image pi on pi.profile_no = p.profile_no 
+    			left join attach a on a.attach_no = pi.attach_no 
+    		order by emp_no asc
+    	</select>
     	
-    	<select id="joinProfile" resultType="ProfileInfoVO">
+    	
+    	<select id="joinProfileOne" resultType="ProfileInfoVO">
     		select 
 				p.profile_no,
 				e.emp_no,
@@ -50,7 +77,7 @@
     			LEFT JOIN emp_position ep ON e.emp_position_no = ep.emp_position_no 
     			left join profile_image pi on pi.profile_no = p.profile_no 
     			left join attach a on a.attach_no = pi.attach_no
-    		where e.emp_no=#{empNo}
+    		where p.emp_no=#{empNo}
     	</select>
     	
     	
@@ -76,7 +103,7 @@
 		<update id="editEmp">
 			update emp 
 			<set>
-				<if test="vo.empTel != null"> -->
+				<if test="vo.empTel != null">
     				emp_tel = #{vo.empTel},
     			</if>
     			<if test="vo.empEmail != null">
@@ -98,6 +125,7 @@
     		</set>
     		where emp_no = #{empNo}
     	</update>
+    	
 
     	
     </mapper>

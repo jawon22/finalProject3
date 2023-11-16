@@ -1,10 +1,7 @@
 package com.kh.teamup.restcontroller;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -64,13 +61,10 @@ public class ApproveRestController { //결재 테이블
 		
 		int apprNo = approveDao.sequence(); //apprNo를 가져옴
 		int apprPathNo = approvePathDao.sequence();
-//		int receiverNo = receiversDao.sequence();
-//		int referrerNo = referrersDao.sequence();
 		
 		approveInputVO.getApproveDto().setApprNo(apprNo);//결재에 시퀀스 설정
-		
-		// fe에서 작성자의 번호가 넘어오면 번호로 작성자의 정보 조회후 인서트
-		ApproveDto approveDto = approveInputVO.getApproveDto(); //approveDto를 꺼낸후
+		ApproveDto approveDto = approveInputVO.getApproveDto();
+				
 		approveDao.insert(approveDto);  // 인서트
 		log.debug("approveDto={}",approveDto);
 		
@@ -88,9 +82,9 @@ public class ApproveRestController { //결재 테이블
 		log.debug("approvePathDto={}",approvePathDto);
 		
 		// 승인자가 몇명인지 파악한후 for문으로 insert
-		List<ReceiversDto> receiversDto = approveInputVO.getReceiversDto();
+		List<ReceiversDto> receiversDto = approveInputVO.getReceiversDtoList();
 		List<Integer> receivers = new ArrayList<>();
-		
+		log.debug("dto= {}",receiversDto);
 		for(int i=0; i<receiversDto.size();i++) {
 			receivers.add(i, receiversDto.get(i).getReceiversReceiver());
 		}
@@ -106,7 +100,7 @@ public class ApproveRestController { //결재 테이블
 		}
 		
 		//만약 참조자가 있다면 몇 명인지 파악한후 for문으로 insert
-		List<ReferrersDto> referrersDto = approveInputVO.getReferrersDto();	
+		List<ReferrersDto> referrersDto = approveInputVO.getReferrersDtoList();	
 		List<Integer> referers = new ArrayList<>();
 		
 		for(int i =0; i<referrersDto.size();i++) {
