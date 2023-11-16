@@ -44,7 +44,7 @@
 	        ATT.emp_no,
 	        ATT.attend_start,
 	        ATT.attend_end,
-	        NVL((ATT.attend_end - ATT.attend_start) * 24, 0) -1 AS "working_times"
+	        NVL((ATT.attend_end - ATT.attend_start) * 24, 0) AS "working_times"
 	    FROM (
 	        SELECT
 	            TRUNC(SYSDATE, 'MM') + (LEVEL - 1) AS DT
@@ -70,7 +70,7 @@
 		    ATT.emp_no,
 		    ATT.attend_start,
 		    ATT.attend_end,
-		    NVL((ATT.attend_end - ATT.attend_start) * 24, 0) -1 AS working_times
+		    NVL((ATT.attend_end - ATT.attend_start) * 24, 0) AS working_times
 		FROM (
 		    SELECT
 		        TRUNC(TO_DATE(#{yearMonth}, 'YYYY-MM'), 'MM') + (LEVEL - 1) AS DT
