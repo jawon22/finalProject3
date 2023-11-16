@@ -79,18 +79,22 @@ public class ProfileRestController {
 		profileDao.connectProfile(profileDto.getProfileNo(), attachNo);
 	}
 	
-	//프로필 이미지 수정
-	@PutMapping(value = "/{profileNo}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity<String> editProfile(@ModelAttribute ProfileUpdateVO vo) throws IllegalStateException, IOException{
+	//프로필 이미지, 제목, 내용 수정
+	@PutMapping(value = "/{empNo}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<String> editProfile(@ModelAttribute ProfileUpdateVO vo, @PathVariable int empNo) throws IllegalStateException, IOException{
 		
+		int profileNo = profileDao.sequence();//profileNo를 가져옴
+		
+
 		MultipartFile attach = vo.getAttach();
 		
-		ProfileDto profileDto = vo.getProfileDto();
-		profileDao.update(vo);
+		ProfileInfoVO profileInfoVO = vo.getProfileInfoVO();
+		profileDao.updateProfile(profileInfoVO, empNo);
+		profileDao.updateEmp(profileInfoVO, empNo);
 		
 		if(!attach.isEmpty()) {//파일이 있으면
 			//파일 삭제 - 기존 파일이 있을 경우에만 처리
-			AttachDto attachDto = profileDao.findImage(profileDto.getProfileNo());
+			AttachDto attachDto = profileDao.findImage(profileInfoVO.getEmpNo());
 			String home = System.getProperty("user.home");
 			File dir = new File(home, "upload");
 			
@@ -119,16 +123,15 @@ public class ProfileRestController {
 				attachDao.insert(insertDto);
 				
 				//프로필 + 파일 연결
-				profileDao.connectProfile(profileDto.getProfileNo(), attachNo);
+				profileDao.connectProfile(profileInfoVO.getProfileNo(), attachNo);
 		}
 		
 		return ResponseEntity.ok().body("프로필 이미지 수정성공");
 	}
 	
 	@GetMapping("/{empNo}")
-	public List<ProfileInfoVO> list(@PathVariable int empNo){
-		return profileDao.selectList(empNo);
+	public ProfileInfoVO findProfile(@PathVariable int empNo){
+		return profileDao.selectOne(empNo);
 	} 
-	
 
 }

@@ -5,19 +5,35 @@
     "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
     
 <mapper namespace="attend">
+
+	<!-- 시퀀스 -->
+ 	<select id="sequence" resultType="int">
+    	select attend_seq.nextval from dual
+    </select>
 	
 	<!-- C 등록 -->
 	<!-- 출근 버튼 눌렀을 때 -->
 	<insert id="save">
-		insert into attend(emp_no, ATTEND_NO, ATTEND_START) values(#{empNo}, attend_seq.nextval, sysdate)
+		insert into attend ( emp_no, attend_no, attend_start ) 
+			values ( #{empNo}, #{attendNo}, sysdate )
 	</insert>
+	
+	<!-- 등록할 때 조회도 같이(출근시간을 찍어주기 위해 -->
+	<select id="findAttendNo" resultType="AttendDto">
+		select * from attend where attend_no = #{attendNo}
+	</select>
 	
 	<!-- U 수정 -->
 	<!-- 퇴근 버튼 눌렀을 때 -->
-	<update id="update">
+	<update id="update" >
 		update attend set attend_end = sysdate where emp_no = #{empNo}
 		and trunc(attend_start) = trunc(sysdate)
 	</update>
+	
+	<!-- empNo를 이용하여 오늘자 출근내역을 불러오는 명령 -->
+	<select id="findTodayAttendByEmpNo" resultType="AttendDto">
+		select * from attend where emp_no = #{empNo} and trunc(attend_start) = trunc(sysdate)
+	</select>
 	
 	<!-- R 목록, 상세 -->
 	<!-- 이번 달 1일부터 오늘까지 나오는 구문 -->
@@ -28,7 +44,7 @@
 	        ATT.emp_no,
 	        ATT.attend_start,
 	        ATT.attend_end,
-	        NVL((ATT.attend_end - ATT.attend_start) * 24, 0) -1 AS "working_times"
+	        NVL((ATT.attend_end - ATT.attend_start) * 24, 0) AS "working_times"
 	    FROM (
 	        SELECT
 	            TRUNC(SYSDATE, 'MM') + (LEVEL - 1) AS DT
@@ -54,7 +70,7 @@
 		    ATT.emp_no,
 		    ATT.attend_start,
 		    ATT.attend_end,
-		    NVL((ATT.attend_end - ATT.attend_start) * 24, 0) -1 AS working_times
+		    NVL((ATT.attend_end - ATT.attend_start) * 24, 0) AS working_times
 		FROM (
 		    SELECT
 		        TRUNC(TO_DATE(#{yearMonth}, 'YYYY-MM'), 'MM') + (LEVEL - 1) AS DT

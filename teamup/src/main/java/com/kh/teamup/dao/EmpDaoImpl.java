@@ -100,4 +100,22 @@ public class EmpDaoImpl implements EmpDao {
 		return sqlSession.selectList("emp.selectBydeptAndCom",empSearchBydeptComVO);
 	}
 	
+	@Override
+	public void updateDept(String empId, EmpDto empDto) {
+		Map<String, Object> params = Map.of("empId",empId ,"empDto",empDto);
+
+		sqlSession.update("emp.changeDetp",params);
+	}
+	
+	@Override
+	public void changeEmpId(String empId) {
+		sqlSession.update("emp.changeEmpId",empId);
+	}
+	
+	@Override
+	public void updateExit(String empId, EmpDto empDto) {
+		Map<String, Object> params = Map.of("empId",empId ,"empDto",empDto);
+		sqlSession.update("emp.updateExit",params);
+	}
+	
 }

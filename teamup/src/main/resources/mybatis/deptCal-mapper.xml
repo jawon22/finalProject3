@@ -3,50 +3,45 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="empcal">
-	<select id="empCalList" resultType="empCalDto">
-		select * from cal_emp
-		<where>
-			<if test="empNo!= 0">
-				and emp_no = #{empNo}
-			</if>
-	
-		</where>
+<mapper namespace="deptcal">
+	<select id="deptCalList" resultType="empCalDto">
+		select * from cal_dept where dept_no = #{deptNo}
 	</select>
+	
+	
 
 	<insert id="add">
-		insert into cal_emp(cal_no, emp_no, cal_title,
+		insert into cal_dept(cal_no, dept_no, cal_title,
 		cal_content,cal_start_date ,cal_end_date , cal_color)
 		values
-		(cal_no_seq.nextval, #{empNo}, #{calTitle},
+		(cal_dept_seq.nextval, #{deptNo}, #{calTitle},
 		#{calContent},#{calStartDate} ,#{calEndDate},#{calColor})
 	</insert>
 
-	<select id="empCalDetail" resultType="empCalDto">
-		select * from cal_emp where
+	<select id="deptCalDetail" resultType="empCalDto">
+		select * from cal_dept where
 		cal_no =#{calNo}
 	</select>
 
-	<update id="update">
-		update cal_emp set
+	<update id="updateDept">
+		update cal_dept set
 		cal_title=#{empCalDto.calTitle},
 		cal_start_date=#{empCalDto.calStartDate},
 		cal_end_date=#{empCalDto.calEndDate},
 		cal_content=#{empCalDto.calContent},
 		cal_status=#{empCalDto.calStatus},
 		cal_color=#{empCalDto.calColor}
-
 		where cal_no=#{calNo}
 	</update>
 
 	<select id="calDetail" resultType="empCalDto">
-		select * from cal_emp where
+		select * from cal_dept where
 		cal_no=#{calNo}
 	</select>
 
 
-	<delete id="deleteCal">
-		delete from cal_emp where cal_no= #{calNo}
+	<delete id="deleteDeptCal">
+		delete from cal_dept where cal_no= #{calNo}
 
 	</delete>
 

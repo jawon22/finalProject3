@@ -14,4 +14,8 @@
     	values(emp_position_seq.nextval,#{empPositionName},#{empPositionOrder},#{comId})
     	</insert>
     	
+    	<select id="listByCom" resultType="empPositionDto">
+    		select * from emp_position where com_id=#{comId} order by emp_position_order asc
+    	</select>
+    	
     </mapper>
