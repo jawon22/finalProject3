@@ -14,8 +14,40 @@
 		select * from appr where appr_no = #{apprNo}
 	</select>
 	
-	<select id="approveList" resultType="ApproveDto">
-		select * from appr order by appr_date_start desc
+	<!-- 결재의 모든 정보 + 해당 결재선 번호 -->
+	<select id="approveList" resultMap="approveVO">
+		select 
+			a.*,
+		   	ap.appr_path_no,
+		   	emp.EMP_NAME,
+			emp.EMP_TEL,
+		   	stat.STATUS
+		from appr_path ap
+		   left outer join (
+		      select 
+		         path_no,
+		         case
+		            when count(*) = count(case when RECEIVERS_STATUS='Y' then 1 end) then '승인'
+		            when count(case when RECEIVERS_STATUS='N' then 1 end) > 0 then '반려'
+		            else '진행'
+		         end STATUS
+		      From receivers
+	      	group by path_no
+		   ) 
+		  stat on ap.appr_path_no = stat.path_no
+		 left outer join appr a ON ap.appr_no = a.appr_no
+		left outer join emp on a.APPR_SENDER = emp.emp_no
+		left outer join receivers rec on ap.appr_path_no = rec.path_no
+		left outer join referrers refe on ap.appr_path_no = refe.path_no
+		order by a.appr_date_start asc
+	</select>
+
+	<select id="receiverList" resultType="ReceiversDto">
+		select * from receivers where path_no = #{receiversPathNo} 
+	</select>
+	
+	<select id="refererList" resultType="ReferrersDto">
+		select * from referrers where path_no = #{referrersPathNo}
 	</select>
 	
 	<delete id="approveCancel">
@@ -27,6 +59,42 @@
 			appr_date_end, appr_division) values(#{apprNo}, #{apprSender}, #{deptNo},
 			#{apprTitle}, #{apprContent}, #{apprDateStart}, #{apprDateEnd}, #{apprDivision})
 	</insert>
+
+	<resultMap type="ApproveVO" id="approveVO">
+		<result column="appr_path_no" property="apprPathNo"/>
+		<result column="emp_name" property="empName"/>
+		<result column="emp_tel" property="empTel"/>
+		<result column="status" property="status"/>
+	
+		<!-- 객체 -->
+		<association property="approveDto">
+			<result column="appr_no" property="apprNo"/>
+			<result column="appr_sender" property="apprSender"/>
+			<result column="dept_no" property="deptNo"/>
+			<result column="appr_title" property="apprTitle"/>
+			<result column="appr_content" property="apprContent"/>
+			<result column="appr_date_start" property="apprDateStart"/>
+			<result column="appr_date_end" property="apprDateEnd"/>
+			<result column="appr_division" property="apprDivision"/>
+		</association>
+		
+		<collection property="receiversDtoList" select="receiverList" column="appr_path_no"
+				javaType="java.util.List" ofType="ReceiversDto">
+			<result column="receivers_no" property="receiversNo"/>
+			<result column="path_no" property="pathNo"/>
+			<result column="receivers_receiver" property="receiversReceiver"/>
+			<result column="receivers_status" property="receiversStatus"/>
+			<result column="receivers_confirm_time" property="ReceiversConfirmTime"/>
+			<result column="receivers_return_rs" property="receiversReturnRs"/>
+		</collection>
+		
+		<collection property="referrersDtoList" select="refererList" column="appr_path_no" 
+				javaType="java.util.List" ofType="ReferrersDto">
+			<result column="referrers_no" property="referrersNo"/>
+			<result column="path_no" property="pathNo"/>
+			<result column="referrers_referrer" property="referrersReferrer"/>
+		</collection>
+	</resultMap>
 
 <!-- 	<update id="edit"> -->
 <!-- 		update appr -->
