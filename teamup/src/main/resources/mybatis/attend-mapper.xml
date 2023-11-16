@@ -44,7 +44,7 @@
 	        ATT.emp_no,
 	        ATT.attend_start,
 	        ATT.attend_end,
-	        NVL((ATT.attend_end - ATT.attend_start) * 24, 0) -1 AS "working_times"
+	        NVL(((ATT.attend_end - ATT.attend_start)-1) * 24, 0) AS "working_times"
 	    FROM (
 	        SELECT
 	            TRUNC(SYSDATE, 'MM') + (LEVEL - 1) AS DT
@@ -96,7 +96,7 @@
 	<select id="selectByEmpTotalWorkingTime" resultType="int">
 	    SELECT
 	        -- TO_CHAR(TMP.DT, 'YYYY-MM') AS year_month,
-	        SUM(NVL((ATT.attend_end - ATT.attend_start) * 24, 0)) AS total_working_times
+    SUM(NVL(EXTRACT(HOUR FROM (CAST(ATT.attend_end AS TIMESTAMP) - CAST(ATT.attend_start AS TIMESTAMP) - NUMTODSINTERVAL(1, 'HOUR'))), 0)) AS total_working_times
 	    FROM (
 	        SELECT
 	            TRUNC(TO_DATE(#{yearMonth}, 'YYYY-MM'), 'MM') AS DT
