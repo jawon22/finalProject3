@@ -14,6 +14,6 @@ import lombok.NoArgsConstructor;
 public class AttendDto {
 	private int empNo; //사원번호 외래키
 	private int attendNo; //근태번호 프키
-	private Date attendStart; //출근시간
-	private Date attendEnd; //퇴근시간
+	private String attendStart; //출근시간
+	private String attendEnd; //퇴근시간
 }
