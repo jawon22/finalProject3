@@ -1,6 +1,7 @@
 package com.kh.teamup.dao;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
@@ -22,6 +23,12 @@ public class ProfileDaoImpl implements ProfileDao{
 	@Override
 	public int sequence() {
 		return sqlSession.selectOne("emp_profile.sequence");
+	}
+	
+	//empNo로 profileNo 찾기
+	@Override
+	public int findProfileNo(int empNo) {
+		return sqlSession.selectOne("emp_profile.findProfileNo", empNo);
 	}
 	
 	//프로필 정보 등록(+이미지)
@@ -62,10 +69,17 @@ public class ProfileDaoImpl implements ProfileDao{
 		return sqlSession.update("emp_profile.editEmp", params) > 0;
 	}
 	
+	//전체회원 프로필 조회
+	@Override
+	public List<ProfileInfoVO> selectList() {
+		return sqlSession.selectList("emp_profile.joinProfileAll");
+	}
 	
+	//회원번호에 따른 회원 프로필 조회
 	@Override
 	public ProfileInfoVO selectOne(int empNo) {
-		return sqlSession.selectOne("emp_profile.joinProfile", empNo);
+		return sqlSession.selectOne("emp_profile.joinProfileOne", empNo);
+		
 	}
 
 }
