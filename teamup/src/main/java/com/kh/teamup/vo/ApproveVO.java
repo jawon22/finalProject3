@@ -15,9 +15,10 @@ import lombok.NoArgsConstructor;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
-public class ApproveInputVO {
+public class ApproveVO {
 	private ApproveDto approveDto;
-	private ApprovePathDto approvePathDto;
+	private int apprPathNo;
+	private String empName, empTel, status;
 	private List<ReceiversDto> receiversDtoList;
 	private List<ReferrersDto> referrersDtoList;
 }
