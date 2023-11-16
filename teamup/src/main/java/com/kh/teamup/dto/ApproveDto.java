@@ -1,7 +1,5 @@
 package com.kh.teamup.dto;
 
-import java.sql.Date;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,6 +11,6 @@ public class ApproveDto {
 	private int apprSender;
 	private int deptNo;
 	private String apprTitle, apprContent;
-	private Date apprDateStart, apprDateEnd;
+	private String apprDateStart, apprDateEnd;
 	private String apprDivision;
 }
