@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -50,6 +51,46 @@ public class CalendarRestController {
 	@GetMapping("/detail/{calNo}")
 	public EmpCalDto detail(@PathVariable int calNo) {
 		return calDao.selectOne(calNo);
+	}
+	
+	@DeleteMapping("/delete/{calNo}")
+	public void deleteCal(@PathVariable int calNo) {
+		
+		calDao.deleteCal(calNo);
+		
+	}
+	
+	
+	///부서 별?
+	
+	@PostMapping("/dpetadd/")
+	public void deptAdd(@RequestBody EmpCalDto empCalDto) {
+		
+		calDao.deptadd(empCalDto);
+		
+		
+	}
+	@GetMapping("deptList/{deptNo}")
+	public List<EmpCalDto> deptCalList(@PathVariable int deptNo){
+		return calDao.deptCalList(deptNo);
+	}
+	
+	@PutMapping("/updateDeptCal/{calNo}")
+	public void updateDeptCal(@PathVariable int calNo,@RequestBody EmpCalDto empCalDto) {
+		log.debug("dto={}",empCalDto);
+		calDao.updateDeptCal(calNo, empCalDto);
+	}
+	
+	@GetMapping("/deptDetail/{calNo}")
+	public EmpCalDto deptDetail(@PathVariable int calNo) {
+		return calDao.deptDetail(calNo);
+	}
+	
+	@DeleteMapping("/deleteDeptCal/{calNo}")
+	public void deleteDeptCal(@PathVariable int calNo) {
+		
+		calDao.deleteDeptCal(calNo);
+		
 	}
 	
 
