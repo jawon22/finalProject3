@@ -83,10 +83,16 @@ public class ProfileRestController {
 	@PutMapping(value = "/{empNo}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<String> editProfile(@ModelAttribute ProfileUpdateVO vo, @PathVariable int empNo) throws IllegalStateException, IOException{
 		
-		int profileNo = profileDao.sequence();//profileNo를 가져옴
+//		log.debug("v0={}",vo);
+//		log.debug("empNo={}", empNo);
+//		int profileNo = profileDao.sequence();//profileNo를 가져옴
+		int profileNo = profileDao.findProfileNo(empNo);
+		int attachNo = attachDao.sequence();
+		log.debug("attachNo={}", attachNo);
 		
 
 		MultipartFile attach = vo.getAttach();
+		log.debug("at={}",attach);
 		
 		ProfileInfoVO profileInfoVO = vo.getProfileInfoVO();
 		profileDao.updateProfile(profileInfoVO, empNo);
@@ -94,9 +100,11 @@ public class ProfileRestController {
 		
 		if(!attach.isEmpty()) {//파일이 있으면
 			//파일 삭제 - 기존 파일이 있을 경우에만 처리
-			AttachDto attachDto = profileDao.findImage(profileInfoVO.getEmpNo());
+//			AttachDto attachDto = profileDao.findImage(profileInfoVO.getEmpNo());
+			AttachDto attachDto = profileDao.findImage(profileNo);
 			String home = System.getProperty("user.home");
 			File dir = new File(home, "upload");
+			log.debug("attach={}",attachDto);
 			
 			if(attachDto != null) {
 				attachDao.delete(attachDto.getAttachNo());
@@ -107,8 +115,8 @@ public class ProfileRestController {
 				
 				//파일 추가 및 연결
 				//파일번호 생성
-				int attachNo = attachDao.sequence();
-				log.debug("attachNo=", attachNo);
+//				int attachNo = attachDao.sequence();
+				log.debug("attachNo={}", attachNo);
 				
 				//신규파일 저장
 				File insertTarget = new File(dir, String.valueOf(attachNo));
@@ -120,18 +128,28 @@ public class ProfileRestController {
 				insertDto.setAttachName(attach.getOriginalFilename());
 				insertDto.setAttachSize(attach.getSize());
 				insertDto.setAttachType(attach.getContentType());
+				log.debug("insertDto={}", insertDto);
 				attachDao.insert(insertDto);
 				
 				//프로필 + 파일 연결
-				profileDao.connectProfile(profileInfoVO.getProfileNo(), attachNo);
+				ProfileInfoVO changeVO =  profileDao.selectOne(empNo);
+				profileDao.connectProfile(changeVO.getProfileNo(), attachNo);
 		}
 		
 		return ResponseEntity.ok().body("프로필 이미지 수정성공");
 	}
 	
+	//전체회원 프로필 조회
+	@GetMapping("/")
+	public List<ProfileInfoVO> list(){
+		return profileDao.selectList();
+	} 
+	
+	//회원번호에 따른 회원 프로필 조회
 	@GetMapping("/{empNo}")
 	public ProfileInfoVO findProfile(@PathVariable int empNo){
 		return profileDao.selectOne(empNo);
 	} 
+	
 
 }
