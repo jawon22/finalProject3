@@ -1,6 +1,7 @@
 package com.kh.teamup.restcontroller;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 import javax.mail.MessagingException;
@@ -34,6 +35,8 @@ import com.kh.teamup.vo.EmpComplexSearchVO;
 import com.kh.teamup.vo.EmpSearchBydeptComVO;
 import com.kh.teamup.vo.SearchVO;
 
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -266,11 +269,12 @@ public class EmpRestController {
 	}
 	
 	////////////////////////////////////////////////////////////////////
-	
+	private final String secretKey = ""; // 서명 키. 반드시 안전한 방법으로 보호되어야 함
+    private final long validityInMilliseconds = 3600000; // 토큰의 유효 기간 (1시간)
 	//true면 session에 저장
 	@Operation(description = "로그인")
 	@PostMapping("login/")
-	public boolean login(@RequestBody EmpDto inputDto) {
+	public String login(@RequestBody EmpDto inputDto) {
 		//아이디로 조회 
 		EmpDto findDto = empDao.selecOne(inputDto.getEmpId());
 		
@@ -278,11 +282,22 @@ public class EmpRestController {
 		boolean isMach =encoder.matches(inputDto.getEmpPw(),findDto.getEmpPw()) ;
 		
 		log.debug("??={}",isMach);
-		return isMach;
 		
-		//isMatch면 session에 저장
+		if(isMach==true) {
+			Date now = new Date();
+	        Date validity = new Date(now.getTime() + validityInMilliseconds);
 
-		
+	        return Jwts.builder()
+	                .setSubject(findDto.getEmpId())
+	                .setIssuedAt(now)
+	                .setExpiration(validity)
+	                .compact();
+
+		}
+		else {
+			return null;
+		}
+
 	}
 	
 	
