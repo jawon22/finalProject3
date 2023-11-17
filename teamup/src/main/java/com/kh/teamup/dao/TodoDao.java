@@ -10,5 +10,6 @@ public interface TodoDao {
 	List<TodoDto> selectList();
 	TodoDto selectOne(int empNo);
 	void deleteTodo(int empNo);
+	void change(TodoDto todoDto, int todoNo);
 	
 }

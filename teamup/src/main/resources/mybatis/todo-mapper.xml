@@ -25,16 +25,12 @@
     
     
     <update id="change">
-    	update todo 
-		<set>
-			<if test="todoDto.todoType != null">
-				todo_type = #{todoDto.todoType},
-			</if>
-			<if test="todoDto.todoContent">
-				todo_content = #{todoContent}
-			</if>
-		</set>
-    	where todo_no = #{todoNo]
+    	update todo set
+			<if test="todoDto.empNo > 0">
+				emp_no = #{todoDto.empNo},
+			</if>			
+			todo_type = #{todoDto.todoType},	todo_content = #{todoDto.todoContent}
+    	where todo_no = #{todoDto.todoNo}
     </update>
     
     </mapper>
