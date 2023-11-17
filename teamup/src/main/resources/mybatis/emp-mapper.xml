@@ -162,9 +162,14 @@
 	
 	
 	
-	<insert id="token">
+	<insert id="setToken">
 	insert into token(id, token) values(token_seq.nextval, #{token})
 	</insert>
+	
+	
+	<select id="findtoken" resultType="empToken">
+	select * from token where token= #{token}
+	</select>
 
 
 
