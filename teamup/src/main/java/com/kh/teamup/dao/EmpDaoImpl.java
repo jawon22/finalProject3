@@ -9,6 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import com.kh.teamup.dto.EmpDto;
+import com.kh.teamup.dto.EmpToken;
 import com.kh.teamup.vo.EmpComplexSearchVO;
 import com.kh.teamup.vo.EmpSearchBydeptComVO;
 import com.kh.teamup.vo.SearchVO;
@@ -116,6 +117,19 @@ public class EmpDaoImpl implements EmpDao {
 	public void updateExit(String empId, EmpDto empDto) {
 		Map<String, Object> params = Map.of("empId",empId ,"empDto",empDto);
 		sqlSession.update("emp.updateExit",params);
+	}
+	
+	
+	//------토큰 저장
+	@Override
+	public void setToken(EmpToken empToken) {
+		sqlSession.insert("emp.setToken",empToken);
+		
+	};
+	@Override
+	public EmpToken findToken(String token) {
+		
+		return sqlSession.selectOne("emp.findtoken",token);
 	}
 	
 }

@@ -3,6 +3,7 @@ package com.kh.teamup.dao;
 import java.util.List;
 
 import com.kh.teamup.dto.EmpDto;
+import com.kh.teamup.dto.EmpToken;
 import com.kh.teamup.vo.EmpComplexSearchVO;
 import com.kh.teamup.vo.EmpSearchBydeptComVO;
 import com.kh.teamup.vo.SearchVO;
@@ -35,6 +36,10 @@ public interface EmpDao {
 	void changeEmpId(String empId);
 
 	void updateExit(String empId, EmpDto empDto);
+
+	void setToken(EmpToken empToken);
+
+	EmpToken findToken(String token);
 	
 	
 
