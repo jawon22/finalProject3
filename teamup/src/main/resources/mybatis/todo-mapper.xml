@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+    <mapper namespace="todo">
+    
+    <insert id="save">
+    	insert into todo(todo_no, emp_no, todo_type, todo_content, todo_date)
+    	values (todo_seq.nextval, #{empNo}, #{todoType}, #{todoContent}, #{todoDate})
+    </insert>
+    
+    <select id="list" resultType="TodoDto">
+    	select * from todo order by todo_no desc
+    </select>
+    
+    <select id="find" resultType="TodoDto">
+    	select * from todo where emp_no = #{emp_no}
+    </select>
+    
+    <delete id="remove">
+    	delete todo where todo_no = #{todoNo}
+    </delete>
+    
+    
+    <update id="change">
+    	update todo 
+		<set>
+			<if test="todoDto.todoType != null">
+				todo_type = #{todoDto.todoType},
+			</if>
+			<if test="todoDto.todoContent">
+				todo_content = #{todoContent}
+			</if>
+		</set>
+    	where todo_no = #{todoNo]
+    </update>
+    
+    </mapper>
+    
+    
