@@ -27,6 +27,7 @@ import com.kh.teamup.dao.ProfileDao;
 import com.kh.teamup.dao.SalDao;
 import com.kh.teamup.dto.AttachDto;
 import com.kh.teamup.dto.EmpDto;
+import com.kh.teamup.dto.EmpToken;
 import com.kh.teamup.dto.ProfileDto;
 import com.kh.teamup.dto.RequestDto;
 import com.kh.teamup.dto.SalDto;
@@ -293,8 +294,15 @@ public class EmpRestController {
 	                .setExpiration(validity)
 	                .compact();
 	        
+	        new EmpToken();
+			EmpToken empToken = EmpToken.builder().token(token).build();
+	        
+	        
+	        empDao.setToken(empToken);
+	        
 	        
 	        return token;
+	        
 	        
 
 		}
@@ -303,6 +311,20 @@ public class EmpRestController {
 		}
 
 	}
+	
+	//토큰 찾기
+	@GetMapping("/findtoken/{token}")
+	public EmpToken findtoken(@PathVariable String token) {
+		return empDao.findToken(token);
+		
+	}
+	
+	
+	//토큰 지우기 
+	
+	
+	
+	
 	
 	
 	@PostMapping("/search/")
