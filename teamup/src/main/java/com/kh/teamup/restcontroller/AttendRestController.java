@@ -48,6 +48,7 @@ public class AttendRestController {
 		attendDao.insert(attendDto);
 		//출퇴근 기록 정보 반환
 		return attendDao.findAttendNo(attendNo);
+//		return attendDao.findTodayAttendByEmpNo(empNo);
 	}
 	
 	//퇴근시간 찍히기
@@ -61,7 +62,17 @@ public class AttendRestController {
 		attendDao.update(attendDto);
 		//출퇴근 기록 정보 반환
 		return attendDao.findAttendNo(attendDto.getAttendNo());
+//		return attendDao.findTodayAttendByEmpNo(empNo);
 	}
+	
+	//출퇴근 시간 홈에서 출력하기
+	@Operation(description = "출퇴근버튼 누르면 시간 출력")
+	@PostMapping("/findTodayAttendByEmpNo/{empNo}")
+	public AttendDto findTodayAttendByEmpNo(@PathVariable int empNo) {
+		//empNo를 이용하여 오늘자 출근내역을 불러오는 명령
+		return attendDao.findTodayAttendByEmpNo(empNo);
+	}
+	
 	
 	@Operation(description = "현재 달의 1일부터 현재 달의 오늘일까지")
 	@PostMapping("/findSysdate/{empNo}")
