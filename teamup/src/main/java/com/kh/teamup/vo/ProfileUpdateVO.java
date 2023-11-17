@@ -3,6 +3,7 @@ package com.kh.teamup.vo;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.kh.teamup.dto.AttachDto;
 import com.kh.teamup.dto.ProfileDto;
 
 import lombok.Data;

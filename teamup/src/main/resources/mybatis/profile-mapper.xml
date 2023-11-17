@@ -126,6 +126,9 @@
     		where emp_no = #{empNo}
     	</update>
     	
+    	<update id="editImage">
+    		update profile_image where profile_no = #{profileNo}
+    	</update>
 
     	
     </mapper>

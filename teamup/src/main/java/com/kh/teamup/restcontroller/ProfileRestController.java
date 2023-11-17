@@ -1,5 +1,6 @@
 package com.kh.teamup.restcontroller;
 
+import java.io.Console;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -59,6 +60,7 @@ public class ProfileRestController {
 		
 		MultipartFile attach = vo.getAttach();
 		
+		
 		int attachNo = attachDao.sequence();
 		
 		String home = System.getProperty("user.home");
@@ -73,8 +75,8 @@ public class ProfileRestController {
 		attachDto.setAttachSize(attach.getSize());
 		attachDto.setAttachType(attach.getContentType());
 		attachDao.insert(attachDto);
-		log.debug("attach={}", attachDto);
-		log.debug("f={}", profileDto);
+//		log.debug("attach={}", attachDto);
+//		log.debug("f={}", profileDto);
 		
 		profileDao.connectProfile(profileDto.getProfileNo(), attachNo);
 	}
@@ -83,28 +85,28 @@ public class ProfileRestController {
 	@PutMapping(value = "/{empNo}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<String> editProfile(@ModelAttribute ProfileUpdateVO vo, @PathVariable int empNo) throws IllegalStateException, IOException{
 		
-//		log.debug("v0={}",vo);
 //		log.debug("empNo={}", empNo);
 //		int profileNo = profileDao.sequence();//profileNo를 가져옴
 		int profileNo = profileDao.findProfileNo(empNo);
 		int attachNo = attachDao.sequence();
-		log.debug("attachNo={}", attachNo);
+//		log.debug("attachNo={}", attachNo);
 		
 
 		MultipartFile attach = vo.getAttach();
-		log.debug("at={}",attach);
+		log.debug("at={}", attach);
 		
 		ProfileInfoVO profileInfoVO = vo.getProfileInfoVO();
 		profileDao.updateProfile(profileInfoVO, empNo);
 		profileDao.updateEmp(profileInfoVO, empNo);
+		log.debug("ProfileUpdateVO={}",vo);
 		
 		if(!attach.isEmpty()) {//파일이 있으면
 			//파일 삭제 - 기존 파일이 있을 경우에만 처리
 //			AttachDto attachDto = profileDao.findImage(profileInfoVO.getEmpNo());
 			AttachDto attachDto = profileDao.findImage(profileNo);
+			log.debug("attachDto={}",attachDto);
 			String home = System.getProperty("user.home");
 			File dir = new File(home, "upload");
-			log.debug("attach={}",attachDto);
 			
 			if(attachDto != null) {
 				attachDao.delete(attachDto.getAttachNo());
@@ -149,7 +151,9 @@ public class ProfileRestController {
 	@GetMapping("/{empNo}")
 	public ProfileInfoVO findProfile(@PathVariable int empNo){
 		return profileDao.selectOne(empNo);
-	} 
+	}
+	
+	
 	
 
 }

@@ -1,5 +1,9 @@
 package com.kh.teamup.vo;
 
+import org.springframework.web.multipart.MultipartFile;
+
+import com.kh.teamup.dto.AttachDto;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -7,6 +11,7 @@ import lombok.NoArgsConstructor;
 
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
 public class ProfileInfoVO {
+	private AttachDto attachDto;
 	private int attachNo;
 	private int profileNo;
 	private int empNo;
