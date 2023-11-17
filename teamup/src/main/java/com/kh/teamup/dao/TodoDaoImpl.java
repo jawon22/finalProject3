@@ -18,7 +18,7 @@ public class TodoDaoImpl implements TodoDao{
 
 	@Override
 	public void insert(TodoDto todoDto) {
-		log.debug("todoDto = {}", todoDto);
+//		log.debug("todoDto = {}", todoDto);
 		sqlSession.insert("todo.save", todoDto);
 	}
 	
