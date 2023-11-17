@@ -158,6 +158,13 @@
 	<update id="updateExit">
 		update emp set emp_exit= #{empDto.empExit} where emp_id=#{empId}
 	</update>
+	
+	
+	
+	
+	<insert id="token">
+	insert into token(id, token) values(token_seq.nextval, #{token})
+	</insert>
 
 
 

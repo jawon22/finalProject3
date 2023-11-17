@@ -287,11 +287,15 @@ public class EmpRestController {
 			Date now = new Date();
 	        Date validity = new Date(now.getTime() + validityInMilliseconds);
 
-	        return Jwts.builder()
+	        String token =  Jwts.builder()
 	                .setSubject(findDto.getEmpId())
 	                .setIssuedAt(now)
 	                .setExpiration(validity)
 	                .compact();
+	        
+	        
+	        return token;
+	        
 
 		}
 		else {
