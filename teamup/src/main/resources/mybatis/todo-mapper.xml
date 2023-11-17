@@ -7,8 +7,8 @@
     <mapper namespace="todo">
     
     <insert id="save">
-    	insert into todo(todo_no, emp_no, todo_type, todo_content, todo_date)
-    	values (todo_seq.nextval, #{empNo}, #{todoType}, #{todoContent}, #{todoDate})
+ 	insert into todo(todo_no, emp_no, todo_type, todo_content)
+ 	values(todo_seq.nextval, #{empNo}, #{todoType}, #{todoContent})
     </insert>
     
     <select id="list" resultType="TodoDto">
