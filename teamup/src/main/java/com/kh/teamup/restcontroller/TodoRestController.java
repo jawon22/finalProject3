@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.kh.teamup.dao.TodoDao;
 import com.kh.teamup.dto.TodoDto;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,6 +30,7 @@ public class TodoRestController {
 	@Autowired private TodoDao todoDao;
 	
 	//등록
+	@Operation(description = "todo등록")
 	@PostMapping("/save/")
 	public void insert(@RequestBody TodoDto todoDto) {
 		log.debug("todoDto={}",todoDto);
@@ -36,21 +38,25 @@ public class TodoRestController {
 	}
 	
 	//목록
-	@GetMapping("/")
-	public List<TodoDto>list(){
-		return todoDao.selectList();
+	@Operation(description = "todo 사원별 목록")
+	@GetMapping("/list/{empNo}")
+	public List<TodoDto>list(@PathVariable int empNo){
+		return todoDao.empTodoList(empNo);
 	}
 	
-	@GetMapping("/{empNo}")
-	public TodoDto find (@PathVariable int empNo) {
-		return todoDao.selectOne(empNo);
+	@Operation(description = "todo 사원별 상세 조회")
+	@GetMapping("/{todoNo}")
+	public TodoDto find (@PathVariable int todoNo) {
+		return todoDao.selectOne(todoNo);
 	}
-	
+
+	@Operation(description = "todo 삭제")
 	@DeleteMapping("/{empNo}")
 	public void delete(@PathVariable int empNo) {
 		todoDao.deleteTodo(empNo);
 	}
 	
+	@Operation(description = "todo 수정")
 	@PutMapping("/{todoNo}")
 	public void update(@RequestBody TodoDto todoDto, @PathVariable int todoNo) {
 		todoDao.change(todoDto, todoNo);

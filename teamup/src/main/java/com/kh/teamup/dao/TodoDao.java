@@ -7,9 +7,9 @@ import com.kh.teamup.dto.TodoDto;
 public interface TodoDao {
 
 	void insert(TodoDto todoDto);
-	List<TodoDto> selectList();
-	TodoDto selectOne(int empNo);
+	TodoDto selectOne(int todoNo);
 	void deleteTodo(int empNo);
 	void change(TodoDto todoDto, int todoNo);
+	List<TodoDto> empTodoList(int empNo);
 	
 }

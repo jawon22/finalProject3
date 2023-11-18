@@ -12,11 +12,11 @@
     </insert>
     
     <select id="list" resultType="TodoDto">
-    	select * from todo order by todo_no desc
+    	select * from todo where emp_no = #{empNo} order by todo_no desc
     </select>
     
     <select id="find" resultType="TodoDto">
-    	select * from todo where emp_no = #{emp_no}
+    	select * from todo where todo_no = #{todoNo}
     </select>
     
     <delete id="remove">
