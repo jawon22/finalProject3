@@ -25,13 +25,13 @@ public class TodoDaoImpl implements TodoDao{
 	}
 	
 	@Override
-	public List<TodoDto> selectList() {
-		return sqlSession.selectList("todo.list");
+	public List<TodoDto> empTodoList(int empNo) {
+		return sqlSession.selectList("todo.list", empNo);
 	}
 	
 	@Override
-	public TodoDto selectOne(int empNo) {
-		return sqlSession.selectOne("todo.find", empNo);
+	public TodoDto selectOne(int todoNo) {
+		return sqlSession.selectOne("todo.find", todoNo);
 	}
 	
 	@Override
