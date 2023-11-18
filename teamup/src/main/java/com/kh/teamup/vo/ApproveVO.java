@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 public class ApproveVO {
 	private ApproveDto approveDto;
 	private int apprPathNo;
-	private String empName, empTel, status;
+	private String empName, empTel, deptName, status;
 	private List<ReceiversDto> receiversDtoList;
 	private List<ReferrersDto> referrersDtoList;
 }
