@@ -22,6 +22,7 @@ public class SearchVO {
 	private String empTel;
 	private int salAnnual;
 	private Date empJoin;
+	private Date empExit;
 	
 	
 	private String select;
@@ -31,6 +32,10 @@ public class SearchVO {
 	
 	private Date joinStart;
 	private Date joinEnd;
+	
+	private int page;
+	private Integer empCount;
+	private int size;
 	
 	
 

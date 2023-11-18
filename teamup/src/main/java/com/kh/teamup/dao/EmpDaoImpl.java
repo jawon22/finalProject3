@@ -131,5 +131,10 @@ public class EmpDaoImpl implements EmpDao {
 		
 		return sqlSession.selectOne("emp.findtoken",token);
 	}
+	@Override
+	public Integer count(String comId) {
+		
+		return sqlSession.selectOne("search.count",comId);
+	}
 	
 }

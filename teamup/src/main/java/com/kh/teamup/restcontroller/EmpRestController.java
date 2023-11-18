@@ -330,7 +330,6 @@ public class EmpRestController {
 	@PostMapping("/search/")
 	public List<SearchVO> complexSearch(@RequestBody SearchVO searchVO){
 		
-		
 		return empDao.search(searchVO);
 	}
 	@GetMapping("/mypage/{empNo}")
@@ -357,12 +356,18 @@ public class EmpRestController {
 		
 		empDao.changeEmpId(empId);
 		
+		
 	}
 	
 	@PutMapping("/updateExit/{empId}")
 	public void updateExit(@PathVariable String empId,@RequestBody EmpDto empDto) {
 		
 		empDao.updateExit(empId, empDto);
+	}
+	
+	@GetMapping("/count/{comId}")
+	public Integer count(@PathVariable String comId) {
+		return empDao.count(comId);
 	}
 	
 }
