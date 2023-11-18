@@ -21,6 +21,7 @@
 		   	ap.appr_path_no,
 		   	emp.EMP_NAME,
 			emp.EMP_TEL,
+			d.dept_name,
 		   	stat.STATUS
 		from appr_path ap
 		   left outer join (
@@ -32,13 +33,14 @@
 		            else '진행'
 		         end STATUS
 		      From receivers
-	      	group by path_no
+		      group by path_no
 		   ) 
 		  stat on ap.appr_path_no = stat.path_no
-		 left outer join appr a ON ap.appr_no = a.appr_no
+		 LEFT OUTER JOIN appr a ON ap.appr_no = a.appr_no
 		left outer join emp on a.APPR_SENDER = emp.emp_no
 		left outer join receivers rec on ap.appr_path_no = rec.path_no
 		left outer join referrers refe on ap.appr_path_no = refe.path_no
+		left outer join dept d on a.dept_no = d.dept_no
 		order by a.appr_date_start asc
 	</select>
 
@@ -64,6 +66,7 @@
 		<result column="appr_path_no" property="apprPathNo"/>
 		<result column="emp_name" property="empName"/>
 		<result column="emp_tel" property="empTel"/>
+		<result column="dept_name" property="deptName"/>
 		<result column="status" property="status"/>
 	
 		<!-- 객체 -->
