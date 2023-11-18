@@ -6,120 +6,134 @@
     
 <mapper namespace="attend">
 
-	<!-- 시퀀스 -->
- 	<select id="sequence" resultType="int">
-    	select attend_seq.nextval from dual
+   <!-- 시퀀스 -->
+    <select id="sequence" resultType="int">
+       select attend_seq.nextval from dual
     </select>
-	
-	<!-- C 등록 -->
-	<!-- 출근 버튼 눌렀을 때 -->
-	<insert id="save">
-		insert into attend ( emp_no, attend_no, attend_start ) 
-			values ( #{empNo}, #{attendNo}, sysdate )
-	</insert>
-	
-	<!-- 등록할 때 조회도 같이(출근시간을 찍어주기 위해 -->
-	<select id="findAttendNo" resultType="AttendDto">
-		select * from attend where attend_no = #{attendNo}
-	</select>
-	
-	<!-- U 수정 -->
-	<!-- 퇴근 버튼 눌렀을 때 -->
-	<update id="update" >
-		update attend set attend_end = sysdate where emp_no = #{empNo}
-		and trunc(attend_start) = trunc(sysdate)
-	</update>
-	
-	<!-- empNo를 이용하여 오늘자 출근내역을 불러오는 명령 -->
-	<select id="findTodayAttendByEmpNo" resultType="AttendDto">
-		select * from attend where emp_no = #{empNo} and trunc(attend_start) = trunc(sysdate)
-	</select>
-	
-	<!-- R 목록, 상세 -->
-	<!-- 이번 달 1일부터 오늘까지 나오는 구문 -->
-	<select id="findSysdate" resultType="AttendWorkingTimesVO">
-	    SELECT
-	        TMP.DT,
-	        ATT.attend_no,
-	        ATT.emp_no,
-	        ATT.attend_start,
-	        ATT.attend_end,
-	        NVL((ATT.attend_end - ATT.attend_start) * 24, 0) AS "working_times"
-	    FROM (
-	        SELECT
-	            TRUNC(SYSDATE, 'MM') + (LEVEL - 1) AS DT
-	        FROM dual
-	        <![CDATA[
-	        CONNECT BY LEVEL <= CEIL(SYSDATE - TRUNC(SYSDATE, 'MM'))
-	        ]]>
-	    ) TMP
-	    LEFT JOIN (
-	        SELECT *
-	        FROM attend
-	        WHERE emp_no = #{empNo}
-	    ) ATT ON TO_CHAR(TMP.DT, 'YYYY-MM-DD') = TO_CHAR(ATT.attend_start, 'YYYY-MM-DD')
-	    ORDER BY TMP.DT DESC
-	</select>
-	
-	<!-- R 목록, 상세 -->
-	<!-- 사용자에게 년 월을 받아서 근태내역을 출력 -->
-	<select id="findSearch" resultType="AttendWorkingTimesVO">
-	    SELECT
-		    TO_CHAR(TMP.DT, 'YYYY-MM-DD') AS dt,
-		    ATT.attend_no,
-		    ATT.emp_no,
-		    ATT.attend_start,
-		    ATT.attend_end,
-		    NVL((ATT.attend_end - ATT.attend_start) * 24, 0) AS working_times
-		FROM (
-		    SELECT
-		        TRUNC(TO_DATE(#{yearMonth}, 'YYYY-MM'), 'MM') + (LEVEL - 1) AS DT
-		    FROM dual
-		    CONNECT BY
-		    <![CDATA[
-		        LEVEL <= LAST_DAY(TO_DATE(#{yearMonth}, 'YYYY-MM'))
-		    ]]>
-		                  - TRUNC(TO_DATE(#{yearMonth}, 'YYYY-MM')) + 1
-		) TMP
-		LEFT JOIN (
-		    SELECT *
-		    FROM attend
-		    WHERE TO_CHAR(attend_start, 'YYYY-MM') = #{yearMonth}
-		      AND emp_no = #{empNo}
-		) ATT ON TO_CHAR(TMP.DT, 'YYYY-MM-DD') = TO_CHAR(ATT.attend_start, 'YYYY-MM-DD')
-		ORDER BY TMP.DT desc
-	</select>
+   
+   <!-- C 등록 -->
+   <!-- 출근 버튼 눌렀을 때 -->
+   <insert id="save">
+      insert into attend ( emp_no, attend_no, attend_start ) 
+         values ( #{empNo}, #{attendNo}, sysdate )
+   </insert>
+   
+   <!-- 등록할 때 조회도 같이(출근시간을 찍어주기 위해 -->
+   <select id="findAttendNo" resultType="AttendDto">
+      select * from attend where attend_no = #{attendNo}
+   </select>
 
-	
-	<!-- R 목록, 상세 -->
-	<!-- 사번별로 연월을 기준으로 해당 달의 총 근무시간이 나오는 구문 -->
-	<select id="selectByEmpTotalWorkingTime" resultType="int">
-	    SELECT
-	        -- TO_CHAR(TMP.DT, 'YYYY-MM') AS year_month,
-    SUM(NVL(EXTRACT(HOUR FROM (CAST(ATT.attend_end AS TIMESTAMP) - CAST(ATT.attend_start AS TIMESTAMP) - NUMTODSINTERVAL(1, 'HOUR'))), 0)) AS total_working_times
-	    FROM (
-	        SELECT
-	            TRUNC(TO_DATE(#{yearMonth}, 'YYYY-MM'), 'MM') AS DT
-	        FROM dual
-	    ) TMP
-	    LEFT JOIN (
-	        SELECT *
-	        FROM attend
-	        WHERE (TO_CHAR(attend_start, 'YYYY-MM') = #{yearMonth}
-	               OR TO_CHAR(attend_end, 'YYYY-MM') = #{yearMonth})
+   
+   <!-- empNo로 가장 최신 출퇴근 내역 조회 -->
+   <!-- <select id="findAttendList" resultType="AttendDto">
+      select 
+		emp_no,
+		attend_no,
+		attend_start,
+		attend_end
+      from 
+      	attend 
+      where 
+      	emp_no = #{empNo}
+      	and trunk(attend_start) = (
+      		select max(trunc(attend_start))
+      		from attend
+      		where emp_no = 107
+      	)
+   </select>
+     -->
+   
+   <!-- U 수정 -->
+   <!-- 퇴근 버튼 눌렀을 때 -->
+   <update id="update" >
+      update attend set attend_end = sysdate where emp_no = #{empNo}
+      and trunc(attend_start) = trunc(sysdate)
+   </update>
+   
+   <!-- empNo를 이용하여 오늘자 출근내역을 불러오는 명령 -->
+   <select id="findTodayAttendByEmpNo" resultType="AttendDto">
+      select * from attend where emp_no = #{empNo} and trunc(attend_start) = trunc(sysdate)
+   </select>
+   
+   <!-- R 목록, 상세 -->
+   <!-- 이번 달 1일부터 오늘까지 나오는 구문 -->
+   <select id="findSysdate" resultType="AttendWorkingTimesVO">
+       SELECT
+           TMP.DT,
+           ATT.attend_no,
+           ATT.emp_no,
+           ATT.attend_start,
+           ATT.attend_end,
+           NVL((ATT.attend_end - ATT.attend_start) * 24, 0) AS "working_times"
+       FROM (
+           SELECT
+               TRUNC(SYSDATE, 'MM') + (LEVEL - 1) AS DT
+           FROM dual
+           <![CDATA[
+           CONNECT BY LEVEL <= CEIL(SYSDATE - TRUNC(SYSDATE, 'MM'))
+           ]]>
+       ) TMP
+       LEFT JOIN (
+           SELECT *
+           FROM attend
+           WHERE emp_no = #{empNo}
+       ) ATT ON TO_CHAR(TMP.DT, 'YYYY-MM-DD') = TO_CHAR(ATT.attend_start, 'YYYY-MM-DD')
+       ORDER BY TMP.DT DESC
+   </select>
+   
+   <!-- R 목록, 상세 -->
+   <!-- 사용자에게 년 월을 받아서 근태내역을 출력 -->
+   <select id="findSearch" resultType="AttendWorkingTimesVO">
+	   SELECT
+	      TO_CHAR(TMP.DT, 'YYYY-MM-DD') AS dt,
+	      ATT.attend_no,
+	      ATT.emp_no,
+	      ATT.attend_start,
+	      ATT.attend_end,
+	      NVL((ATT.attend_end - ATT.attend_start) * 24, 0) AS working_times
+	  FROM (
+	      SELECT
+	          TRUNC(TO_DATE(#{yearMonth}, 'YYYY-MM'), 'MM') + (LEVEL - 1) AS DT
+	      FROM dual
+	      CONNECT BY
+	      <![CDATA[
+	          LEVEL <= LEAST(LAST_DAY(TO_DATE(#{yearMonth}, 'YYYY-MM')), TRUNC(SYSDATE))
+	      ]]>
+	                    - TRUNC(TO_DATE(#{yearMonth}, 'YYYY-MM')) + 1
+	  ) TMP
+	  LEFT JOIN (
+	      SELECT *
+	      FROM attend
+	      WHERE TO_CHAR(attend_start, 'YYYY-MM') = #{yearMonth}
 	        AND emp_no = #{empNo}
-	    ) ATT ON TO_CHAR(TMP.DT, 'YYYY-MM') = TO_CHAR(ATT.attend_start, 'YYYY-MM')
-	    GROUP BY TO_CHAR(TMP.DT, 'YYYY-MM')
+	  ) ATT ON TO_CHAR(TMP.DT, 'YYYY-MM-DD') = TO_CHAR(ATT.attend_start, 'YYYY-MM-DD')
+	  ORDER BY TMP.DT DESC
 	</select>
-	
-	
-	
-	
+
+
+   
+   <!-- R 목록, 상세 -->
+   <!-- 사번별로 연월을 기준으로 해당 달의 총 근무시간이 나오는 구문 -->
+   <select id="selectByEmpTotalWorkingTime" resultType="int">
+       SELECT
+           -- TO_CHAR(TMP.DT, 'YYYY-MM') AS year_month,
+    SUM(NVL(EXTRACT(HOUR FROM (CAST(ATT.attend_end AS TIMESTAMP) - CAST(ATT.attend_start AS TIMESTAMP) - NUMTODSINTERVAL(1, 'HOUR'))), 0)) AS total_working_times
+       FROM (
+           SELECT
+               TRUNC(TO_DATE(#{yearMonth}, 'YYYY-MM'), 'MM') AS DT
+           FROM dual
+       ) TMP
+       LEFT JOIN (
+           SELECT *
+           FROM attend
+           WHERE (TO_CHAR(attend_start, 'YYYY-MM') = #{yearMonth}
+                  OR TO_CHAR(attend_end, 'YYYY-MM') = #{yearMonth})
+           AND emp_no = #{empNo}
+       ) ATT ON TO_CHAR(TMP.DT, 'YYYY-MM') = TO_CHAR(ATT.attend_start, 'YYYY-MM')
+       GROUP BY TO_CHAR(TMP.DT, 'YYYY-MM')
+   </select>
+   
+   
+   
+   
 </mapper>
-
-
-
-
-
-
-
