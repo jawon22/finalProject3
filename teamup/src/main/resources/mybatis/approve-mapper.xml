@@ -99,10 +99,4 @@
 		</collection>
 	</resultMap>
 
-<!-- 	<update id="edit"> -->
-<!-- 		update appr -->
-		
-<!-- 		where appr_sender -->
-<!-- 	</update> -->
-
 </mapper>
