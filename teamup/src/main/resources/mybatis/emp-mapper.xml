@@ -122,7 +122,7 @@
 
 	<select id="selectBydeptAndCom"
 		resultType="EmpSearchBydeptComVO">
-		select e.dept_no, e.com_id, ep.EMP_POSITION_NAME
+		select e.dept_no, e.com_id, ep.EMP_POSITION_NAME , e.emp_position_no
 		,e.EMP_NAME ,e.EMP_TEL ,e.emp_email, e.emp_id ,e.emp_join, e.emp_exit from emp e
 		left outer
 		join EMP_POSITION ep on e.EMP_Position_NO = ep.EMP_POSITION_no
