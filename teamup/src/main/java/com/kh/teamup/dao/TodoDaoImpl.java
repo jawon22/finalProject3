@@ -35,8 +35,8 @@ public class TodoDaoImpl implements TodoDao{
 	}
 	
 	@Override
-	public void deleteTodo(int empNo) {
-		sqlSession.delete("todo.remove", empNo);
+	public void deleteTodo(int todoNo) {
+		sqlSession.delete("todo.remove", todoNo);
 	}
 	
 	@Override

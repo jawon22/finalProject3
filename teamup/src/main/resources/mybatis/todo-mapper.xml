@@ -6,31 +6,31 @@
     
     <mapper namespace="todo">
     
-    <insert id="save">
- 	insert into todo(todo_no, emp_no, todo_type, todo_content)
- 	values(todo_seq.nextval, #{empNo}, #{todoType}, #{todoContent})
+     <insert id="save">
+        insert into todo (todo_no, emp_no, todo_content, todo_done)
+        values (todo_seq.nextval, #{empNo}, #{todoContent}, #{todoDone})
     </insert>
-    
+
     <select id="list" resultType="TodoDto">
-    	select * from todo where emp_no = #{empNo} order by todo_no desc
+        select * from todo where emp_no = #{empNo} order by todo_no desc
     </select>
-    
+
     <select id="find" resultType="TodoDto">
-    	select * from todo where todo_no = #{todoNo}
+        select * from todo where todo_no = #{todoNo}
     </select>
-    
+
     <delete id="remove">
-    	delete todo where todo_no = #{todoNo}
+        delete from todo where todo_no = #{todoNo}
     </delete>
-    
-    
+
     <update id="change">
-    	update todo set
-			<if test="todoDto.empNo > 0">
-				emp_no = #{todoDto.empNo},
-			</if>			
-			todo_type = #{todoDto.todoType},	todo_content = #{todoDto.todoContent}
-    	where todo_no = #{todoDto.todoNo}
+        update todo set
+        <if test="todoDto.empNo > 0">
+            emp_no = #{todoDto.empNo},
+        </if>
+        todo_content = #{todoDto.todoContent},
+        todo_done = #{todoDto.todoDone}
+        where todo_no = #{todoDto.todoNo}
     </update>
     
     </mapper>

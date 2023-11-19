@@ -31,7 +31,7 @@ public class TodoRestController {
 	
 	//등록
 	@Operation(description = "todo등록")
-	@PostMapping("/save/")
+	@PostMapping("/save")
 	public void insert(@RequestBody TodoDto todoDto) {
 		log.debug("todoDto={}",todoDto);
 		todoDao.insert(todoDto);
@@ -51,9 +51,9 @@ public class TodoRestController {
 	}
 
 	@Operation(description = "todo 삭제")
-	@DeleteMapping("/{empNo}")
-	public void delete(@PathVariable int empNo) {
-		todoDao.deleteTodo(empNo);
+	@DeleteMapping("/{todoNo}")
+	public void delete(@PathVariable int todoNo) {
+		todoDao.deleteTodo(todoNo);
 	}
 	
 	@Operation(description = "todo 수정")
