@@ -8,7 +8,7 @@ public interface TodoDao {
 
 	void insert(TodoDto todoDto);
 	TodoDto selectOne(int todoNo);
-	void deleteTodo(int empNo);
+	void deleteTodo(int todoNo);
 	void change(TodoDto todoDto, int todoNo);
 	List<TodoDto> empTodoList(int empNo);
 	
