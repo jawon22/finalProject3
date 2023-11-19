@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
 public class ProfileInfoVO {
-	private AttachDto attachDto;
+//	private AttachDto attachDto;
 	private int attachNo;
 	private int profileNo;
 	private int empNo;
