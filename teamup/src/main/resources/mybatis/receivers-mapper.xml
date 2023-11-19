@@ -14,9 +14,23 @@
 		select * from receivers where path_no = #{pathNo}
 	</select>
 	
+	<select id="findByPathNoAndReceiver" resultType="ReceiversDto">
+		select * from receivers where path_no = #{pathNo} and receivers_receiver = #{receiversReceiver}
+	</select>
+	
 	<insert id="receiversSave">
 		insert into receivers(receivers_no, path_no, receivers_receiver) 
 		values(#{receiversNo}, #{pathNo}, #{receiversReceiver})
 	</insert>
+	
+	<update id="approveConfirm">
+		update receivers set receivers_status ='Y', RECEIVERS_CONFIRM_TIME = SYSDATE , receivers_return_rs= #{receiversReturnRs} 
+			where path_no= #{pathNo} and receivers_receiver = #{receiversReceiver}
+	</update>
+	
+	<update id="approveCancel">
+		update receivers set receivers_status ='N', RECEIVERS_CONFIRM_TIME = SYSDATE , receivers_return_rs= #{receiversReturnRs} 
+			where path_no= #{pathNo} and receivers_receiver = #{receiversReceiver}
+	</update>
 	
 </mapper>

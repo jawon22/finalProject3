@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -134,4 +135,32 @@ public class ApproveRestController { //결재 테이블
 		
 	}
 	
+	//승인(결재)
+	@PutMapping("/pathNo/{pathNo}/receiver/{receiver}")
+	public ResponseEntity<Void> confirm(@PathVariable int pathNo, @PathVariable int receiver,
+			@PathVariable String reasons){
+		
+		boolean result = receiversDao.apprConfirm(pathNo, receiver, reasons);
+		return result ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 }
+
+
+
+
+
+
+
+
+
+
+
+
