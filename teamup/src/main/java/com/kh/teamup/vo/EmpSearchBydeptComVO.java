@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
 public class EmpSearchBydeptComVO {
 	private String empPositionName;
+	private String empPositionNo;
 	private String empName;
 	private String empTel;
 	private String empEmail;

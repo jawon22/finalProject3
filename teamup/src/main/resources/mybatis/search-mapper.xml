@@ -6,6 +6,7 @@
 <mapper namespace="search">
 
 	<select id="search" resultType="searchVO">
+
 		select
 		e.COM_ID ,
 		c.com_name,
@@ -39,15 +40,22 @@
 			</if>
 		</where>
 
+
 	</select>
 	<select id="search2" resultType="searchVO">
 
-		select
-		e.COM_ID ,
+		SELECT * FROM (
+		SELECT ROWNUM rn, TMP.*
+		FROM (
+
+		SELECT
+		e.COM_ID,
 		c.com_name,
-		e.dept_no ,
+		e.dept_no,
 		e.emp_join,
+		e.emp_exit,
 		d.dept_name,
+		e.emp_position_no,
 		ep.emp_position_name,
 		e.emp_no,
 		e.emp_id,
@@ -55,14 +63,17 @@
 		s.SAL_ANNUAL,
 		e.emp_tel,
 		e.emp_email
-		from
+		FROM
 		emp e
-		left outer join dept d on e.dept_no =
+		LEFT OUTER JOIN dept d ON
+		e.dept_no =
 		d.dept_no
-		left outer join com c on e.com_id = c.com_id
-		left outer join
-		sal s on s.EMP_NO = e.EMP_NO
-		left outer join emp_position ep on
+		LEFT OUTER JOIN com c ON e.com_id = c.com_id
+		LEFT
+		OUTER JOIN
+		sal s ON s.EMP_NO = e.EMP_NO
+		LEFT OUTER JOIN emp_position ep
+		ON
 		e.emp_position_no = ep.emp_position_no
 		<where>
 			<if test="keyword != null and select !=null">
@@ -89,7 +100,36 @@
 			</if>
 
 		</where>
+		)TMP
+		)where rn
+		<if test="page ==0">
+			BETWEEN 1 and #{size}
+		</if>
+		<if test="page !=0">
+			BETWEEN (#{page} - 1) * #{size} + 1 AND #{page} * #{size}
+		</if>
+		
+		order by  dept_name,emp_name 
+	</select>
+
+	<select id="count" resultType="int">
+
+		select
+		count(e.com_Id) as emp_count
+		from
+		emp e
+		left outer join dept d on e.dept_no = d.dept_no
+		left outer
+		join com c on e.com_id = c.com_id
+		left outer join
+		sal s on s.EMP_NO =
+		e.EMP_NO
+		left outer join emp_position ep on
+		e.emp_position_no =
+		ep.emp_position_no where e.com_id = #{comId}
+
 
 	</select>
+
 
 </mapper>

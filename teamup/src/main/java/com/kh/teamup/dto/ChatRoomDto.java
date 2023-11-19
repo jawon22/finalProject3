@@ -1,4 +1,4 @@
-package com.kh.teamup.vo;
+package com.kh.teamup.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,11 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
-public class PagenationVO {
-	private int begin;
-	private int end;
-	private int page;
-	
-	
+public class ChatRoomDto {
+	private String chatRoomStatus;
+	private int chatRoomNo;
 
 }

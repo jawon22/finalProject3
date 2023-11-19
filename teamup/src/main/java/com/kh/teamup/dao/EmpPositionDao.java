@@ -11,5 +11,6 @@ public interface EmpPositionDao {
 	void addPosition(EmpPositionDto empPositionDto);
 
 	List<EmpPositionDto> listByCom(String comId);
+	
 
 }
