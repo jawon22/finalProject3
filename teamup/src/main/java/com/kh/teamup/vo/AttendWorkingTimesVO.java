@@ -15,4 +15,5 @@ public class AttendWorkingTimesVO {
 	private Date dt;
 	private Timestamp attendStart, attendEnd;
 	private int workingTimes; //근무시간
+	private String attendStatus; //근무상태
 }

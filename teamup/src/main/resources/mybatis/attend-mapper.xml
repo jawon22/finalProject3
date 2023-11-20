@@ -59,55 +59,92 @@
    <!-- 이번 달 1일부터 오늘까지 나오는 구문 -->
    <select id="findSysdate" resultType="AttendWorkingTimesVO">
        SELECT
-           TMP.DT,
-           ATT.attend_no,
-           ATT.emp_no,
-           ATT.attend_start,
-           ATT.attend_end,
-           NVL((ATT.attend_end - ATT.attend_start) * 24, 0) AS "working_times"
-       FROM (
-           SELECT
-               TRUNC(SYSDATE, 'MM') + (LEVEL - 1) AS DT
-           FROM dual
-           <![CDATA[
-           CONNECT BY LEVEL <= CEIL(SYSDATE - TRUNC(SYSDATE, 'MM'))
-           ]]>
-       ) TMP
-       LEFT JOIN (
-           SELECT *
-           FROM attend
-           WHERE emp_no = #{empNo}
-       ) ATT ON TO_CHAR(TMP.DT, 'YYYY-MM-DD') = TO_CHAR(ATT.attend_start, 'YYYY-MM-DD')
-       ORDER BY TMP.DT DESC
+		    TO_CHAR(TMP.DT, 'YYYY-MM-DD') AS dt,
+		    ATT.attend_no,
+		    ATT.emp_no,
+		    ATT.attend_start,
+		    ATT.attend_end,
+		    NVL((ATT.attend_end - ATT.attend_start) * 24, 0) AS working_times,
+		    CASE
+		    <![CDATA[
+		        WHEN TO_NUMBER(TO_CHAR(ATT.attend_start, 'HH24')) > 9 THEN '지각'
+		        WHEN TO_NUMBER(TO_CHAR(ATT.attend_end, 'HH24')) < 18 THEN '조퇴'
+		    ]]>
+		        WHEN TO_CHAR(TMP.DT, 'Dy', 'NLS_DATE_LANGUAGE=American') IN ('Sun', 'Sat') THEN 
+		            CASE WHEN EXISTS (
+		                SELECT 1 
+		                FROM attend
+		                WHERE TO_CHAR(attend_start, 'YYYY-MM-DD') = TO_CHAR(TMP.DT, 'YYYY-MM-DD')
+		                  AND TO_CHAR(attend_end, 'YYYY-MM-DD') = TO_CHAR(TMP.DT, 'YYYY-MM-DD')
+		                  AND emp_no = 32
+		            ) THEN '휴무일근무' ELSE '휴무' END
+		        WHEN ATT.attend_start IS NULL AND ATT.attend_end IS NULL THEN '결근'
+		        ELSE '정상근무'
+		    END AS attend_status
+		FROM (
+		    SELECT
+		        TRUNC(SYSDATE, 'MM') + (LEVEL - 1) AS DT
+		    FROM dual
+		    CONNECT BY
+		    	<![CDATA[
+		        LEVEL <= TO_NUMBER(TO_CHAR(SYSDATE, 'DD'))
+		        ]]>
+		) TMP
+		LEFT JOIN (
+		    SELECT *
+		    FROM attend
+		    WHERE TO_CHAR(attend_start, 'YYYY-MM') = TO_CHAR(SYSDATE, 'YYYY-MM')
+		      AND emp_no = #{empNo}
+		) ATT ON TO_CHAR(TMP.DT, 'YYYY-MM-DD') = TO_CHAR(ATT.attend_start, 'YYYY-MM-DD')
+		ORDER BY TMP.DT DESC
    </select>
    
    <!-- R 목록, 상세 -->
-   <!-- 사용자에게 년 월을 받아서 근태내역을 출력 -->
-   <select id="findSearch" resultType="AttendWorkingTimesVO">
-	   SELECT
-	      TO_CHAR(TMP.DT, 'YYYY-MM-DD') AS dt,
-	      ATT.attend_no,
-	      ATT.emp_no,
-	      ATT.attend_start,
-	      ATT.attend_end,
-	      NVL((ATT.attend_end - ATT.attend_start) * 24, 0) AS working_times
-	  FROM (
-	      SELECT
-	          TRUNC(TO_DATE(#{yearMonth}, 'YYYY-MM'), 'MM') + (LEVEL - 1) AS DT
-	      FROM dual
-	      CONNECT BY
-	      <![CDATA[
-	          LEVEL <= LEAST(LAST_DAY(TO_DATE(#{yearMonth}, 'YYYY-MM')), TRUNC(SYSDATE))
-	      ]]>
-	                    - TRUNC(TO_DATE(#{yearMonth}, 'YYYY-MM')) + 1
-	  ) TMP
-	  LEFT JOIN (
-	      SELECT *
-	      FROM attend
-	      WHERE TO_CHAR(attend_start, 'YYYY-MM') = #{yearMonth}
-	        AND emp_no = #{empNo}
-	  ) ATT ON TO_CHAR(TMP.DT, 'YYYY-MM-DD') = TO_CHAR(ATT.attend_start, 'YYYY-MM-DD')
-	  ORDER BY TMP.DT DESC
+	<!-- 사용자에게 년 월을 받아서 근태내역을 출력 -->
+	<select id="findSearch" resultType="AttendWorkingTimesVO">
+	    SELECT
+	        TO_CHAR(TMP.DT, 'YYYY-MM-DD') AS dt,
+	        ATT.attend_no,
+	        ATT.emp_no,
+	        ATT.attend_start,
+	        ATT.attend_end,
+	        NVL((ATT.attend_end - ATT.attend_start) * 24, 0) AS working_times,
+	        CASE
+	        <![CDATA[
+	            WHEN TO_NUMBER(TO_CHAR(ATT.attend_start, 'HH24')) > 9 THEN '지각'
+	            WHEN TO_NUMBER(TO_CHAR(ATT.attend_end, 'HH24')) < 18 THEN '조퇴'
+	        ]]>
+	            WHEN TO_CHAR(TMP.DT, 'Dy', 'NLS_DATE_LANGUAGE=American') IN ('Sun', 'Sat') THEN 
+	                CASE WHEN EXISTS (
+	                    SELECT 1 
+	                    FROM attend
+	                    WHERE TO_CHAR(attend_start, 'YYYY-MM-DD') = TO_CHAR(TMP.DT, 'YYYY-MM-DD')
+	                      AND TO_CHAR(attend_end, 'YYYY-MM-DD') = TO_CHAR(TMP.DT, 'YYYY-MM-DD')
+	                      AND emp_no = #{empNo}
+	                ) THEN '휴무일근무' ELSE '휴무' END
+	            WHEN ATT.attend_start IS NULL AND ATT.attend_end IS NULL THEN '결근'
+	            ELSE '정상근무'
+	        END AS attend_status
+	    FROM (
+	        SELECT
+	            TRUNC(TO_DATE(#{yearMonth}, 'YYYY-MM'), 'MM') + (LEVEL - 1) AS DT
+	        FROM dual
+	        <![CDATA[
+	        CONNECT BY LEVEL <= 
+	        ]]>
+	            CASE 
+	                WHEN TO_CHAR(TO_DATE(#{yearMonth}, 'YYYY-MM'), 'YYYY-MM') = TO_CHAR(SYSDATE, 'YYYY-MM') 
+	                    THEN TO_NUMBER(TO_CHAR(SYSDATE, 'DD'))
+	                ELSE TO_NUMBER(TO_CHAR(LAST_DAY(TO_DATE(#{yearMonth}, 'YYYY-MM')), 'DD'))
+	            END
+	    ) TMP
+	    LEFT JOIN (
+	        SELECT *
+	        FROM attend
+	        WHERE TO_CHAR(attend_start, 'YYYY-MM') = #{yearMonth}
+	          AND emp_no = #{empNo}
+	    ) ATT ON TO_CHAR(TMP.DT, 'YYYY-MM-DD') = TO_CHAR(ATT.attend_start, 'YYYY-MM-DD')
+	    ORDER BY TMP.DT DESC
 	</select>
 
 

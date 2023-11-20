@@ -73,7 +73,7 @@ public class AttendRestController {
 		return attendDao.findTodayAttendByEmpNo(empNo);
 	}
 	
-	
+	//현재 날짜를 기준으로 근태내역 출력
 	@Operation(description = "현재 달의 1일부터 현재 달의 오늘일까지")
 	@PostMapping("/findSysdate/{empNo}")
 	public List<AttendWorkingTimesVO> findSysdate(@PathVariable int empNo) throws JsonProcessingException {
@@ -82,8 +82,8 @@ public class AttendRestController {
 	    return list;
 	}
 	
-	
-	@Operation(description = "사용자가 월을 직접 입력하여 근태내역 보여주기")
+	//사용자가 년, 월을 선택하여 근태내역 출력
+	@Operation(description = "사용자가 년, 월을 선택하여 근태내역 보여주기")
 	@PostMapping("/findSearch/{empNo}")
 	public List<AttendWorkingTimesVO> findSearch(@PathVariable int empNo, @RequestBody AttendWorkingSearchVO VO){ //@RequestBody AttendWorkingSearchVO VO
 		List<AttendWorkingTimesVO> list = attendDao.findSearch(VO);
@@ -92,5 +92,6 @@ public class AttendRestController {
 //	    List<AttendWorkingTimesVO> list = attendDao.findSearch(VO);
 //	    return list;
 	}
+	
 	
 }
