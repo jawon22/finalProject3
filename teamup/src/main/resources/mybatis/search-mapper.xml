@@ -60,7 +60,6 @@
 		e.emp_no,
 		e.emp_id,
 		e.EMP_NAME,
-		s.SAL_ANNUAL,
 		e.emp_tel,
 		e.emp_email
 		FROM

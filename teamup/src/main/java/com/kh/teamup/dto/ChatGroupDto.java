@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
 public class ChatGroupDto {
-	private String chatMember;
-	private String chatRoomNo;
+	private String[] chatMember;
+	private int chatRoomNo;
 
 }
