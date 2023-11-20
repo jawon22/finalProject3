@@ -69,6 +69,7 @@ public class AttendDaoImpl implements AttendDao {
 	}
 	
 	
+	
 	//사원별 월별 총근무시간 계산
 	@Override
 	public int totalWorkingTimeByMonth(TotalWorkingTimeByMonthVO vo) {
