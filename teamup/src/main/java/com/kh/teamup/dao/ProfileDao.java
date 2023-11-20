@@ -16,9 +16,9 @@ public interface ProfileDao {
 
 	void addProfile(ProfileDto profileDto);//프로필 등록할 때 이미지 함께 등록
 
-	void connectProfile(int profileNo, int attachNo);//프로필과 이미지 연결
+	void connectProfile(int empNo, int attachNo);//프로필과 이미지 연결
 
-	AttachDto findImage(int profileNo);//프로필 이미지 화면에 출력
+	AttachDto findImage(int empNo);//프로필 이미지 화면에 출력
 
 	boolean updateProfile(ProfileInfoVO profileInfoVO, int empNo);//프로필+프로필이미지 수정
 	

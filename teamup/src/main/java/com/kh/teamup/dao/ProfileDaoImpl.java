@@ -39,17 +39,17 @@ public class ProfileDaoImpl implements ProfileDao{
 	
 	//프로필과 이미지 연결
 	@Override
-	public void connectProfile(int profileNo, int attachNo) {
+	public void connectProfile(int empNo, int attachNo) {
 		Map<String, Object> params = new HashMap<>();
-		params.put("profileNo", profileNo);
+		params.put("empNo", empNo);
 		params.put("attachNo", attachNo);
 		sqlSession.insert("emp_profile.profileImage", params);
 	}
 	
-	//프로필No로 이미지를 찾는 구문
+	//empNo로 이미지를 찾는 구문
 	@Override
-	public AttachDto findImage(int profileNo) {
-		return sqlSession.selectOne("emp_profile.findImage", profileNo);
+	public AttachDto findImage(int empNo) {
+		return sqlSession.selectOne("emp_profile.findImage", empNo);
 	}
 	
 	//프로필 정보 + 이미지 수정 구문
