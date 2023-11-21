@@ -20,4 +20,11 @@
 		INSERT INTO chat_group (chat_member, chat_room_no)
 		VALUES (#{chatMember}, #{chatRoomNo})
 	</insert>
+
+
+	<select id="list" resultType="RoomVO">
+		select * from CHAT_ROOM cr
+		inner join chat_group cg on cr.CHAT_ROOM_NO = cg.chat_room_no
+		where chat_member =#{chatMember}
+	</select>
 </mapper>

@@ -91,16 +91,17 @@
 		emp_position ep on e.emp_position_no = ep.emp_position_no
 		<where>
 			<if test="deptNo > 0">
-				d.dept_no = #{deptNo}
+				and d.dept_no = #{deptNo}
 			</if>
 
 			<if test="comId != null">
-				e.com_id = #{comId}
+				and e.com_id = #{comId}
 			</if>
 
 			<if test="comName != null">
-				c.com_name = #{comName}
+				and c.com_name = #{comName}
 			</if>
+
 		</where>
 
 
