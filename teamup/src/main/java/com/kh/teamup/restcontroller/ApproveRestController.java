@@ -136,16 +136,29 @@ public class ApproveRestController { //결재 테이블
 	}
 	
 	//승인(결재)
-	@PutMapping("/pathNo/{pathNo}/receiver/{receiver}")
+	@PutMapping("/{pathNo}/{receiver}")
 	public ResponseEntity<Void> confirm(@PathVariable int pathNo, @PathVariable int receiver,
-			@PathVariable String reasons){
+			@RequestBody ReceiversDto receiversDto){
+		if(receiversDto.getReceiversReturnRs() ==null) {
+			receiversDto.setReceiversReturnRs("승인");
+		}
 		
-		boolean result = receiversDao.apprConfirm(pathNo, receiver, reasons);
+		boolean result = receiversDao.apprConfirm(pathNo, receiver, receiversDto);
 		return result ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
 	}
 	
 	
-	
+	//반려(결재)
+	@PutMapping("/pathNo/{pathNo}/receiver/{receiver}")
+	public ResponseEntity<Void> cancel(@PathVariable int pathNo, @PathVariable int receiver,
+			@RequestBody ReceiversDto receiversDto){
+		if(receiversDto.getReceiversReturnRs() ==null) {
+			receiversDto.setReceiversReturnRs("반려");
+		}
+		
+		boolean result = receiversDao.apprCancel(pathNo, receiver, receiversDto);
+		return result ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+	}
 	
 	
 	
