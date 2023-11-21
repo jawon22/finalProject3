@@ -1,6 +1,5 @@
 package com.kh.teamup.restcontroller;
 
-import java.io.Console;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -87,7 +85,7 @@ public class ProfileRestController {
 		
 //		log.debug("empNo={}", empNo);
 //		int profileNo = profileDao.sequence();//profileNo를 가져옴
-		int profileNo = profileDao.findProfileNo(empNo);
+//		int profileNo = profileDao.findProfileNo(empNo);
 		int attachNo = attachDao.sequence();
 //		log.debug("attachNo={}", attachNo);
 		
@@ -98,12 +96,16 @@ public class ProfileRestController {
 		ProfileInfoVO profileInfoVO = vo.getProfileInfoVO();
 		profileDao.updateProfile(profileInfoVO, empNo);
 		profileDao.updateEmp(profileInfoVO, empNo);
-		log.debug("ProfileUpdateVO={}",vo);
+//		log.debug("ProfileUpdateVO={}",vo);
+		
 		
 		if(!attach.isEmpty()) {//파일이 있으면
 			//파일 삭제 - 기존 파일이 있을 경우에만 처리
 //			AttachDto attachDto = profileDao.findImage(profileInfoVO.getEmpNo());
-			AttachDto attachDto = profileDao.findImage(profileNo);
+			log.debug("empNo:{}",empNo);
+			log.debug("정보={}",profileDao.findImage(empNo));
+			AttachDto attachDto = profileDao.findImage(empNo);
+			
 			log.debug("attachDto={}",attachDto);
 			String home = System.getProperty("user.home");
 			File dir = new File(home, "upload");
@@ -135,7 +137,7 @@ public class ProfileRestController {
 				
 				//프로필 + 파일 연결
 				ProfileInfoVO changeVO =  profileDao.selectOne(empNo);
-				profileDao.connectProfile(changeVO.getProfileNo(), attachNo);
+				profileDao.connectProfile(changeVO.getEmpNo(), attachNo);
 		}
 		
 		return ResponseEntity.ok().body("프로필 이미지 수정성공");

@@ -13,7 +13,7 @@
     									#{salListNational}, #{salListEmp}, #{salListWork}, #{salListLocal}, #{salListDate})
     	</insert>
     	
-    	<!-- 사원의 급여 상세 조회 -->
+    	<!-- 사원의 급여 상세 조회 //-->
     	<select id="findByEmpSalList" resultType="SalListDto">
 		    select * from sal_list
 		    where emp_no = #{empNo}

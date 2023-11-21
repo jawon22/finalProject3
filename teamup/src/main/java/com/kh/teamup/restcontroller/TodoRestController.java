@@ -33,7 +33,7 @@ public class TodoRestController {
 	@Operation(description = "todo등록")
 	@PostMapping("/save")
 	public void insert(@RequestBody TodoDto todoDto) {
-		log.debug("todoDto={}",todoDto);
+//		log.debug("todoDto={}",todoDto);
 		todoDao.insert(todoDto);
 	}
 	

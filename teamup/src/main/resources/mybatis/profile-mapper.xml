@@ -21,15 +21,15 @@
     	</insert>
 
     	<insert id="profileImage">
-    		insert into profile_image(profile_no, attach_no) 
-    		values(#{profileNo}, #{attachNo})
+    		insert into profile_image(emp_no, attach_no) 
+    		values(#{empNo}, #{attachNo})
     	</insert>
 
     	
-    	<select id="findImage" resultType="attachDto">
+    	<select id="findImage" resultType="AttachDto">
     		select * from attach where attach_no=(
     			select attach_no from profile_image 
-    			where profile_no = #{profileNo}
+    			where emp_no = #{empNo}
     		)
     	</select>
     	
@@ -51,7 +51,7 @@
 				join emp e on e.emp_no = p.emp_no 
 				LEFT JOIN dept d ON e.dept_no = d.dept_no 
     			LEFT JOIN emp_position ep ON e.emp_position_no = ep.emp_position_no 
-    			left join profile_image pi on pi.profile_no = p.profile_no 
+    			left join profile_image pi on pi.emp_no = e.emp_no 
     			left join attach a on a.attach_no = pi.attach_no 
     		order by emp_no asc
     	</select>
@@ -75,7 +75,7 @@
 				join emp e on e.emp_no = p.emp_no 
 				LEFT JOIN dept d ON e.dept_no = d.dept_no 
     			LEFT JOIN emp_position ep ON e.emp_position_no = ep.emp_position_no 
-    			left join profile_image pi on pi.profile_no = p.profile_no 
+    			left join profile_image pi on pi.emp_no = e.emp_no 
     			left join attach a on a.attach_no = pi.attach_no
     		where p.emp_no=#{empNo}
     	</select>

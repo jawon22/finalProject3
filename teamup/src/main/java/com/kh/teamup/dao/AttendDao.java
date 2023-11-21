@@ -25,5 +25,6 @@ public interface AttendDao {
 	//목록(사용자가 년도와 월 선택)
 	List<AttendWorkingTimesVO>findSearch(AttendWorkingSearchVO VO);	
 	
+	
 	int totalWorkingTimeByMonth(TotalWorkingTimeByMonthVO vo);
 }

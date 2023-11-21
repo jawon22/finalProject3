@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+    
+    <mapper namespace="board">
+    
+    	<insert id="add">
+	    	insert into board(board_no, emp_no, com_id, board_title, board_content, board_update_date, board_category, board_read_count)
+	    	values(board_seq.nextval, #{empNo}, #{comId}, #{boardTitle}, #{boardContent}, #{boardUpdateDate}, #{boardCategory}, #{boardReadCount})
+    	</insert>
+    	
+    	<select id="list" resultType="BoardDto">
+    		select * from board where com_id = #{comId} order by board_no desc
+    	</select>
+    	
+    	<select id="find" resultType="BoardDto">
+    		select * from board where board_no = #{boardNo} order by board_no desc
+    	</select>
+    	
+    	<delete id="remove">
+    		delete from board where board_no = #{boardNo}
+    	</delete>
+    	
+    	<update id="edit">
+    		update board set
+    		<if test="boardDto.boardNo > 0">
+    			board_no = #{boardDto.boardNo},
+    		</if>
+    		board_title = #{boardDto.boardTitle}, board_content=#{boardDto.boardContent}, board_update_date = sysdate, board_category= #{boardDto.boardCategory} where board_no = #{boardDto.boardNo}
+    	</update>
+    	
+    	
+    </mapper>
+    
+    
+    
+    
+    
+    
+    
