@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.teamup.dao.ChatGroupDao;
 import com.kh.teamup.dao.ChatRoomDao;
+import com.kh.teamup.dao.MessageDao;
+import com.kh.teamup.dto.MessageDto;
 import com.kh.teamup.vo.ChatVO;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -61,9 +63,14 @@ public class ChatRestController {
 		    
 		}
 	}
+	
+	@Autowired private MessageDao messageDao;
+	
+	
+	@PostMapping("/messege/")
+	public void messageSend(@RequestBody MessageDto messageDto) {
+		
+		messageDao.send(messageDto);
+		
 	}
-
-//결제자 번호 3 2 6 
-//로컬에다가 내거 직급 -> 로그인 직급을저장 
-//3   if(3>1) 버튼 못누르게 
-//else if 승인상태를 조회해서 이사람이 승인을 했으면 버튼을 활성화 1 
+	}

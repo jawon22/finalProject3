@@ -30,8 +30,8 @@ public class SearchVO {
 	private int salMax;//sal<salmax
 	private int salMin;//sal>salmin
 	
-	private Date joinStart;
-	private Date joinEnd;
+	private String joinStart;
+	private String joinEnd;
 	
 	private int page;
 	private Integer empCount;
