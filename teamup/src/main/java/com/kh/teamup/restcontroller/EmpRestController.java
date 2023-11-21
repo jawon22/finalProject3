@@ -143,7 +143,7 @@ public class EmpRestController {
 		
 		profileDao.addProfile(profileDto);
 		
-		
+		/*
 		//사원 등록할 때 기본 이미지 같이 등록
 		int defaultImageNo = 1; // 기본 이미지의 번호를 설정하세요.
 	    int attachNo = attachDao.sequence();
@@ -154,9 +154,10 @@ public class EmpRestController {
 	    attachDto.setAttachSize(0); // 이미지 크기는 0 또는 적절한 크기로 설정하세요.
 	    attachDto.setAttachType("image/jpeg"); // 이미지 타입은 적절한 타입으로 설정하세요.
 	    attachDao.insert(attachDto);
-	    
+		
 	    // 프로필과 이미지 연결
-	    profileDao.connectProfile(profileNo, attachNo);
+	    profileDao.connectProfile(empNo, attachNo);
+		 */
 	    
 	    EmpDto findDto = empDao.selectIdByNo(empNo);
 	    
