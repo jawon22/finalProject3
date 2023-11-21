@@ -12,5 +12,6 @@ public class MessageDto {
 	private String chatContent;
 	private String messageTime;
 	private String messageStatus;
+	private int sender;
 	
 }

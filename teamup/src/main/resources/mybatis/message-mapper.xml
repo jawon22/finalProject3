@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+    <mapper namespace="message">
+
+	<insert id="send">
+		insert into message(message_no,sender,chat_room_no,message_content)
+		values(message_seq.nextval,#{sender},#{chatRoomNo},#{chatContent})
+	</insert>
+
+</mapper>

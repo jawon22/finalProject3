@@ -44,21 +44,21 @@ public class ReceiversDaoImpl implements ReceiversDao{
 	}
 	
 	@Override
-	public boolean apprConfirm(int pathNo, int receiver, String reasons) {
+	public boolean apprConfirm(int pathNo, int receiver, ReceiversDto receiversDto) {
 		Map<String, Object> params = new HashMap<>();
 		params.put("pathNo", pathNo);
 		params.put("receiversReceiver", receiver);
-		params.put("receiversReturnRs", reasons);
+		params.put("dto", receiversDto);
 		
 		return sqlSession.update("receivers.approveConfirm",params)>0;
 	}
 	
 	@Override
-	public boolean apprCancel(int pathNo, int receiver, String reasons) {
+	public boolean apprCancel(int pathNo, int receiver, ReceiversDto receiversDto) {
 		Map<String, Object> params = new HashMap<>();
 		params.put("pathNo", pathNo);
 		params.put("receiversReceiver", receiver);
-		params.put("receiversReturnRs", reasons);
+		params.put("dto", receiversDto);
 		
 		return sqlSession.update("receivers.approveCancel",params)>0;
 	}

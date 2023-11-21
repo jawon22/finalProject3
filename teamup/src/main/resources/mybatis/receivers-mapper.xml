@@ -24,13 +24,37 @@
 	</insert>
 	
 	<update id="approveConfirm">
-		update receivers set receivers_status ='Y', RECEIVERS_CONFIRM_TIME = SYSDATE , receivers_return_rs= #{receiversReturnRs} 
-			where path_no= #{pathNo} and receivers_receiver = #{receiversReceiver}
+		update receivers 
+		<set>
+			<if test="dto.receiversNo >0" >
+				receivers_no = #{dto.receiversNo},
+			</if>
+			<if test="dto.receiversStatus !=null">
+				receivers_status ='Y',	
+			</if>
+			 RECEIVERS_CONFIRM_TIME = SYSDATE ,
+			<if test="dto.receiversReturnRs != null">
+			  receivers_return_rs= #{receiversReturnRs} 
+			</if>
+		</set> 
+		where path_no= #{pathNo} and receivers_receiver = #{receiversReceiver}
 	</update>
 	
 	<update id="approveCancel">
-		update receivers set receivers_status ='N', RECEIVERS_CONFIRM_TIME = SYSDATE , receivers_return_rs= #{receiversReturnRs} 
-			where path_no= #{pathNo} and receivers_receiver = #{receiversReceiver}
+		update receivers 
+		<set>
+			<if test="dto.receiversNo >0" >
+				receivers_no = #{dto.receiversNo},
+			</if>
+			<if test="dto.receiversStatus !=null">
+				receivers_status ='N',	
+			</if>
+			 RECEIVERS_CONFIRM_TIME = SYSDATE ,
+			<if test="dto.receiversReturnRs != null">
+			  receivers_return_rs= #{receiversReturnRs} 
+			</if>
+		</set> 
+		where path_no= #{pathNo} and receivers_receiver = #{receiversReceiver}
 	</update>
 	
 </mapper>
