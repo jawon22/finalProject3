@@ -16,5 +16,6 @@ public class EmpComplexSearchVO {
 	private String empId;
 	private String empTel;
 	private String empEmail;
+	private int empNo;
 	
 }
