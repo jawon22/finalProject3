@@ -11,5 +11,6 @@ public interface BoardDao {
 	BoardDto selectOne(int boardNo);
 	void deleteBoard(int boardNo);
 	void change(BoardDto boardDto, long boardNo);
+	boolean updateRcount(long boardNo);
 
 }

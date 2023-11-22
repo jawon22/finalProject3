@@ -24,14 +24,23 @@
     		delete from board where board_no = #{boardNo}
     	</delete>
     	
-    	<update id="edit">
-    		update board set
-    		<if test="boardDto.boardNo > 0">
-    			board_no = #{boardDto.boardNo},
-    		</if>
-    		board_title = #{boardDto.boardTitle}, board_content=#{boardDto.boardContent}, board_update_date = sysdate, where board_no = #{boardDto.boardNo}
-    	</update>
-    	
+		<update id="edit">
+		    update board 
+		    <set>
+			    <if test="boardDto.boardTitle != null">
+			        board_title = #{boardDto.boardTitle},
+			    </if>
+			    <if test="boardDto.boardContent != null">
+			        board_content = #{boardDto.boardContent},
+			    </if>
+			     	board_update_date = sysdate
+		    </set>
+		    where board_no = #{boardDto.boardNo}
+		</update>
+		    	
+		 <update id="updateRcount">
+		 		update board set board_read_count = board_read_count + 1 where board_no = #{boardNo}
+		 </update>
     	
     </mapper>
     

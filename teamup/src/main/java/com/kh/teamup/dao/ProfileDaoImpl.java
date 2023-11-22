@@ -20,6 +20,7 @@ public class ProfileDaoImpl implements ProfileDao{
 	@Autowired
 	private SqlSession sqlSession;
 	
+	
 	@Override
 	public int sequence() {
 		return sqlSession.selectOne("emp_profile.sequence");
@@ -78,8 +79,12 @@ public class ProfileDaoImpl implements ProfileDao{
 	//회원번호에 따른 회원 프로필 조회
 	@Override
 	public ProfileInfoVO selectOne(int empNo) {
-		return sqlSession.selectOne("emp_profile.joinProfileOne", empNo);
-		
+		return sqlSession.selectOne("emp_profile.joinProfileOne", empNo);		
+	}
+	
+	@Override
+	public void deleteProfileImage(int empNo) {
+		sqlSession.delete("emp_profile.deleteImage", empNo);
 	}
 
 }
