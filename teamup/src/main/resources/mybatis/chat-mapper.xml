@@ -27,4 +27,6 @@
 		inner join chat_group cg on cr.CHAT_ROOM_NO = cg.chat_room_no
 		where chat_member =#{chatMember}
 	</select>
+	
+	
 </mapper>
