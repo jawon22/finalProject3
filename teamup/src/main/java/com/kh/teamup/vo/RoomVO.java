@@ -1,10 +1,5 @@
 package com.kh.teamup.vo;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.io.IOException;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -12,15 +7,17 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
 public class RoomVO {
 	
 	
 	private int chatRoomNo;
-	
-	private int chatMember;
-	
 	
 	@Builder.Default
 	private Set<WebSocketSession> chatMembers = new CopyOnWriteArraySet<>();
@@ -34,10 +31,11 @@ public class RoomVO {
 		chatMembers.remove(session);
 	}
 	public void send(WebSocketSession session,TextMessage message) throws IOException {
-		for(WebSocketSession chatMember : chatMembers) {
-			chatMember.sendMessage(message);
+		for(WebSocketSession user : chatMembers) {
+			user.sendMessage(message);
 		}
 	}
+	
 	
 	
 
