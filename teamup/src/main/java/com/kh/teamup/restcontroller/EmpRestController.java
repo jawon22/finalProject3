@@ -371,4 +371,15 @@ public class EmpRestController {
 		return empDao.count(comId);
 	}
 	
+	
+	
+	@PutMapping("/adminEmpUpdate/{empNo}") 
+	public void adminEmpUpdate(@PathVariable int empNo, @RequestBody RequestDto requestDto) {
+		
+		empDao.empInfoUpdate(empNo,requestDto.getEmpDto());
+		
+		salDao.edit(empNo, requestDto.getSalDto());
+		
+	}
+	
 }

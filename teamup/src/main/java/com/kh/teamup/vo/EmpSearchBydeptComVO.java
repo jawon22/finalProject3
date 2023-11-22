@@ -19,5 +19,7 @@ public class EmpSearchBydeptComVO {
 	private Date empJoin;
 	private Date empExit;
 	private int deptNo;
+	private int salAnnual;
+	private int empNo;
 
 }
