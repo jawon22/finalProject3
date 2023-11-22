@@ -382,4 +382,19 @@ public class EmpRestController {
 		
 	}
 	
+	
+	
+	@PostMapping("/empFindPw/")
+	public void empFindPw(@RequestBody EmpDto inputDto) throws MessagingException, IOException {
+		EmpDto findDto = empDao.selecOne(inputDto.getEmpId());
+		if(findDto != null ) {
+			boolean result = findDto.getEmpEmail().equals(inputDto.getEmpEmail());
+			
+			if(result) {
+				empService.updateEmpId(findDto.getEmpNo(), findDto);
+				
+			}
+		}
+	}
+	
 }
