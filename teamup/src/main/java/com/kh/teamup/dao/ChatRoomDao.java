@@ -2,6 +2,7 @@ package com.kh.teamup.dao;
 
 import java.util.List;
 
+import com.kh.teamup.dto.ChatRoomDto;
 import com.kh.teamup.vo.RoomVO;
 
 public interface ChatRoomDao {

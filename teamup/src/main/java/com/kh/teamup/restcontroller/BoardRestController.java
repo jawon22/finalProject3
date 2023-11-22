@@ -42,12 +42,20 @@ public class BoardRestController {
 		return boardDao.comBoardList(comId);
 	}
 	
-	@Operation(description = "공지사항 상세")
+	@Operation(description = "공지사항 상세+수정용")
 	@GetMapping("/find/{boardNo}")
 		public BoardDto find(@PathVariable int boardNo){
 		return boardDao.selectOne(boardNo);
 	}
 	
+	@Operation(description = "공지사항 상세 읽기전용+조회수증가")
+	@GetMapping("/read/{boardNo}")
+		public BoardDto read(@PathVariable int boardNo){
+		boardDao.updateRcount(boardNo);//조회수 증가
+		return boardDao.selectOne(boardNo);
+	}
+	
+	@Operation(description = "공지사항 삭제")
 	@DeleteMapping("/{boardNo}")
 	public void delete(@PathVariable int boardNo) {
 		boardDao.deleteBoard(boardNo);
@@ -59,6 +67,9 @@ public class BoardRestController {
 		boardDao.change(boardDto, boardNo);
 	}
 	
+	
+	
+
 }
 
 

@@ -371,4 +371,30 @@ public class EmpRestController {
 		return empDao.count(comId);
 	}
 	
+	
+	
+	@PutMapping("/adminEmpUpdate/{empNo}") 
+	public void adminEmpUpdate(@PathVariable int empNo, @RequestBody RequestDto requestDto) {
+		
+		empDao.empInfoUpdate(empNo,requestDto.getEmpDto());
+		
+		salDao.edit(empNo, requestDto.getSalDto());
+		
+	}
+	
+	
+	
+	@PostMapping("/empFindPw/")
+	public void empFindPw(@RequestBody EmpDto inputDto) throws MessagingException, IOException {
+		EmpDto findDto = empDao.selecOne(inputDto.getEmpId());
+		if(findDto != null ) {
+			boolean result = findDto.getEmpEmail().equals(inputDto.getEmpEmail());
+			
+			if(result) {
+				empService.updateEmpId(findDto.getEmpNo(), findDto);
+				
+			}
+		}
+	}
+	
 }

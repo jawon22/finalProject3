@@ -1,8 +1,6 @@
 package com.kh.teamup.restcontroller;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.kh.teamup.dao.ChatGroupDao;
 import com.kh.teamup.dao.ChatRoomDao;
 import com.kh.teamup.dao.MessageDao;
-import com.kh.teamup.dto.ChatRoomDto;
 import com.kh.teamup.dto.MessageDto;
 import com.kh.teamup.vo.ChatVO;
 import com.kh.teamup.vo.RoomVO;
