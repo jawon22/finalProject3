@@ -1,6 +1,5 @@
 package com.kh.teamup.dto;
 
-import java.sql.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +11,6 @@ public class ReceiversDto {
 	private int pathNo;
 	private int receiversReceiver;
 	private String receiversStatus;
-	private Date ReceiversConfirmTime;
+	private String ReceiversConfirmTime;
 	private String receiversReturnRs;
 }
