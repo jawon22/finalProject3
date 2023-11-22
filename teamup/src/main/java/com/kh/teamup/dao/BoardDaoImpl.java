@@ -45,5 +45,10 @@ public class BoardDaoImpl implements BoardDao{
 		int result = sqlSession.update("board.edit", param);
 		if(result == 0) throw new NoTargetException();
 	}
+	
+	@Override
+	public boolean updateRcount(long boardNo) {
+		return sqlSession.update("board.updateRcount", boardNo)>0;
+	}
 
 }
