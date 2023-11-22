@@ -8,8 +8,8 @@
     <mapper namespace="board">
     
     	<insert id="add">
-	    	insert into board(board_no, emp_no, com_id, board_title, board_content, board_update_date, board_category, board_read_count)
-	    	values(board_seq.nextval, #{empNo}, #{comId}, #{boardTitle}, #{boardContent}, #{boardUpdateDate}, #{boardCategory}, #{boardReadCount})
+	    	insert into board(board_no, emp_no, com_id, dept_no, board_title, board_content, board_update_date, board_read_count)
+	    	values(board_seq.nextval, #{empNo}, #{comId}, #{deptNo}, #{boardTitle}, #{boardContent}, #{boardUpdateDate}, #{boardReadCount})
     	</insert>
     	
     	<select id="list" resultType="BoardDto">
@@ -29,7 +29,7 @@
     		<if test="boardDto.boardNo > 0">
     			board_no = #{boardDto.boardNo},
     		</if>
-    		board_title = #{boardDto.boardTitle}, board_content=#{boardDto.boardContent}, board_update_date = sysdate, board_category= #{boardDto.boardCategory} where board_no = #{boardDto.boardNo}
+    		board_title = #{boardDto.boardTitle}, board_content=#{boardDto.boardContent}, board_update_date = sysdate, where board_no = #{boardDto.boardNo}
     	</update>
     	
     	

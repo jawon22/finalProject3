@@ -87,7 +87,7 @@ public class ProfileRestController {
 //		int profileNo = profileDao.sequence();//profileNo를 가져옴
 //		int profileNo = profileDao.findProfileNo(empNo);
 		int attachNo = attachDao.sequence();
-//		log.debug("attachNo={}", attachNo);
+		log.debug("attachNo={}", attachNo);
 		
 
 		MultipartFile attach = vo.getAttach();

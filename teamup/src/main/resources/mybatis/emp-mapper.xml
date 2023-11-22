@@ -73,6 +73,7 @@
 	<select id="complexSearch" resultType="EmpComplexSearchVO">
 
 		select
+		e.emp_no,
 		e.COM_ID ,
 		c.com_name,
 		e.dept_no ,
@@ -91,16 +92,17 @@
 		emp_position ep on e.emp_position_no = ep.emp_position_no
 		<where>
 			<if test="deptNo > 0">
-				d.dept_no = #{deptNo}
+				and d.dept_no = #{deptNo}
 			</if>
 
 			<if test="comId != null">
-				e.com_id = #{comId}
+				and e.com_id = #{comId}
 			</if>
 
 			<if test="comName != null">
-				c.com_name = #{comName}
+				and c.com_name = #{comName}
 			</if>
+
 		</where>
 
 
@@ -122,10 +124,21 @@
 
 	<select id="selectBydeptAndCom"
 		resultType="EmpSearchBydeptComVO">
-		select e.dept_no, e.com_id, ep.EMP_POSITION_NAME , e.emp_position_no
-		,e.EMP_NAME ,e.EMP_TEL ,e.emp_email, e.emp_id ,e.emp_join, e.emp_exit from emp e
-		left outer
-		join EMP_POSITION ep on e.EMP_Position_NO = ep.EMP_POSITION_no
+		select 
+		e.dept_no, 
+		e.com_id, 
+		ep.EMP_POSITION_NAME, 
+		e.emp_position_no,
+		e.EMP_NAME, 
+		e.EMP_TEL, 
+		e.emp_email, 
+		e.emp_id, 
+		e.emp_join, 
+		e.emp_exit,
+		s.sal_annual
+		from emp e
+		left outer join EMP_POSITION ep on e.EMP_Position_NO = ep.EMP_POSITION_no
+		left outer join sal s on e.emp_no = s.emp_no
 		where
 		e.DEPT_NO =#{deptNo} and e.com_id=#{comId}
 		order by
