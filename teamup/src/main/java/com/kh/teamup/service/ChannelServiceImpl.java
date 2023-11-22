@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -15,8 +14,6 @@ import com.kh.teamup.vo.RoomVO;
 public class ChannelServiceImpl implements ChannelService{
 	private List<RoomVO> roomList = new CopyOnWriteArrayList<>();
 
-	@Autowired
-	
 	@Override
 	public RoomVO createRoom(int chatRoomNo) { // 방 생성
 		RoomVO room = RoomVO.builder().chatRoomNo(chatRoomNo).build();
