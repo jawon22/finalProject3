@@ -32,13 +32,17 @@ public class SockJsWebSocketServer extends TextWebSocketHandler{
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 		waitingRoom.enter(session);
-	
-		String sessionId = session.getId();
 		
-		log.debug("채널:{}",waitingRoom);
-		sessionUserMap.put("client", sessionId);
-		log.debug("사용자:{}",sessionId);
-		log.debug("사용자{}명",sessionUserMap.size());
+//		int chatMember = waitingRoom.getChatMember();
+		
+		
+		
+//		String sessionId = session.getId();
+//		
+//		log.debug("채널:{}",waitingRoom);
+//		sessionUserMap.put("client", sessionId);
+//		log.debug("사용자:{}",sessionId);
+//		log.debug("사용자{}명",sessionUserMap.size());
 
 		
 	}
@@ -49,32 +53,52 @@ public class SockJsWebSocketServer extends TextWebSocketHandler{
 	
 	@Override
 	protected void handleTextMessage(WebSocketSession sender, TextMessage message) throws Exception {
+		
+//		type = enterRoom , chatRoomNo = 144
+		
 		String payload = message.getPayload();
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		JsonNode jsonNode = objectMapper.readTree(payload);
 		
 		log.debug("node={}",jsonNode);
-
+		
+		//사용자가 보낸 메세지에 type과 chatRoomNo가은게 있어야 어떠한 처리가 가능
 		String messageType = jsonNode.get("type").asText();
+		int roomNo = jsonNode.get("chatRoomNo").asInt();
+		
 		log.debug("type={}",messageType);
+		
+		
 
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		// messageType에 따라 다른 처리 수행
-		if ("enterRoom".equals(messageType)) {
-		    waitingRoom.enter(sender);
-		    log.debug("sender={}",sender);
-
-		    // 여기에서 세션에 원하는 값을 저장
-		    String empNo = jsonNode.get("content").asText();
-		    sessionUserMap.put(sender.getId(), empNo);
-		    log.debug("id={}", sessionUserMap);
-		    
-		} else if ("userId".equals(messageType)) {
-		    // 'userId'에 대한 처리 로직 추가
-		    String userId = jsonNode.get("content").asText();
-		    // 예: sessionUserMap.put(sender.getId(), userId);
-		    
-		}
+//		if ("enterRoom".equals(messageType)) {
+//		    waitingRoom.enter(sender);
+//		    log.debug("sender={}",sender);
+//
+//		    // 여기에서 세션에 원하는 값을 저장
+//		    String empNo = jsonNode.get("content").asText();
+//		    sessionUserMap.put(sender.getId(), empNo);
+//		    log.debug("id={}", sessionUserMap);
+//		    
+//		} else if ("userId".equals(messageType)) {
+//		    // 'userId'에 대한 처리 로직 추가
+//		    String userId = jsonNode.get("content").asText();
+//		    // 예: sessionUserMap.put(sender.getId(), userId);
+//		    
+//		}
 
 	}
 	
