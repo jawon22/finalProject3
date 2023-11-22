@@ -24,6 +24,10 @@
     		insert into profile_image(emp_no, attach_no) 
     		values(#{empNo}, #{attachNo})
     	</insert>
+    	
+    	<delete id="deleteImage">
+    		delete profile_image where emp_no=#{empNo}
+    	</delete>
 
     	
     	<select id="findImage" resultType="AttachDto">
