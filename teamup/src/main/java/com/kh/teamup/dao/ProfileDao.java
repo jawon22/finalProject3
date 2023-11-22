@@ -26,6 +26,8 @@ public interface ProfileDao {
 
 	List<ProfileInfoVO> selectList();//전체회원 프로필 조회
 	ProfileInfoVO selectOne(int empNo);//회원번호에 따른 회원 프로필 조회
+	
+	void deleteProfileImage(int empNo);//프로필 이미지 삭제
 
 
 
