@@ -3,6 +3,8 @@ package com.kh.teamup.restcontroller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -80,6 +82,20 @@ public class BoardRestController {
 	    List<BoardVO> pagedList = boardDao.listPaged(boardVO);
 	    return pagedList;
 	}
+
+	// BoardRestController에 추가
+	@GetMapping("/totalCount/{comId}")
+	public ResponseEntity<Long> getTotalCount(@PathVariable String comId) {
+	    try {
+	        BoardVO boardVO = BoardVO.builder().comId(comId).build();
+	        long totalCount = boardDao.getTotalCount(boardVO);
+	        return new ResponseEntity<>(totalCount, HttpStatus.OK);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	    }
+	}
+
 
 
 	

@@ -24,5 +24,5 @@ public class BoardVO {
     // 추가된 필드
     private int size;  // 페이지당 항목 수
     private int page;  // 현재 페이지 번호
-    private int totalCount;  // 총 게시물 수
+    private long totalCount;  // 총 게시물 수
 }

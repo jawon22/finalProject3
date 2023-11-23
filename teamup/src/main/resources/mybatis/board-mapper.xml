@@ -42,7 +42,7 @@
 		 		update board set board_read_count = board_read_count + 1 where board_no = #{boardNo}
 		 </update>
 		 
-		 <!-- 페이지네이션 추가 -->
+		<!-- 페이지네이션 추가 -->
 		<select id="listPaged" resultType="BoardVO">
 		    select * from (
 		        select rownum as rnum, b.* from (
@@ -55,6 +55,7 @@
 		<select id="getTotalCount" resultType="int">
 		    select count(*) from board where com_id = #{comId}
 		</select>
+
 		 
 		 
     	
