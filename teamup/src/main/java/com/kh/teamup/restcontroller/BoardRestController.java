@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.teamup.dao.BoardDao;
 import com.kh.teamup.dto.BoardDto;
+import com.kh.teamup.vo.BoardVO;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -50,10 +52,36 @@ public class BoardRestController {
 	
 	@Operation(description = "공지사항 상세 읽기전용+조회수증가")
 	@GetMapping("/read/{boardNo}")
-		public BoardDto read(@PathVariable int boardNo){
-		boardDao.updateRcount(boardNo);//조회수 증가
-		return boardDao.selectOne(boardNo);
+	public BoardDto read(@PathVariable int boardNo, @RequestParam String empNo) {
+	    BoardDto board = boardDao.selectOne(boardNo);
+
+	    // empNo를 int로 변환하여 비교
+	    int empNoInt = Integer.parseInt(empNo);
+	    if (board.getEmpNo() != empNoInt) {
+	        boardDao.updateRcount(boardNo); // 조회수 증가
+	    }
+
+	    return boardDao.selectOne(boardNo);
 	}
+	
+	@GetMapping("/listPaged/{comId}")
+	public List<BoardVO> listPaged(@PathVariable String comId,
+	                               @RequestParam("page") int page,
+	                               @RequestParam("size") int size) {
+	    BoardVO boardVO = BoardVO.builder()
+	                            .comId(comId)
+	                            .page(page)
+	                            .size(size)
+	                            .build();
+
+	    int totalCount = boardDao.getTotalCount(boardVO);
+	    boardVO.setTotalCount(totalCount);
+
+	    List<BoardVO> pagedList = boardDao.listPaged(boardVO);
+	    return pagedList;
+	}
+
+
 	
 	@Operation(description = "공지사항 삭제")
 	@DeleteMapping("/{boardNo}")

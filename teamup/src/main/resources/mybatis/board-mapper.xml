@@ -41,6 +41,22 @@
 		 <update id="updateRcount">
 		 		update board set board_read_count = board_read_count + 1 where board_no = #{boardNo}
 		 </update>
+		 
+		 <!-- 페이지네이션 추가 -->
+		<select id="listPaged" resultType="BoardVO">
+		    select * from (
+		        select rownum as rnum, b.* from (
+		            select * from board where com_id = #{comId} order by board_no desc
+		        ) b where rownum &lt;= #{page} * #{size}
+		    ) where rnum &gt; (#{page} - 1) * #{size}
+		</select>
+		
+		<!-- 토탈 카운트 조회 -->
+		<select id="getTotalCount" resultType="int">
+		    select count(*) from board where com_id = #{comId}
+		</select>
+		 
+		 
     	
     </mapper>
     
