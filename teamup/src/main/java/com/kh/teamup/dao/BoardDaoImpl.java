@@ -54,19 +54,13 @@ public class BoardDaoImpl implements BoardDao{
 	
 	@Override
 	public int getTotalCount(BoardVO boardVO) {
-	    List<Object> result = sqlSession.selectList("board.listPaged", boardVO);
-	    if (result != null && !result.isEmpty()) {
-	        // 리스트의 첫 번째 항목을 반환
-	        return (int) result.get(0);
-	    } else {
-	        return 0;
-	    }
+	    return sqlSession.selectOne("board.getTotalCount", boardVO);
 	}
 
-	
 	@Override
 	public List<BoardVO> listPaged(BoardVO boardVO) {
-		  return sqlSession.selectOne("board.getTotalCount", boardVO);
+	    return sqlSession.selectList("board.listPaged", boardVO);
 	}
+
 
 }
