@@ -1,7 +1,10 @@
 package com.kh.teamup.websocket;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +16,7 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kh.teamup.service.ChannelService;
+import com.kh.teamup.vo.ClientVO;
 import com.kh.teamup.vo.RoomVO;
 
 import lombok.extern.slf4j.Slf4j;
@@ -20,65 +24,61 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class SockJsWebSocketServer extends TextWebSocketHandler{
 	
-	private RoomVO waitingRoom = new RoomVO();
-	
 	@Autowired private ChannelService channelService;
 	
+	private RoomVO waitingRoom = new RoomVO();
 	
     private Map<String, String> sessionUserMap = new ConcurrentHashMap<>();
+    private ObjectMapper mapper = new ObjectMapper(); //JSON 변환기
 
 	
 	
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-		waitingRoom.enter(session);
+		ClientVO client = new ClientVO(session);
 		
-//		int chatMember = waitingRoom.getChatMember();
-		
-		
-		
-//		String sessionId = session.getId();
-//		
-//		log.debug("채널:{}",waitingRoom);
-//		sessionUserMap.put("client", sessionId);
-//		log.debug("사용자:{}",sessionId);
-//		log.debug("사용자{}명",sessionUserMap.size());
-
+		waitingRoom.enter(client);
 		
 	}
+	
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-		waitingRoom.exit(session);
+		ClientVO client  = new ClientVO(session);
+		waitingRoom.exit(client);
+		
 	}
 	
 	@Override
 	protected void handleTextMessage(WebSocketSession sender, TextMessage message) throws Exception {
 		
 //		type = enterRoom , chatRoomNo = 144
+		ClientVO client = new ClientVO(sender);
+		Map params = mapper.readValue(message.getPayload(), Map.class); //JSON메세지 해석
 		
-		String payload = message.getPayload();
+		Map<String, Object> map = new HashMap<>();
+		map.put("empNo", client.getEmpNo());
+		map.put("deptNo", client.getDeptNo());
+		map.put("empPositionNo", client.getEmpPositionNo());
+		map.put("content", params.get("content"));
 
-		ObjectMapper objectMapper = new ObjectMapper();
-		JsonNode jsonNode = objectMapper.readTree(payload);
 		
-		log.debug("node={}",jsonNode);
+		log.debug("params={}",params);
 		
 		//사용자가 보낸 메세지에 type과 chatRoomNo가은게 있어야 어떠한 처리가 가능
-		String messageType = jsonNode.get("type").asText();
-		int roomNo = jsonNode.get("chatRoomNo").asInt();
+//		String messageType = jsonNode.get("type").asText();
+//		int roomNo = jsonNode.get("chatRoomNo").asInt();
 		
-		log.debug("type={}",messageType);
+		String type = (String) params.get("type");
+		int roomNo = (int) params.get("chatRoomNo");
+		log.debug("type={}",type);
+		log.debug("roomNo",roomNo);
 		
+		String messageJson = mapper.writeValueAsString(map);
+		TextMessage tm = new TextMessage(messageJson);
 		
-
-		
-		
-		
-		
-		
-		
-		
-		
+		for(ClientVO c : waitingRoom.getChatMembers()) {
+			c.sendMessage(tm);
+		}
 		
 		
 		
@@ -101,6 +101,31 @@ public class SockJsWebSocketServer extends TextWebSocketHandler{
 //		}
 
 	}
+	
+	//접속한 사용자에게 메세지 이력을 전송하는 메소드
+	public void sendMessageList(ClientVO client) {
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 
 }

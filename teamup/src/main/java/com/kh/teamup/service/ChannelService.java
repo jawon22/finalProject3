@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
+import com.kh.teamup.vo.ClientVO;
 import com.kh.teamup.vo.RoomVO;
 
 public interface ChannelService {
@@ -12,9 +13,9 @@ public interface ChannelService {
 	void deleteRoom (int chatRoomNo); //방 제거
 	RoomVO findRoom(int chatRoomNo); // 방 검색
 	
-	void enterUser(WebSocketSession session, int chatRoomNo); 
-	void exitUser(WebSocketSession session, int chatRoomNo);
-	void sendMessage(WebSocketSession session, int chatRoomNo, TextMessage message) throws IOException;
+	void enterUser(ClientVO client, int chatRoomNo); 
+	void exitUser(ClientVO client, int chatRoomNo);
+	void sendMessage(ClientVO client, int chatRoomNo, TextMessage message) throws IOException;
 	
 	
 }

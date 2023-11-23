@@ -20,18 +20,18 @@ public class RoomVO {
 	private int chatRoomNo;
 	
 	@Builder.Default
-	private Set<WebSocketSession> chatMembers = new CopyOnWriteArraySet<>();
+	private Set<ClientVO> chatMembers = new CopyOnWriteArraySet<>();
 	
 	
-	public void enter(WebSocketSession session) {
-		chatMembers.add(session);
+	public void enter(ClientVO client) {
+		chatMembers.add(client);
 	}
 	
-	public void exit(WebSocketSession session) {
-		chatMembers.remove(session);
+	public void exit(ClientVO client) {
+		chatMembers.remove(client);
 	}
-	public void send(WebSocketSession session,TextMessage message) throws IOException {
-		for(WebSocketSession user : chatMembers) {
+	public void send(ClientVO client,TextMessage message) throws IOException {
+		for(ClientVO user : chatMembers) {
 			user.sendMessage(message);
 		}
 	}

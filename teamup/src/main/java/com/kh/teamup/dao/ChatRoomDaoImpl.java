@@ -10,17 +10,19 @@ import com.kh.teamup.dto.ChatRoomDto;
 import com.kh.teamup.vo.RoomVO;
 
 @Repository
-public class chatRoomDaoImpl implements ChatRoomDao{
+public class ChatRoomDaoImpl implements ChatRoomDao{
 	@Autowired private SqlSession sqlSession;
 	//채팅방 생성
 	@Override
 	public int sequence() {
 		return sqlSession.selectOne("chat.sequence");
 	}
+	
 	@Override
 	public void addChat(int chatRoomNo) {
 		sqlSession.insert("chat.addChat", chatRoomNo);
 	}
+	
 	//채팅멤버
 	@Override
 	public List<RoomVO> roomList(int chatMember) {

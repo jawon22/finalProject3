@@ -9,5 +9,9 @@
 		insert into message(message_no,sender,chat_room_no,message_content)
 		values(message_seq.nextval,#{sender},#{chatRoomNo},#{chatContent})
 	</insert>
+	
+	<select id="list" resultType="MessageDto">
+		select * from message where chat_room_no = #{chatRoomNo} order by message_time asc 
+	</select>
 
 </mapper>
