@@ -397,4 +397,23 @@ public class EmpRestController {
 		}
 	}
 	
+	
+	@PutMapping("/changePw/{empNo}")
+	public void changePw(@PathVariable int empNo, @RequestBody EmpDto empDto) {
+		
+		String newPw = empDto.getEmpPw();
+		
+		String incodePw = encoder.encode(newPw);
+		log.debug("pw={}",incodePw);
+		
+		empDto.setEmpPw(incodePw);
+		
+		log.debug("dto={}", empDto);
+		
+		
+		empDao.empInfoUpdate(empNo, empDto);
+		
+	}
+	
+
 }
