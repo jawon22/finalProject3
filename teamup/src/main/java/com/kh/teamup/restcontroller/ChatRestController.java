@@ -40,10 +40,10 @@ public class ChatRestController {
 		log.debug("no={}",chatRoomNo);
 		
 		//채팅 대상 추가
-
 	    // chatVO.getChatGroupDto().getChatMember()로부터 배열 생성 후 할당
 		int[] chatMembers = chatVO.getChatGroupDto().getChatMember();
 		log.debug("members={}", chatMembers);
+		
 		// chatGroupDao에 대화 상대 추가
 		for (int i = 0 ; i<chatMembers.length; i++) {
 

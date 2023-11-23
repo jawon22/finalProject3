@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
+import com.kh.teamup.vo.ClientVO;
 import com.kh.teamup.vo.RoomVO;
 
 @Service
@@ -38,28 +39,28 @@ public class ChannelServiceImpl implements ChannelService{
 	}
 	
 	@Override
-	public void enterUser(WebSocketSession session, int chatRoomNo) {
+	public void enterUser(ClientVO client, int chatRoomNo) {
 		RoomVO room =  findRoom(chatRoomNo);
 		if(room == null) { // 방번호가 없다면 방 만들기
 			room = createRoom(chatRoomNo);
 		}
-		room.enter(session); // 있다면 입장 or 만든 후 입장
+		room.enter(client); // 있다면 입장 or 만든 후 입장
 	}
 	
 	@Override
-	public void exitUser(WebSocketSession session, int chatRoomNo) { // 방에서 나가기
+	public void exitUser(ClientVO client, int chatRoomNo) { // 방에서 나가기
 		RoomVO room = findRoom(chatRoomNo);
 		if(room == null) return;
 		
-		room.exit(session);
+		room.exit(client);
 	}
 	
 	@Override
-	public void sendMessage(WebSocketSession session, int chatRoomNo, TextMessage message) throws IOException { // 메세지 보내기
+	public void sendMessage(ClientVO client, int chatRoomNo, TextMessage message) throws IOException { // 메세지 보내기
 		RoomVO room = findRoom(chatRoomNo);
 		if(room == null)return;
 		
-		room.send(session, message);
+		room.send(client, message);
 		
 	}
 	
