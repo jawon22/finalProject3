@@ -12,12 +12,14 @@ import lombok.Data;
 import lombok.ToString;
 
 @Data
-@ToString(of = {"empNo","deptNo", "empPositionNo"}) //출력할때 여기에 작성한 항목만 작성
+@ToString(of = {"empNo","deptNo","empName","empPositionName","messageTime"}) //출력할때 여기에 작성한 항목만 작성
 public class ClientVO {
 
 	@JsonIgnore
 	private WebSocketSession session;
-	private Integer empNo, deptNo, empPositionNo;
+	private Integer empNo, deptNo;
+	private String empName, empPositionName;
+	private String messageTime;
 	
 	public ClientVO(WebSocketSession session) {
 		this.session = session;
@@ -25,7 +27,8 @@ public class ClientVO {
 		Map<String, Object> attr = session.getAttributes();
 		this.empNo = (Integer) attr.get("empNo");
 		this.deptNo = (Integer)attr.get("deptNo");
-		this.empPositionNo = (Integer)attr.get("empPositionNo");
+		this.empName = (String) attr.get("empName");
+		this.empPositionName = (String)attr.get("empPositionName");
 		
 	}
 

@@ -54,11 +54,19 @@ public class SockJsWebSocketServer extends TextWebSocketHandler{
 //		type = enterRoom , chatRoomNo = 144
 		ClientVO client = new ClientVO(sender);
 		Map params = mapper.readValue(message.getPayload(), Map.class); //JSON메세지 해석
+		client.setEmpNo((int)params.get("empNo"));
+		client.setMessageTime((String)params.get("date"));
 		
 		Map<String, Object> map = new HashMap<>();
 		map.put("empNo", client.getEmpNo());
-		map.put("deptNo", client.getDeptNo());
-		map.put("empPositionNo", client.getEmpPositionNo());
+		map.put("empName", client.getEmpName());
+		map.put("date", client.getMessageTime());
+		map.put("roomNo", params.get("roomNo"));
+		
+//		map.put("deptNo", client.getDeptNo());
+//		map.put("empPositionNo", client.getEmpPositionNo());
+		
+		map.put("type", params.get("type"));
 		map.put("content", params.get("content"));
 
 		
@@ -69,12 +77,13 @@ public class SockJsWebSocketServer extends TextWebSocketHandler{
 //		int roomNo = jsonNode.get("chatRoomNo").asInt();
 		
 		String type = (String) params.get("type");
-		int roomNo = (int) params.get("chatRoomNo");
+		String chatRoomNo = (String) params.get("chatRoomNo");
 		log.debug("type={}",type);
-		log.debug("roomNo",roomNo);
+		log.debug("chatRoomNo={}",chatRoomNo);
 		
 		String messageJson = mapper.writeValueAsString(map);
 		TextMessage tm = new TextMessage(messageJson);
+		log.debug("tm={}",tm);
 		
 		for(ClientVO c : waitingRoom.getChatMembers()) {
 			c.sendMessage(tm);
@@ -82,23 +91,6 @@ public class SockJsWebSocketServer extends TextWebSocketHandler{
 		
 		
 		
-		
-		// messageType에 따라 다른 처리 수행
-//		if ("enterRoom".equals(messageType)) {
-//		    waitingRoom.enter(sender);
-//		    log.debug("sender={}",sender);
-//
-//		    // 여기에서 세션에 원하는 값을 저장
-//		    String empNo = jsonNode.get("content").asText();
-//		    sessionUserMap.put(sender.getId(), empNo);
-//		    log.debug("id={}", sessionUserMap);
-//		    
-//		} else if ("userId".equals(messageType)) {
-//		    // 'userId'에 대한 처리 로직 추가
-//		    String userId = jsonNode.get("content").asText();
-//		    // 예: sessionUserMap.put(sender.getId(), userId);
-//		    
-//		}
 
 	}
 	
