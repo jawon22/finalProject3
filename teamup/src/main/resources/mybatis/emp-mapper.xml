@@ -183,6 +183,9 @@
 	<select id="findtoken" resultType="empToken">
 	select * from token where token= #{token}
 	</select>
+	
+	
+	<select id="updatePw"></select>
 
 
 
