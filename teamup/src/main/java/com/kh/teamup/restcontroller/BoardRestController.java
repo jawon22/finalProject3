@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.teamup.dao.BoardDao;
 import com.kh.teamup.dto.BoardDto;
+import com.kh.teamup.vo.BoardNameVO;
 import com.kh.teamup.vo.BoardVO;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,20 +43,20 @@ public class BoardRestController {
 	
 	@Operation(description = "공지사항 회사별 목록")
 	@GetMapping("/list/{comId}")
-	public List<BoardDto>list(@PathVariable String comId){
+	public List<BoardNameVO> list(@PathVariable String comId){
 		return boardDao.comBoardList(comId);
 	}
 	
 	@Operation(description = "공지사항 상세+수정용")
 	@GetMapping("/find/{boardNo}")
-		public BoardDto find(@PathVariable int boardNo){
+		public BoardNameVO find(@PathVariable int boardNo){
 		return boardDao.selectOne(boardNo);
 	}
 	
 	@Operation(description = "공지사항 상세 읽기전용+조회수증가")
 	@GetMapping("/read/{boardNo}")
-	public BoardDto read(@PathVariable int boardNo, @RequestParam String empNo) {
-	    BoardDto board = boardDao.selectOne(boardNo);
+	public BoardNameVO read(@PathVariable int boardNo, @RequestParam String empNo) {
+	    BoardNameVO board = boardDao.selectOne(boardNo);
 
 	    // empNo를 int로 변환하여 비교
 	    int empNoInt = Integer.parseInt(empNo);
