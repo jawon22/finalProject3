@@ -93,6 +93,17 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/javax.servlet/jstl 
+		 프로젝트에 JSP를 사용하기 위한 라이브러리-->
+		<dependency>
+    		<groupId>javax.servlet</groupId>
+    		<artifactId>jstl</artifactId>
+		</dependency>
+		<dependency>
+    		<groupId>org.apache.tomcat.embed</groupId>
+    		<artifactId>tomcat-embed-jasper</artifactId>
+		</dependency>
 
 		<!-- springdoc 빌드문서 -->
 		<dependency>
