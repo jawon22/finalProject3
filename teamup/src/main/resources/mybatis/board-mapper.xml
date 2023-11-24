@@ -12,13 +12,40 @@
 	    	values(board_seq.nextval, #{empNo}, #{comId}, #{deptNo}, #{boardTitle}, #{boardContent}, #{boardUpdateDate}, #{boardReadCount})
     	</insert>
     	
-    	<select id="list" resultType="BoardDto">
-    		select * from board where com_id = #{comId} order by board_no desc
-    	</select>
+    	<select id="list" resultType="BoardNameVO">
+		    SELECT 
+		        board.*,
+		        emp.emp_name,
+		        dept.dept_name
+		    FROM 
+		        board
+		    JOIN 
+		        emp ON board.emp_no = emp.emp_no
+		    JOIN 
+		        dept ON emp.dept_no = dept.dept_no
+		    WHERE 
+		        board.com_id = #{comId}
+		    ORDER BY 
+		        board.board_no DESC
+		</select>
     	
-    	<select id="find" resultType="BoardDto">
-    		select * from board where board_no = #{boardNo} order by board_no desc
-    	</select>
+    	<select id="find" resultType="BoardNameVO">
+		    SELECT 
+		        board.*,
+		        emp.emp_name,
+		        dept.dept_name
+		    FROM 
+		        board
+		    JOIN 
+		        emp ON board.emp_no = emp.emp_no
+		    JOIN 
+		        dept ON emp.dept_no = dept.dept_no
+		    WHERE 
+		        board.board_no = #{boardNo}
+		    ORDER BY 
+		        board.board_no DESC
+		</select>
+
     	
     	<delete id="remove">
     		delete from board where board_no = #{boardNo}
@@ -46,7 +73,20 @@
 		<select id="listPaged" resultType="BoardVO">
 		    select * from (
 		        select rownum as rnum, b.* from (
-		            select * from board where com_id = #{comId} order by board_no desc
+		             SELECT 
+		        board.*,
+		        emp.emp_name,
+		        dept.dept_name
+		    FROM 
+		        board
+		    JOIN 
+		        emp ON board.emp_no = emp.emp_no
+		    JOIN 
+		        dept ON emp.dept_no = dept.dept_no
+		    WHERE 
+		        board.com_id = #{comId}
+		    ORDER BY 
+		        board.board_no DESC
 		        ) b where rownum &lt;= #{page} * #{size}
 		    ) where rnum &gt; (#{page} - 1) * #{size}
 		</select>

@@ -3,7 +3,6 @@ package com.kh.teamup.vo;
 import java.sql.Timestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.kh.teamup.dto.BoardDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data @Builder @AllArgsConstructor @NoArgsConstructor 
-public class BoardVO {
+public class BoardNameVO {
     private long boardNo;
     private int empNo;
     private int deptNo;
@@ -20,11 +19,7 @@ public class BoardVO {
     private String boardContent;
     private Timestamp boardUpdateDate, boardWriteDate;
     private int boardReadCount;
-
+    // 추가된 필드
     private String empName; // emp 테이블의 emp_name 필드
     private String deptName; // dept 테이블의 dept_name 필드
-
-    private int size;  // 페이지당 항목 수
-    private int page;  // 현재 페이지 번호
-    private long totalCount;  // 총 게시물 수
 }

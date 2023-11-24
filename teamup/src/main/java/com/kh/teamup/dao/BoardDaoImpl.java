@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.kh.teamup.dto.BoardDto;
 import com.kh.teamup.error.NoTargetException;
+import com.kh.teamup.vo.BoardNameVO;
 import com.kh.teamup.vo.BoardVO;
 
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,7 @@ public class BoardDaoImpl implements BoardDao{
 	
 	
 	@Autowired private SqlSession sqlSession;
+	
 
 	@Override
 	public void insert(BoardDto boardDto) {
@@ -26,12 +28,12 @@ public class BoardDaoImpl implements BoardDao{
 	}
 
 	@Override
-	public List<BoardDto> comBoardList(String comId) {
+	public List<BoardNameVO> comBoardList(String comId) {
 		return sqlSession.selectList("board.list", comId);
 	}
 	
 	@Override
-	public BoardDto selectOne(int boardNo) {
+	public BoardNameVO selectOne(int boardNo) {
 		return sqlSession.selectOne("board.find", boardNo);
 	}
 	
