@@ -1,6 +1,7 @@
 package com.kh.teamup.restcontroller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -53,19 +54,42 @@ public class BoardRestController {
 		return boardDao.selectOne(boardNo);
 	}
 	
+//	@Operation(description = "공지사항 상세 읽기전용+조회수증가")
+//	@GetMapping("/read/{boardNo}")
+//	public BoardNameVO read(@PathVariable int boardNo, @RequestParam String empNo) {
+//	    BoardNameVO board = boardDao.selectOne(boardNo);
+//
+//	    // empNo를 int로 변환하여 비교
+//	    int empNoInt = Integer.parseInt(empNo);
+//	    if (board.getEmpNo() != empNoInt) {
+//	        boardDao.updateRcount(boardNo); // 조회수 증가
+//	    }
+//
+//	    return boardDao.selectOne(boardNo);
+//	}
+
+	@SuppressWarnings("unchecked")
 	@Operation(description = "공지사항 상세 읽기전용+조회수증가")
 	@GetMapping("/read/{boardNo}")
-	public BoardNameVO read(@PathVariable int boardNo, @RequestParam String empNo) {
+	public BoardNameVO read(@PathVariable int boardNo, @RequestParam Map<String, Object> requestParams) {
 	    BoardNameVO board = boardDao.selectOne(boardNo);
 
-	    // empNo를 int로 변환하여 비교
-	    int empNoInt = Integer.parseInt(empNo);
-	    if (board.getEmpNo() != empNoInt) {
+	    int empNo = Integer.parseInt((String) requestParams.get("empNo"));
+	    List<Integer> userReadHistory = (List<Integer>) requestParams.get("userReadHistory");
+	    System.out.println("userReadHistory: " + userReadHistory);
+
+	    // 사용자가 이미 읽은 게시글이 아니면서 작성자가 아닌 경우 조회수 증가
+	    if (board.getEmpNo() != empNo && !userReadHistory.contains(boardNo)) {
 	        boardDao.updateRcount(boardNo); // 조회수 증가
+	        userReadHistory.add(boardNo); // 읽은 게시글 기록에 추가
 	    }
 
 	    return boardDao.selectOne(boardNo);
 	}
+
+
+	
+	
 	
 	@GetMapping("/listPaged/{comId}")
 	public List<BoardVO> listPaged(@PathVariable String comId,
