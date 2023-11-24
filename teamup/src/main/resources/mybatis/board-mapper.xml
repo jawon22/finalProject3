@@ -12,22 +12,30 @@
 	    	values(board_seq.nextval, #{empNo}, #{comId}, #{deptNo}, #{boardTitle}, #{boardContent}, #{boardUpdateDate}, #{boardReadCount})
     	</insert>
     	
-    	<select id="list" resultType="BoardNameVO">
-		    SELECT 
-		        board.*,
-		        emp.emp_name,
-		        dept.dept_name
-		    FROM 
-		        board
-		    JOIN 
-		        emp ON board.emp_no = emp.emp_no
-		    JOIN 
-		        dept ON emp.dept_no = dept.dept_no
-		    WHERE 
-		        board.com_id = #{comId}
-		    ORDER BY 
-		        board.board_no DESC
-		</select>
+<select id="list" resultType="BoardNameVO">
+    <![CDATA[
+        SELECT 
+            board.*,
+            emp.emp_name,
+            dept.dept_name
+        FROM 
+            (
+                SELECT ROWNUM AS rnum, b.*
+                FROM (
+                    SELECT * 
+                    FROM board
+                    WHERE board.com_id = #{comId}
+                    ORDER BY board.board_no DESC
+                ) b
+                WHERE ROWNUM <= 5
+            ) board
+        JOIN 
+            emp ON board.emp_no = emp.emp_no
+        JOIN 
+            dept ON emp.dept_no = dept.dept_no
+    ]]>
+</select>
+
     	
     	<select id="find" resultType="BoardNameVO">
 		    SELECT 
