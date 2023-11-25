@@ -38,7 +38,6 @@ public class BoardRestController {
 	@Operation(description = "공지사항 등록")
 	@PostMapping("/add")
 	public void insert(@RequestBody BoardDto boardDto) {
-		log.debug("boardDto = {}", boardDto);
 		boardDao.insert(boardDto);
 	}
 	
@@ -67,20 +66,19 @@ public class BoardRestController {
 //
 //	    return boardDao.selectOne(boardNo);
 //	}
-
-	@SuppressWarnings("unchecked")
 	@Operation(description = "공지사항 상세 읽기전용+조회수증가")
-	@GetMapping("/read/{boardNo}")
-	public BoardNameVO read(@PathVariable int boardNo, @RequestParam Map<String, Object> requestParams) {
+	@PostMapping("/read/{boardNo}")
+	public BoardNameVO read(
+	    @PathVariable int boardNo,
+	    @RequestParam("empNo") String empNo,
+	    @RequestBody List<Integer> userReadHistory
+	) {
 	    BoardNameVO board = boardDao.selectOne(boardNo);
 
-	    int empNo = Integer.parseInt((String) requestParams.get("empNo"));
-	    List<Integer> userReadHistory = (List<Integer>) requestParams.get("userReadHistory");
-	    System.out.println("userReadHistory: " + userReadHistory);
+	    int empNoInt = Integer.parseInt(empNo);
 
-	    // 사용자가 이미 읽은 게시글이 아니면서 작성자가 아닌 경우 조회수 증가
-	    if (board.getEmpNo() != empNo && !userReadHistory.contains(boardNo)) {
-	        boardDao.updateRcount(boardNo); // 조회수 증가
+	    if (board.getEmpNo() != empNoInt && !userReadHistory.contains(boardNo)) {
+	        boardDao.updateRcount(boardNo);
 	        userReadHistory.add(boardNo); // 읽은 게시글 기록에 추가
 	    }
 

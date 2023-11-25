@@ -1,8 +1,5 @@
 package com.kh.teamup.dto;
 
-
-
-
 import java.sql.Timestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -14,10 +11,10 @@ import lombok.NoArgsConstructor;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data @Builder @AllArgsConstructor @NoArgsConstructor 
-public class BoardDto {
-	private long boardNo;
-	private int empNo,deptNo;
-	private String comId, boardTitle, boardContent;
-	private Timestamp boardWriteDate, boardUpdateDate;
-	private int boardReadCount;
+public class ReplyDto {
+		private long replyNo;
+		private int replyWriter;
+		private String replyContent;
+		private Timestamp replyTime;
+		private long replyOrigin;
 }
