@@ -17,22 +17,21 @@ public class ClientVO {
 
 	@JsonIgnore
 	private WebSocketSession session;
-	private Integer empNo, deptNo;
+	private Integer  deptNo;
+	private String empNo;
 	private String empName, empPositionName;
-	private String messageTime;
+	//private String messageTime;
 	
 	public ClientVO(WebSocketSession session) {
 		this.session = session;
 		
 		Map<String, Object> attr = session.getAttributes();
-		this.empNo = (Integer) attr.get("empNo");
-		this.deptNo = (Integer)attr.get("deptNo");
-		this.empName = (String) attr.get("empName");
-		this.empPositionName = (String)attr.get("empPositionName");
-		
+		this.empNo = (String) attr.get("empNo");
+		System.out.println(attr);
 	}
 
 	public void sendMessage(TextMessage message) throws IOException {
+		
 		session.sendMessage(message);
 		
 	}
