@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+    <mapper namespace="reply">
+    	<insert id="save">
+    		insert into reply(reply_no, reply_writer, reply_content, reply_origin)
+    		values (reply_seq.nextval, #{replyWriter}, #{replyContent}, #{replyOrigin})
+    	</insert>
+    	
+    	<select id="list" resultType="ReplyByBoardVO">
+		    <![CDATA[
+		        SELECT 
+		            reply.reply_no,
+		            reply.reply_writer,
+		            reply.reply_content,
+		            reply.reply_time,
+		            reply.reply_origin,
+		            emp.emp_name AS replyWriterName,
+		            dept.dept_name AS replyWriterDept,
+		            emp_position.emp_position_name AS replyWriterEP
+		        FROM 
+		            (
+		                SELECT ROWNUM AS rnum, r.*
+		                FROM (
+		                    SELECT * 
+		                    FROM reply
+		                    WHERE reply.reply_origin = #{replyOrigin}
+		                    ORDER BY reply.reply_no DESC
+		                ) r
+		            ) reply
+		        LEFT JOIN 
+		            emp ON reply.reply_writer = emp.emp_no
+		        LEFT JOIN 
+		            dept ON emp.dept_no = dept.dept_no
+		        LEFT JOIN 
+		            emp_position ON emp.emp_position_no = emp_position.emp_position_no
+		    ]]>
+		</select>
+		
+		<delete id="remove">
+			delete from reply where reply_no = #{replyNo}
+		</delete>
+		
+		<update id="edit">
+			update reply
+			<set>
+				<if test="replyDto.replyContent != null">
+					reply_content = #{replyDto.replyContent},
+				</if>
+					reply_time = sysdate
+			</set>
+			where reply_no = #{replyDto.replyNo}
+		</update>
+		
+
+    </mapper>

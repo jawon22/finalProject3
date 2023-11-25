@@ -38,7 +38,6 @@ public class BoardRestController {
 	@Operation(description = "공지사항 등록")
 	@PostMapping("/add")
 	public void insert(@RequestBody BoardDto boardDto) {
-		log.debug("boardDto = {}", boardDto);
 		boardDao.insert(boardDto);
 	}
 	
