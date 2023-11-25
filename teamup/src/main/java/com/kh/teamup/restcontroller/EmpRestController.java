@@ -254,7 +254,7 @@ public class EmpRestController {
 		empDao.deleteEmp(empNo);
 	}
 	@Operation(description = "개별 수정")
-	@PatchMapping("/empInfoUpdate/{empNo}")
+	@PutMapping("/empInfoUpdate/{empNo}")
 	public void empInfoUpdate(@RequestBody EmpDto empDto,@PathVariable int empNo) {
 		empDao.empInfoUpdate(empNo,empDto);
 	}
@@ -401,6 +401,12 @@ public class EmpRestController {
 	@PutMapping("/changePw/{empNo}")
 	public void changePw(@PathVariable int empNo, @RequestBody EmpDto empDto) {
 		
+		
+		
+		
+		
+		
+		
 		String newPw = empDto.getEmpPw();
 		
 		String incodePw = encoder.encode(newPw);
@@ -415,5 +421,20 @@ public class EmpRestController {
 		
 	}
 	
+	
+	@PostMapping("/findPw/{empNo}")
+	public void findPw(@PathVariable int empNo ,@RequestBody EmpDto inputDto) {
+		
+		String myPw = inputDto.getEmpPw();
+		
+		EmpDto findDto = empDao.selectOne(empNo);
+		
+		String originPw = findDto.getEmpPw();
+		
+		boolean result = encoder.matches(myPw, originPw);
+		
+		
+		
+	}
 
 }
