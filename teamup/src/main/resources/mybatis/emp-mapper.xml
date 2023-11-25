@@ -78,6 +78,7 @@
 		c.com_name,
 		e.dept_no ,
 		d.dept_name,
+		e.emp_position_no,
 		ep.emp_position_name,
 		e.emp_no,
 		e.emp_id,
