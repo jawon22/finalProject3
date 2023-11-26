@@ -23,6 +23,9 @@ public class BoardVO {
 
     private String empName; // emp 테이블의 emp_name 필드
     private String deptName; // dept 테이블의 dept_name 필드
+    
+//    private String select;
+//    private String keyword;
 
     private int size;  // 페이지당 항목 수
     private int page;  // 현재 페이지 번호

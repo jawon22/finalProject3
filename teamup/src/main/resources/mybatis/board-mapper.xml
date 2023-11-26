@@ -13,7 +13,7 @@
 		</insert>
 
     	
-    	<!-- 메이페이지 공지사항 목록 -->
+    	<!-- 메인페이지 공지사항 목록 -->
 			<select id="list" resultType="BoardNameVO">
 			    <![CDATA[
 			        SELECT 
@@ -100,6 +100,45 @@
 		        ) b where rownum &lt;= #{page} * #{size}
 		    ) where rnum &gt; (#{page} - 1) * #{size}
 		</select>
+		
+<!-- 				공지사항 목록 페이지네이션 추가
+		<select id="listPaged" resultType="BoardVO">
+		    SELECT * FROM (
+		        SELECT 
+		            rownum as rnum, b.* 
+		        FROM (
+		            SELECT 
+		                board.*,
+		                emp.emp_name,
+		                dept.dept_name
+		            FROM 
+		                board
+		            JOIN 
+		                emp ON board.emp_no = emp.emp_no
+		            JOIN 
+		                dept ON emp.dept_no = dept.dept_no
+		                <where>
+		                    <if test="keyword != null and select != null">
+		                        ${select} LIKE CONCAT(#{keyword}, '%')
+		                    </if>
+		                    <if test="comId != null">
+		                        AND dept.com_id = #{comId}
+		                    </if>
+		                    <if test="deptNo != 0">
+		                        AND emp.dept_no = #{deptNo}
+		                    </if>
+		                    <if test="empName != null">
+		                        AND emp.emp_name LIKE CONCAT(#{empName}, '%')
+		                    </if>
+		                </where>
+		            
+		            ORDER BY 
+		                board.board_no DESC
+		        ) b 
+		        WHERE rownum &lt;= #{page} * #{size}
+		    ) 
+		    WHERE rnum &gt; (#{page} - 1) * #{size}
+		</select> -->
 		
 		<!-- 토탈 카운트 조회 -->
 		<select id="getTotalCount" resultType="int">
