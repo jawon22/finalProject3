@@ -7,52 +7,54 @@
     
     <mapper namespace="board">
     
-    	<insert id="add">
-	    	insert into board(board_no, emp_no, com_id, dept_no, board_title, board_content, board_update_date, board_read_count)
-	    	values(board_seq.nextval, #{empNo}, #{comId}, #{deptNo}, #{boardTitle}, #{boardContent}, #{boardUpdateDate}, #{boardReadCount})
-    	</insert>
-    	
-<select id="list" resultType="BoardNameVO">
-    <![CDATA[
-        SELECT 
-            board.*,
-            emp.emp_name,
-            dept.dept_name
-        FROM 
-            (
-                SELECT ROWNUM AS rnum, b.*
-                FROM (
-                    SELECT * 
-                    FROM board
-                    WHERE board.com_id = #{comId}
-                    ORDER BY board.board_no DESC
-                ) b
-                WHERE ROWNUM <= 5
-            ) board
-        JOIN 
-            emp ON board.emp_no = emp.emp_no
-        JOIN 
-            dept ON emp.dept_no = dept.dept_no
-    ]]>
-</select>
+		<insert id="add">
+		    insert into board(board_no, emp_no, com_id, dept_no, board_title, board_content, board_update_date, board_read_count)
+		    values(board_seq.nextval, #{empNo}, #{comId}, #{deptNo}, #{boardTitle}, #{boardContent}, #{boardUpdateDate}, #{boardReadCount})
+		</insert>
 
     	
-    	<select id="find" resultType="BoardNameVO">
-		    SELECT 
-		        board.*,
-		        emp.emp_name,
-		        dept.dept_name
-		    FROM 
-		        board
-		    JOIN 
-		        emp ON board.emp_no = emp.emp_no
-		    JOIN 
-		        dept ON emp.dept_no = dept.dept_no
-		    WHERE 
-		        board.board_no = #{boardNo}
-		    ORDER BY 
-		        board.board_no DESC
-		</select>
+    	<!-- 메인페이지 공지사항 목록 -->
+			<select id="list" resultType="BoardNameVO">
+			    <![CDATA[
+			        SELECT 
+			            board.*,
+			            emp.emp_name,
+			            dept.dept_name
+			        FROM 
+			            (
+			                SELECT ROWNUM AS rnum, b.*
+			                FROM (
+			                    SELECT * 
+			                    FROM board
+			                    WHERE board.com_id = #{comId}
+			                    ORDER BY board.board_no DESC
+			                ) b
+			                WHERE ROWNUM <= 5
+			            ) board
+			        JOIN 
+			            emp ON board.emp_no = emp.emp_no
+			        JOIN 
+			            dept ON emp.dept_no = dept.dept_no
+			    ]]>
+			</select>
+
+    	
+	    	<select id="find" resultType="BoardNameVO">
+			    SELECT 
+			        board.*,
+			        emp.emp_name,
+			        dept.dept_name
+			    FROM 
+			        board
+			    JOIN 
+			        emp ON board.emp_no = emp.emp_no
+			    JOIN 
+			        dept ON emp.dept_no = dept.dept_no
+			    WHERE 
+			        board.board_no = #{boardNo}
+			    ORDER BY 
+			        board.board_no DESC
+			</select>
 
     	
     	<delete id="remove">
@@ -77,7 +79,7 @@
 		 		update board set board_read_count = board_read_count + 1 where board_no = #{boardNo}
 		 </update>
 		 
-		<!-- 페이지네이션 추가 -->
+		<!--공지사항 목록 페이지네이션 추가 -->
 		<select id="listPaged" resultType="BoardVO">
 		    select * from (
 		        select rownum as rnum, b.* from (
@@ -99,11 +101,55 @@
 		    ) where rnum &gt; (#{page} - 1) * #{size}
 		</select>
 		
+<!-- 				공지사항 목록 페이지네이션 추가
+		<select id="listPaged" resultType="BoardVO">
+		    SELECT * FROM (
+		        SELECT 
+		            rownum as rnum, b.* 
+		        FROM (
+		            SELECT 
+		                board.*,
+		                emp.emp_name,
+		                dept.dept_name
+		            FROM 
+		                board
+		            JOIN 
+		                emp ON board.emp_no = emp.emp_no
+		            JOIN 
+		                dept ON emp.dept_no = dept.dept_no
+		                <where>
+		                    <if test="keyword != null and select != null">
+		                        ${select} LIKE CONCAT(#{keyword}, '%')
+		                    </if>
+		                    <if test="comId != null">
+		                        AND dept.com_id = #{comId}
+		                    </if>
+		                    <if test="deptNo != 0">
+		                        AND emp.dept_no = #{deptNo}
+		                    </if>
+		                    <if test="empName != null">
+		                        AND emp.emp_name LIKE CONCAT(#{empName}, '%')
+		                    </if>
+		                </where>
+		            
+		            ORDER BY 
+		                board.board_no DESC
+		        ) b 
+		        WHERE rownum &lt;= #{page} * #{size}
+		    ) 
+		    WHERE rnum &gt; (#{page} - 1) * #{size}
+		</select> -->
+		
 		<!-- 토탈 카운트 조회 -->
 		<select id="getTotalCount" resultType="int">
 		    select count(*) from board where com_id = #{comId}
 		</select>
 
+		<update id="updateReplyCount">
+			update board set board_reply_count=(
+				select count(*) from reply where reply_origin = #{baordNo}
+			) where board_no = #{baordNo}
+		</update>
 		 
 		 
     	

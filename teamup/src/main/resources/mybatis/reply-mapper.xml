@@ -55,5 +55,19 @@
 			where reply_no = #{replyDto.replyNo}
 		</update>
 		
+		    <!-- 댓글 번호로 댓글 정보 조회 -->
+		    <select id="selectReply" resultType="ReplyDto" parameterType="long">
+		        SELECT * FROM reply WHERE reply_no = #{replyNo}
+		    </select>
+		
 
     </mapper>
+    
+    
+    
+    
+    
+    
+    
+    
+    

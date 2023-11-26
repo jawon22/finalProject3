@@ -11,6 +11,7 @@ public interface ReplyDao {
 	List<ReplyByBoardVO> replyListByBoard(long replyOrigin);
 	void deleteReply(long replyNo);
 	void editReply(ReplyDto replyDto, long replyNo);
+	ReplyDto selectReply(long replyNo);
 	
 	
 
