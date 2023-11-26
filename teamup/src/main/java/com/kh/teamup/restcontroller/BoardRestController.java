@@ -88,7 +88,7 @@ public class BoardRestController {
 
 	
 	
-	
+	@Operation(description = "공지사항 목록+페이지네이션(회사기준)")
 	@GetMapping("/listPaged/{comId}")
 	public List<BoardVO> listPaged(@PathVariable String comId,
 	                               @RequestParam("page") int page,
@@ -106,7 +106,7 @@ public class BoardRestController {
 	    return pagedList;
 	}
 
-	// BoardRestController에 추가
+	@Operation(description = "공지사항 총 갯수")
 	@GetMapping("/totalCount/{comId}")
 	public ResponseEntity<Long> getTotalCount(@PathVariable String comId) {
 	    try {
@@ -134,6 +134,12 @@ public class BoardRestController {
 		boardDao.change(boardDto, boardNo);
 	}
 	
+	@Operation(description = "공지사항 댓글 갯수 업데이트")
+	@PutMapping("/updateReplyCount/{boardNo}")
+	public void updateReplyCount(@PathVariable long boardNo) {
+		boardDao.updateBoardReplycount(boardNo);
+	}
+
 	
 	
 

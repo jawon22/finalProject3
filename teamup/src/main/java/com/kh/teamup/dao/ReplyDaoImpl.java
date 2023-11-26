@@ -41,6 +41,12 @@ public class ReplyDaoImpl implements ReplyDao{
 		if(result == 0) throw new NoTargetException();
 	}
 
+	 @Override
+	 public ReplyDto selectReply(long replyNo) {
+	     return sqlSession.selectOne("reply.selectReply", replyNo);
+	 }
+
+	 
 }
 
 

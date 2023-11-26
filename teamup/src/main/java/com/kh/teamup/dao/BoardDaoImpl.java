@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 import com.kh.teamup.dto.BoardDto;
@@ -62,6 +63,12 @@ public class BoardDaoImpl implements BoardDao{
 	@Override
 	public List<BoardVO> listPaged(BoardVO boardVO) {
 	    return sqlSession.selectList("board.listPaged", boardVO);
+	}
+	
+//	게시글 댓글수 업데이트 
+	@Override
+	public int updateBoardReplycount(long boardNo) {
+		return  sqlSession.update("board.updateReplyCount", boardNo);
 	}
 
 

@@ -18,7 +18,7 @@ public class BoardNameVO {
     private String boardTitle;
     private String boardContent;
     private Timestamp boardUpdateDate, boardWriteDate;
-    private int boardReadCount;
+    private int boardReadCount, boardReplyCount;
     // 추가된 필드
     private String empName; // emp 테이블의 emp_name 필드
     private String deptName; // dept 테이블의 dept_name 필드
