@@ -134,6 +134,12 @@ public class BoardRestController {
 		boardDao.change(boardDto, boardNo);
 	}
 	
+	@Operation(description = "공지사항 댓글 갯수 업데이트")
+	@PutMapping("/updateReplyCount/{boardNo}")
+	public void updateReplyCount(@PathVariable long boardNo) {
+		boardDao.updateBoardReplycount(boardNo);
+	}
+
 	
 	
 

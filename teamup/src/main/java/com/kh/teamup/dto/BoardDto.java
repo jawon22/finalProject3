@@ -19,5 +19,5 @@ public class BoardDto {
 	private int empNo,deptNo;
 	private String comId, boardTitle, boardContent;
 	private Timestamp boardWriteDate, boardUpdateDate;
-	private int boardReadCount;
+	private int boardReadCount, boardReplyCount;
 }
