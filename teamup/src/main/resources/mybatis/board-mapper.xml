@@ -80,65 +80,71 @@
 		 </update>
 		 
 		<!--공지사항 목록 페이지네이션 추가 -->
-		<select id="listPaged" resultType="BoardVO">
-		    select * from (
-		        select rownum as rnum, b.* from (
-		             SELECT 
-		        board.*,
-		        emp.emp_name,
-		        dept.dept_name
-		    FROM 
-		        board
-		    JOIN 
-		        emp ON board.emp_no = emp.emp_no
-		    JOIN 
-		        dept ON emp.dept_no = dept.dept_no
-		    WHERE 
-		        board.com_id = #{comId}
-		    ORDER BY 
-		        board.board_no DESC
-		        ) b where rownum &lt;= #{page} * #{size}
-		    ) where rnum &gt; (#{page} - 1) * #{size}
-		</select>
+	<select id="listPaged" resultType="BoardVO">
+			    select * from (
+			        select rownum as rnum, b.* from (
+			             SELECT 
+			        board.*,
+			        emp.emp_name,
+			        dept.dept_name
+			    FROM 
+			        board
+			    JOIN 
+			        emp ON board.emp_no = emp.emp_no
+			    JOIN 
+			        dept ON emp.dept_no = dept.dept_no
+			    WHERE 
+			        board.com_id = #{comId}
+			    ORDER BY 
+			        board.board_no DESC
+			        ) b where rownum &lt;= #{page} * #{size}
+			    ) where rnum &gt; (#{page} - 1) * #{size}
+			</select>
 		
-<!-- 				공지사항 목록 페이지네이션 추가
-		<select id="listPaged" resultType="BoardVO">
-		    SELECT * FROM (
-		        SELECT 
-		            rownum as rnum, b.* 
-		        FROM (
-		            SELECT 
-		                board.*,
-		                emp.emp_name,
-		                dept.dept_name
-		            FROM 
-		                board
-		            JOIN 
-		                emp ON board.emp_no = emp.emp_no
-		            JOIN 
-		                dept ON emp.dept_no = dept.dept_no
-		                <where>
-		                    <if test="keyword != null and select != null">
-		                        ${select} LIKE CONCAT(#{keyword}, '%')
-		                    </if>
-		                    <if test="comId != null">
-		                        AND dept.com_id = #{comId}
-		                    </if>
-		                    <if test="deptNo != 0">
-		                        AND emp.dept_no = #{deptNo}
-		                    </if>
-		                    <if test="empName != null">
-		                        AND emp.emp_name LIKE CONCAT(#{empName}, '%')
-		                    </if>
-		                </where>
-		            
-		            ORDER BY 
-		                board.board_no DESC
-		        ) b 
-		        WHERE rownum &lt;= #{page} * #{size}
-		    ) 
-		    WHERE rnum &gt; (#{page} - 1) * #{size}
-		</select> -->
+<!-- 공지사항 목록 페이지네이션 추가
+<select id="listPaged" resultType="BoardVO">
+    SELECT * FROM (
+        SELECT ROWNUM rn, TMP.*
+        FROM (
+            SELECT 
+                board.*,
+                emp.emp_name,
+                dept.dept_name
+            FROM 
+                board
+            JOIN 
+                emp ON board.emp_no = emp.emp_no
+            JOIN 
+                dept ON emp.dept_no = dept.dept_no
+            <where>
+                <if test="keyword != null and select != null">
+                    ${select} LIKE CONCAT(#{keyword}, '%')
+                </if>
+                <if test="comId != null">
+                    and board.com_id = #{comId}
+                </if>
+                <if test="boardNo != 0">
+                    and board.board_no = #{boardNo}
+                </if>
+                <if test="deptName != null">
+                    AND instr(dept.dept_name, #{deptName}) > 0
+                </if>
+                <if test="empName != null">
+                    AND instr(emp.emp_name, #{empName}) > 0
+                </if>
+            </where>
+        ) TMP
+    ) WHERE rn
+    <if test="page == 0">
+        BETWEEN 1 AND #{size}
+    </if>
+    <if test="page != 0">
+        BETWEEN (#{page} - 1) * #{size} + 1 AND #{page} * #{size}
+    </if>
+     ORDER BY  board.board_no DESC
+</select> -->
+
+
 		
 		<!-- 토탈 카운트 조회 -->
 		<select id="getTotalCount" resultType="int">

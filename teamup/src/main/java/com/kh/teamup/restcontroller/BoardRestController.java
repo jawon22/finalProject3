@@ -84,9 +84,6 @@ public class BoardRestController {
 
 	    return boardDao.selectOne(boardNo);
 	}
-
-
-	
 	
 	@Operation(description = "공지사항 목록+페이지네이션(회사기준)")
 	@GetMapping("/listPaged/{comId}")
@@ -105,6 +102,14 @@ public class BoardRestController {
 	    List<BoardVO> pagedList = boardDao.listPaged(boardVO);
 	    return pagedList;
 	}
+	
+//	@Operation(description = "공지사항 목록+페이지네이션(회사기준)")
+//	@PostMapping("/listPaged/")
+//	public List<BoardVO> listPaged(@RequestBody BoardVO boardVO) {
+//	    int totalCount = boardDao.getTotalCount(boardVO);
+//	    boardVO.setTotalCount(totalCount);
+//	    return boardDao.listPaged(boardVO);
+//	}
 
 	@Operation(description = "공지사항 총 갯수")
 	@GetMapping("/totalCount/{comId}")
@@ -118,9 +123,6 @@ public class BoardRestController {
 	        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	    }
 	}
-
-
-
 	
 	@Operation(description = "공지사항 삭제")
 	@DeleteMapping("/{boardNo}")
