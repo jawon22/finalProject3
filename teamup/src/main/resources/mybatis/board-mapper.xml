@@ -80,7 +80,7 @@
 		 </update>
 		 
 		<!--공지사항 목록 페이지네이션 추가 -->
-	<select id="listPaged" resultType="BoardVO">
+		<select id="listPaged" resultType="BoardVO">
 			    select * from (
 			        select rownum as rnum, b.* from (
 			             SELECT 

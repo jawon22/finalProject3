@@ -10,7 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data @Builder @AllArgsConstructor @NoArgsConstructor 
-public class BoardNameVO {
+public class BoardNameVO {//메인목록 + 상세(수정용)+상세(조회수증가)
     private long boardNo;
     private int empNo;
     private int deptNo;

@@ -38,7 +38,6 @@ public class ReplyRestController {
 	@PostMapping("/")
 	public void insert(@RequestBody ReplyDto replyDto) {
 		replyDao.insert(replyDto);
-		
 		//댓글 개수 업데이트
 		boardDao.updateBoardReplycount(replyDto.getReplyOrigin());
 	}
@@ -54,7 +53,7 @@ public class ReplyRestController {
 	public void delete(@PathVariable long replyNo) {
 	    ReplyDto reply = replyDao.selectReply(replyNo); // 댓글 번호로 댓글 정보를 가져옴
 	    long replyOrigin = reply.getReplyOrigin();
-	    
+	   
 	    replyDao.deleteReply(replyNo);
 
 	    // 댓글 개수 업데이트

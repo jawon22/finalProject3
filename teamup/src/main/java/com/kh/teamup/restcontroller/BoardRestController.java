@@ -103,7 +103,7 @@ public class BoardRestController {
 	    return pagedList;
 	}
 	
-//	@Operation(description = "공지사항 목록+페이지네이션(회사기준)")
+//	@Operation(description = "공지사항 목록+페이지네이션+복합검색(회사기준)")
 //	@PostMapping("/listPaged/")
 //	public List<BoardVO> listPaged(@RequestBody BoardVO boardVO) {
 //	    int totalCount = boardDao.getTotalCount(boardVO);

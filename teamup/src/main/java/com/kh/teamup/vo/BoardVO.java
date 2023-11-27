@@ -11,7 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data @Builder @AllArgsConstructor @NoArgsConstructor 
-public class BoardVO {
+public class BoardVO {//공지사항목록(+페이지네이션)
     private long boardNo;
     private int empNo;
     private int deptNo;

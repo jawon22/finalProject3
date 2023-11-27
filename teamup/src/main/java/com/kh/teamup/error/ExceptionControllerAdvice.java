@@ -13,7 +13,7 @@ public class ExceptionControllerAdvice {
 	//[1] No TargetException이 발생하면 사용자에게 404반환
 	@ExceptionHandler(NoTargetException.class)
 	public ResponseEntity<?> error404(Exception e){
-		log.warn("404 발생", e);
+//		log.warn("404 발생", e);
 		return ResponseEntity.notFound().build();
 	}
 	
@@ -21,7 +21,7 @@ public class ExceptionControllerAdvice {
 //	[2] 그 외 예외가 발생하면 사용자에게 500을 반환
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<String> error500(Exception e){//오류를 기록
-		log.error("오류 발생", e);
+//		log.error("오류 발생", e);
 		return ResponseEntity.internalServerError().body("server error");
 	}
 
