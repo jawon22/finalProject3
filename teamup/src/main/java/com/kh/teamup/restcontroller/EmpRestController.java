@@ -108,9 +108,7 @@ public class EmpRestController {
 //	    profileDao.connectProfile(profileNo, attachNo);
 //	    
 //	    EmpDto findDto = empDao.selectIdByNo(empNo);
-//	    
-//	    
-//	    
+
 //	    log.debug("findDto={}",findDto);
 //	    
 //	    empService.updateEmpId(empNo, findDto);
@@ -161,12 +159,7 @@ public class EmpRestController {
 	    
 	    EmpDto findDto = empDao.selectIdByNo(empNo);
 	    
-	    
-	    
-	    log.debug("findDto={}",findDto);
-	    
-	    empService.updateEmpId(empNo, findDto);
-		
+	    empService.updateEmpId(empNo, findDto);	
 		
 	}
 	
@@ -279,11 +272,8 @@ public class EmpRestController {
 	public String login(@RequestBody EmpDto inputDto) {
 		//아이디로 조회 
 		EmpDto findDto = empDao.selecOne(inputDto.getEmpId());
-		
-		
+				
 		boolean isMach =encoder.matches(inputDto.getEmpPw(),findDto.getEmpPw()) ;
-		
-		log.debug("??={}",isMach);
 		
 		if(isMach==true) {
 			Date now = new Date();
@@ -297,14 +287,10 @@ public class EmpRestController {
 	        
 	        new EmpToken();
 			EmpToken empToken = EmpToken.builder().token(token).build();
-	        
-	        
+	        	        
 	        empDao.setToken(empToken);
-	        
-	        
+        
 	        return token;
-	        
-	        
 
 		}
 		else {
@@ -320,23 +306,19 @@ public class EmpRestController {
 		
 	}
 	
-	
 	//토큰 지우기 
 	
 	
-	
-	
-	
+
 	
 	@PostMapping("/search/")
-	public List<SearchVO> complexSearch(@RequestBody SearchVO searchVO){
-		
+	public List<SearchVO> complexSearch(@RequestBody SearchVO searchVO){		
 		return empDao.search(searchVO);
 	}
+	
 	@GetMapping("/mypage/{empNo}")
 	public EmpDto myPage(@PathVariable int empNo) {
-		return empDao.selectIdByNo(empNo);
-		
+		return empDao.selectIdByNo(empNo);	
 	}
 	
 	@PostMapping("/empListByDeptCom")
@@ -345,39 +327,30 @@ public class EmpRestController {
 	}
 	
 	
-	
 	@PutMapping("/updateDept/{empId}")
 	public void updateDept(@PathVariable String empId,@RequestBody EmpDto empDto) {
 		//부서 이동시키고
 		empDao.updateDept(empId, empDto);
-		log.debug("dto={}",empDto);
-		log.debug("id={}",empId);
-
-		//이동시킨 부서로 사원번호 이전
-		
-		empDao.changeEmpId(empId);
-		
+		//이동시킨 부서로 사원번호 이전	
+		empDao.changeEmpId(empId);	
 		
 	}
 	
 	@PutMapping("/updateExit/{empId}")
 	public void updateExit(@PathVariable String empId,@RequestBody EmpDto empDto) {
-		
 		empDao.updateExit(empId, empDto);
 	}
 	
 	@GetMapping("/count/{comId}")
 	public Integer count(@PathVariable String comId) {
 		return empDao.count(comId);
-	}
-	
+	}	
 	
 	
 	@PutMapping("/adminEmpUpdate/{empNo}") 
 	public void adminEmpUpdate(@PathVariable int empNo, @RequestBody RequestDto requestDto) {
 		
-		empDao.empInfoUpdate(empNo,requestDto.getEmpDto());
-		
+		empDao.empInfoUpdate(empNo,requestDto.getEmpDto());	
 		salDao.edit(empNo, requestDto.getSalDto());
 		
 	}
@@ -399,24 +372,11 @@ public class EmpRestController {
 	
 	
 	@PutMapping("/changePw/{empNo}")
-	public void changePw(@PathVariable int empNo, @RequestBody EmpDto empDto) {
+	public void changePw(@PathVariable int empNo, @RequestBody EmpDto empDto) {		
 		
-		
-		
-		
-		
-		
-		
-		String newPw = empDto.getEmpPw();
-		
-		String incodePw = encoder.encode(newPw);
-		log.debug("pw={}",incodePw);
-		
+		String newPw = empDto.getEmpPw();		
+		String incodePw = encoder.encode(newPw);		
 		empDto.setEmpPw(incodePw);
-		
-		log.debug("dto={}", empDto);
-		
-		
 		empDao.empInfoUpdate(empNo, empDto);
 		
 	}
@@ -425,15 +385,10 @@ public class EmpRestController {
 	@PostMapping("/findPw/{empNo}")
 	public void findPw(@PathVariable int empNo ,@RequestBody EmpDto inputDto) {
 		
-		String myPw = inputDto.getEmpPw();
-		
-		EmpDto findDto = empDao.selectOne(empNo);
-		
-		String originPw = findDto.getEmpPw();
-		
-		boolean result = encoder.matches(myPw, originPw);
-		
-		
+		String myPw = inputDto.getEmpPw();		
+		EmpDto findDto = empDao.selectOne(empNo);		
+		String originPw = findDto.getEmpPw();	
+		boolean result = encoder.matches(myPw, originPw);		
 		
 	}
 

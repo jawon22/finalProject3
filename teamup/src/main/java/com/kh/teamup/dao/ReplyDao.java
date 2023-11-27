@@ -12,7 +12,5 @@ public interface ReplyDao {
 	void deleteReply(long replyNo);
 	void editReply(ReplyDto replyDto, long replyNo);
 	ReplyDto selectReply(long replyNo);
-	
-	
 
 }

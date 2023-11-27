@@ -67,7 +67,6 @@ public class ApproveRestController { //결재 테이블
 		ApproveDto approveDto = approveInputVO.getApproveDto();
 				
 		approveDao.insert(approveDto);  // 인서트
-		log.debug("approveDto={}",approveDto);
 		
 //		// 결재선에 등록자 설정, 결재번호 설정 후 approvePathDto를 꺼낸 뒤 등록
 		ApprovePathDto approvePathDto = approveInputVO.getApprovePathDto();
@@ -80,12 +79,10 @@ public class ApproveRestController { //결재 테이블
 		approvePathDto.setApprNo(approveDto.getApprNo());
 		approvePathDto.setApprSender(approveDto.getApprSender());
 		approvePathDao.insert(approvePathDto);
-		log.debug("approvePathDto={}",approvePathDto);
 		
 		// 승인자가 몇명인지 파악한후 for문으로 insert
 		List<ReceiversDto> receiversDto = approveInputVO.getReceiversDtoList();
 		List<Integer> receivers = new ArrayList<>();
-		log.debug("dto= {}",receiversDto);
 		for(int i=0; i<receiversDto.size();i++) {
 			receivers.add(i, receiversDto.get(i).getReceiversReceiver());
 		}
@@ -96,7 +93,6 @@ public class ApproveRestController { //결재 테이블
 			receiversDto.get(i).setReceiversNo(receiverNo); //시퀀스 설정
 			receiversDto.get(i).setPathNo(approvePathDto.getApprPathNo()); //승인자테이블에 결재선 번호를 설정
 			receiversDto.get(i).setReceiversReceiver(receivers.get(i));
-			log.debug("dto= {}", receiversDto.get(i));
 			receiversDao.insert(receiversDto.get(i));
 		}
 		
@@ -118,8 +114,6 @@ public class ApproveRestController { //결재 테이블
 				referrersDao.insert(referrersDto.get(i));
 			}
 		}
-		
-		log.debug("VO={}",approveInputVO);
 	}
 	
 	

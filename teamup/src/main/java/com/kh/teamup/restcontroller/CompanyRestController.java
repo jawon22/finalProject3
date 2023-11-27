@@ -190,8 +190,7 @@ public class CompanyRestController {
 //		
 		//input이 앞에 있어야 함
 		boolean isMatch = encoder.matches( inputDto.getComPw(),findDto.getComPw());
-		
-		log.debug("match={}", isMatch);
+
 
 		return isMatch;
 

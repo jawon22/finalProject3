@@ -44,7 +44,7 @@ public class RegularSalInsertServiceImpl implements RegularSalInsertService{
 	
 	//스케줄러
 //	@Scheduled(cron = "0 0 10 * * ?")//매달 10일날 실행
-//	@Scheduled(fixedRate = 30000)//1초(1000ms)에 한번씩 실행
+//	@Scheduled(fixedRate = 50000)//5초(1000ms/1초)에 한번씩 실행
 	@Override
 		public void insertSalForAllEmp() {
 		

@@ -52,19 +52,11 @@ public class EmpService {
 		String tempPw=UUID.randomUUID().toString().replace("-", "");//-를 제거
 		tempPw = tempPw.substring(0,10);//tempPw를 앞에서부터 10자리 잘라줌
 		
-		log.debug("임시비번={}",tempPw);
-		
 		//여시서 임시비밀번호를 insert
 		
 		String convert =encoder.encode(tempPw);
-		log.debug("convert={}",convert);
 		empDto.setEmpPw(convert);//이거를 보내주고
 		empDao.empInfoUpdate(empNo, empDto);
-		
-		log.debug("dto={}",empDto);
-		
-		
-		log.debug("findDto={}", findDto);
 		
 		if(findDto.getEmpEmail() == null) return;
 		
@@ -73,8 +65,6 @@ public class EmpService {
 		
 		helper.setTo(findDto.getEmpEmail());
 		helper.setSubject("임시비밀번호 생성");
-		
-		log.debug("email={}",findDto.getEmpEmail());
 		
 		ClassPathResource resource = new ClassPathResource("templates/email2.html");
 		
@@ -89,7 +79,7 @@ public class EmpService {
 		scanner.close();
 		
 		String text = buffer.toString();
-		log.debug(text);
+
 		Document doc = Jsoup.parse(text);
 		
 		Element who = doc.getElementById("who");

@@ -55,15 +55,22 @@ public class BoardDaoImpl implements BoardDao{
 		return sqlSession.update("board.updateRcount", boardNo)>0;
 	}
 	
-	@Override
+	@Override//게시글 총 갯수
 	public int getTotalCount(BoardVO boardVO) {
 	    return sqlSession.selectOne("board.getTotalCount", boardVO);
+	}
+	
+	@Override
+	public int getSearchCount(BoardVO boardVO) {
+		return sqlSession.selectOne("board.getSearchTotalCount", boardVO);
 	}
 
 	@Override
 	public List<BoardVO> listPaged(BoardVO boardVO) {
 	    return sqlSession.selectList("board.listPaged", boardVO);
 	}
+	
+	
 	
 //	게시글 댓글수 업데이트 
 	@Override

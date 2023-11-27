@@ -49,13 +49,10 @@ public class ProfileRestController {
 		
 		int profileNo = profileDao.sequence();//profileNo를 가져옴
 //		log.debug("profileNo={}", profileNo);
-		
-		
-		
+	
 		ProfileDto profileDto = vo.getProfileDto();
 		profileDto.setProfileNo(profileNo);
-		profileDao.addProfile(profileDto);
-		
+		profileDao.addProfile(profileDto);		
 		
 		MultipartFile attach = vo.getAttach();
 		
@@ -88,26 +85,20 @@ public class ProfileRestController {
 //		int profileNo = profileDao.sequence();//profileNo를 가져옴
 //		int profileNo = profileDao.findProfileNo(empNo);
 		int attachNo = attachDao.sequence();
-		log.debug("attachNo={}", attachNo);
-		
 
 		MultipartFile attach = vo.getAttach();
-		log.debug("at={}", attach);
 		
 		ProfileInfoVO profileInfoVO = vo.getProfileInfoVO();
 		profileDao.updateProfile(profileInfoVO, empNo);
 		profileDao.updateEmp(profileInfoVO, empNo);
-//		log.debug("ProfileUpdateVO={}",vo);
-		
+//		log.debug("ProfileUpdateVO={}",vo);		
 		
 		if(!attach.isEmpty()) {//파일이 있으면
 			//파일 삭제 - 기존 파일이 있을 경우에만 처리
 //			AttachDto attachDto = profileDao.findImage(profileInfoVO.getEmpNo());
-			log.debug("empNo:{}",empNo);
-			log.debug("정보={}",profileDao.findImage(empNo));
+
 			AttachDto attachDto = profileDao.findImage(empNo);
-			
-			log.debug("attachDto={}",attachDto);
+
 			String home = System.getProperty("user.home");
 			File dir = new File(home, "upload");
 			
@@ -121,7 +112,6 @@ public class ProfileRestController {
 				//파일 추가 및 연결
 				//파일번호 생성
 //				int attachNo = attachDao.sequence();
-				log.debug("attachNo={}", attachNo);
 				
 				//신규파일 저장
 				File insertTarget = new File(dir, String.valueOf(attachNo));
@@ -133,7 +123,6 @@ public class ProfileRestController {
 				insertDto.setAttachName(attach.getOriginalFilename());
 				insertDto.setAttachSize(attach.getSize());
 				insertDto.setAttachType(attach.getContentType());
-				log.debug("insertDto={}", insertDto);
 				attachDao.insert(insertDto);
 				
 				//프로필 + 파일 연결

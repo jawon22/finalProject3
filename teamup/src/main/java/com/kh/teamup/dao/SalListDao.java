@@ -13,6 +13,5 @@ public interface SalListDao {
 	List<SalListDto> findByEmpNo(int empNo);//급여내역 목록
 	SalListDto selectOne(SalListDetailYearMonthVO vo);//급여내역(사번,연월기준)
 	SalListDto selectOne(int empNo);//최신 급여내역 조회
-	
 
 }
