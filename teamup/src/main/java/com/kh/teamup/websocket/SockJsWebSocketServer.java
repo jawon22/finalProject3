@@ -139,6 +139,7 @@ public class SockJsWebSocketServer extends TextWebSocketHandler {
 			    if (roomMembers != null) {
 			        for (ClientVO c : roomMembers) {
 			            c.sendMessage(tm);
+			            log.debug("members",c);
 			        }
 			    }
 		}
@@ -168,6 +169,7 @@ public class SockJsWebSocketServer extends TextWebSocketHandler {
 		// 그 외의 타입인 경우
 		else {
 			log.warn("Unknown message type: {}", type);
+			
 			// 예외 처리 또는 로깅
 		}
 
