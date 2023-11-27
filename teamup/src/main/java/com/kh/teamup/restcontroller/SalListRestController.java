@@ -72,10 +72,8 @@ public class SalListRestController {
 					
 					// 근무 시간 계산 로직 추가
 					int totalWorkingHours = attendDao.totalWorkingTimeByMonth(vo);
-					log.debug("vo ={}", vo);
 			//		int salMonth = timePay * totalWorkingHours;//통상 시급 * 한달근무시간 (근무시간은 갖고와야함)
 					int salMonth = timePay * totalWorkingHours;
-					log.debug("총근무시간 ={}", totalWorkingHours);
 					List<TaxDto> list = taxDao.selectList();
 					Map<String, Float> map = new HashMap<>();
 					for(TaxDto dto : list) {//taxDto에서 세금명과 세율만 갖고옴

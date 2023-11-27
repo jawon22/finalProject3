@@ -12,8 +12,7 @@ import com.kh.teamup.dto.MessageDto;
 public class MessageDaoImpl implements MessageDao{
 	@Autowired private SqlSession sqlSession;
 	@Override
-	public void send(MessageDto messageDto) {
-		
+	public void send(MessageDto messageDto) {	
 		sqlSession.insert("message.send",messageDto);
 	}
 	

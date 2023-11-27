@@ -11,7 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data @Builder @AllArgsConstructor @NoArgsConstructor 
-public class BoardVO {
+public class BoardVO {//공지사항목록(+페이지네이션)
     private long boardNo;
     private int empNo;
     private int deptNo;
@@ -30,4 +30,5 @@ public class BoardVO {
     private int size;  // 페이지당 항목 수
     private int page;  // 현재 페이지 번호
     private long totalCount;  // 총 게시물 수
+    
 }

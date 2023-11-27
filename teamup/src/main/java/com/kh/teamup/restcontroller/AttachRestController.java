@@ -39,9 +39,7 @@ public class AttachRestController {
 		@GetMapping("/company/{comId}")
 		public ResponseEntity<ByteArrayResource> downloadComImage(@PathVariable String comId) throws IOException{
 			
-			System.out.println("comId = " + comId);
 			AttachDto attachDto = companyDao.findImage(comId);
-			System.out.println("attachDto = " + attachDto);
 			
 			String home = System.getProperty("user.home");
 			File dir = new File(home, "upload");
@@ -71,9 +69,7 @@ public class AttachRestController {
 				public ResponseEntity<ByteArrayResource> downloadProfileImage(@PathVariable int empNo) throws IOException{
 					
 //					System.out.println("profileNo = " + profileNo);
-					System.out.println("empNo = " + empNo);
 					AttachDto attachDto = profileDao.findImage(empNo);
-					System.out.println("wwattachDto = " + attachDto);
 					
 					String home = System.getProperty("user.home");
 					File dir = new File(home, "upload");

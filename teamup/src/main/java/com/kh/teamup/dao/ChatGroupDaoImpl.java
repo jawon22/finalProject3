@@ -14,7 +14,6 @@ public class ChatGroupDaoImpl implements ChatGroupDao{
 	@Override
 	public void addMember(int chatRoomNo, int chatMember) {
 		Map<String, Object> params = Map.of("chatRoomNo", chatRoomNo, "chatMember", chatMember);
-		System.out.println(params);
 		sqlSession.insert("chat.addMember", params);
 	}
 

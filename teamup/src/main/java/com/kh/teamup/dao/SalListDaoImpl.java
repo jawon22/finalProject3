@@ -37,8 +37,7 @@ public class SalListDaoImpl implements SalListDao{
 	
 	@Override//사원별 급여내역 목록
 	public List<SalListDto> findByEmpNo(int empNo) {
-		List<SalListDto> list = sqlSession.selectList("salList.findByEmpNo", empNo);
-		return list;
+		return sqlSession.selectList("salList.findByEmpNo", empNo);
 	}
 	
 	@Override

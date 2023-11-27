@@ -8,7 +8,6 @@ public interface ApprovePathDao {
 
 	int sequence();
 	void insert(ApprovePathDto approvePathDto);
-	
 	List<ApprovePathDto> selectByApprNo(int apprNo); //결재번호에 해당하는 결재선 모두 조회
 
 }
