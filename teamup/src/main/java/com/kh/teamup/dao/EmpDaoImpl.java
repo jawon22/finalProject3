@@ -12,6 +12,7 @@ import com.kh.teamup.dto.EmpDto;
 import com.kh.teamup.dto.EmpToken;
 import com.kh.teamup.vo.EmpComplexSearchVO;
 import com.kh.teamup.vo.EmpSearchBydeptComVO;
+import com.kh.teamup.vo.PageRequestVO;
 import com.kh.teamup.vo.SearchVO;
 @Repository
 public class EmpDaoImpl implements EmpDao {
@@ -125,4 +126,18 @@ public class EmpDaoImpl implements EmpDao {
 		return sqlSession.selectOne("search.count",comId);
 	}
 	
+	
+	
+	
+	@Override
+	public int pageCount(PageRequestVO pageSearchVO) {
+		
+		
+		return sqlSession.selectOne("search.pageCount",pageSearchVO);
+	}
+	
+	@Override
+	public List<SearchVO> pagingList(PageRequestVO pageSearchVO) {
+		return sqlSession.selectList("search.pagingList",pageSearchVO);
+	}
 }

@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
 public class SearchVO {
+	
+	
+	
 	private String comId;
 	private String comName;
 	private int deptNo;
@@ -23,20 +26,20 @@ public class SearchVO {
 	private int salAnnual;
 	private Date empJoin;
 	private Date empExit;
-	
-	
-	private String select;
+//	
+//	
+	private String type;
 	private String keyword;
-	private int salMax;//sal<salmax
-	private int salMin;//sal>salmin
-	
+//	private int salMax;//sal<salmax
+//	private int salMin;//sal>salmin
+//	
 	private String joinStart;
 	private String joinEnd;
 	
-	private int page;
-	private Integer empCount;
-	private int size;
-	
-	
+//	private int page;
+//	private Integer empCount;
+//	private int size;
+//	
+//	
 
 }

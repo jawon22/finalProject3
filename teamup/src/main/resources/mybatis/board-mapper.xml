@@ -29,7 +29,7 @@
 			                    WHERE board.com_id = #{comId}
 			                    ORDER BY board.board_no DESC
 			                ) b
-			                WHERE ROWNUM <= 7
+			                WHERE ROWNUM <= 6
 			            ) board
 			        JOIN 
 			            emp ON board.emp_no = emp.emp_no
