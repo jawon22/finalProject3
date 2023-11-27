@@ -6,6 +6,8 @@ import com.kh.teamup.dto.EmpDto;
 import com.kh.teamup.dto.EmpToken;
 import com.kh.teamup.vo.EmpComplexSearchVO;
 import com.kh.teamup.vo.EmpSearchBydeptComVO;
+import com.kh.teamup.vo.PageRequestVO;
+import com.kh.teamup.vo.PageResponseVO;
 import com.kh.teamup.vo.SearchVO;
 
 public interface EmpDao {
@@ -43,6 +45,10 @@ public interface EmpDao {
 	
 	
 	Integer count(String comId);
+
+	int pageCount(PageRequestVO pageSearchVO);
+
+	List<SearchVO> pagingList(PageRequestVO pageSearchVO);
 	
 
 }

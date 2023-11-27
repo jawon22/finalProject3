@@ -107,8 +107,8 @@
 		<if test="page !=0">
 			BETWEEN (#{page} - 1) * #{size} + 1 AND #{page} * #{size}
 		</if>
-		
-		order by  dept_name,emp_name 
+
+		order by dept_name,emp_name
 	</select>
 
 	<select id="count" resultType="int">
@@ -129,6 +129,100 @@
 
 
 	</select>
+
+
+
+	<select id="pageCount" resultType="int">
+		SELECT COUNT(*)
+		FROM emp e
+		LEFT OUTER JOIN dept d ON e.dept_no = d.dept_no
+		LEFT OUTER JOIN com c ON e.com_id = c.com_id
+		LEFT OUTER JOIN sal s ON s.EMP_NO = e.EMP_NO
+		LEFT OUTER JOIN emp_position ep ON e.emp_position_no = ep.emp_position_no
+		<where>
+			<if
+				test="searchVO.keyword != null and searchVO.type != null">
+				${searchVO.type} LIKE CONCAT(#{searchVO.keyword}, '%')
+			</if>
+			<if test="searchVO.comId != null">
+				AND c.com_id = #{searchVO.comId}
+			</if>
+			<if test="searchVO.deptNo != 0">
+				AND d.dept_no = #{searchVO.deptNo}
+			</if>
+			<if test="searchVO.empName != null">
+				AND e.emp_name = #{searchVO.empName}
+			</if>
+			<if test="searchVO.joinStart != null">
+				AND e.emp_join >= #{searchVO.joinStart}
+			</if>
+			<if test="searchVO.joinEnd != null">
+            <![CDATA[
+            AND e.emp_join <= #{searchVO.joinEnd}
+            ]]>
+			</if>
+		</where>
+	</select>
+
+
+<select id="pagingList" resultType="SearchVO">
+    SELECT *
+    FROM (
+        SELECT ROWNUM rn, TMP.*
+        FROM (
+            SELECT
+                e.COM_ID,
+                c.com_name,
+                e.dept_no,
+                e.emp_join,
+                e.emp_exit,
+                d.dept_name,
+                e.emp_position_no,
+                ep.emp_position_name,
+                e.emp_no,
+                e.emp_id,
+                e.EMP_NAME,
+                e.emp_tel,
+                e.emp_email
+            FROM emp e
+                LEFT OUTER JOIN dept d ON e.dept_no = d.dept_no
+                LEFT OUTER JOIN com c ON e.com_id = c.com_id
+                LEFT OUTER JOIN sal s ON s.EMP_NO = e.EMP_NO
+                LEFT OUTER JOIN emp_position ep ON e.emp_position_no = ep.emp_position_no
+            <where>
+                <if test="searchVO.keyword != null and searchVO.type != null">
+                    AND ${searchVO.type} LIKE CONCAT(#{searchVO.keyword}, '%')
+                </if>
+                <if test="searchVO.comId != null">
+                    AND c.com_id = #{searchVO.comId}
+                </if>
+                <if test="searchVO.deptNo != 0">
+                    AND d.dept_no = #{searchVO.deptNo}
+                </if>
+                <if test="searchVO.empName != null">
+                    AND e.emp_name = #{searchVO.empName}
+                </if>
+                <if test="searchVO.joinStart != null">
+                    AND e.emp_join >= #{searchVO.joinStart}
+                </if>
+                <if test="searchVO.joinEnd != null">
+                    <![CDATA[
+                    AND e.emp_join <= #{searchVO.joinEnd}
+                    ]]>
+                </if>
+            </where>
+            ORDER BY dept_name, emp_name
+        ) TMP
+    ) WHERE rn
+    <choose>
+        <when test="pagenationVO.page == 0">
+            BETWEEN 1 AND #{pagenationVO.size}
+        </when>
+        <otherwise>
+            BETWEEN (#{pagenationVO.page} - 1) * #{pagenationVO.size} + 1 AND #{pagenationVO.page} * #{pagenationVO.size}
+        </otherwise>
+    </choose>
+</select>
 
 
 </mapper>

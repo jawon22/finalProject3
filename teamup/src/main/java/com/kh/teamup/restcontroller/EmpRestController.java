@@ -34,6 +34,9 @@ import com.kh.teamup.dto.SalDto;
 import com.kh.teamup.service.EmpService;
 import com.kh.teamup.vo.EmpComplexSearchVO;
 import com.kh.teamup.vo.EmpSearchBydeptComVO;
+import com.kh.teamup.vo.PageRequestVO;
+import com.kh.teamup.vo.PageResponseVO;
+import com.kh.teamup.vo.PagenationVO;
 import com.kh.teamup.vo.SearchVO;
 
 import io.jsonwebtoken.Jwts;
@@ -333,6 +336,31 @@ public class EmpRestController {
 		
 		return empDao.search(searchVO);
 	}
+	
+	
+	
+	
+	@PostMapping("/pagenation/")
+	public PageResponseVO pagenation(@RequestBody PageRequestVO pageRequestVO){
+		//카운트 가져오기 
+		
+		//검색한 갯수
+		int count = empDao.pageCount(pageRequestVO);
+		log.debug("몇개?={}",count);
+		
+		PagenationVO pagenationVO = new PagenationVO();
+		
+		pagenationVO.setCount(count);
+		List<SearchVO> list = empDao.pagingList(pageRequestVO);
+		
+		PageResponseVO pageResponseVO =  PageResponseVO.builder().searchVO(list).pagenationVO(pagenationVO).build();
+		
+		
+		return pageResponseVO;
+	}
+	
+	
+	
 	@GetMapping("/mypage/{empNo}")
 	public EmpDto myPage(@PathVariable int empNo) {
 		return empDao.selectIdByNo(empNo);

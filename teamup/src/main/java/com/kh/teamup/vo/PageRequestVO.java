@@ -6,15 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
-public class PagenationVO {
+public class PageRequestVO {
 	
-//	private String type;
-//	private String keyword;
-//	
-	private int page;
-	private int count;
-	private int size;
-	private int navi;
+	private SearchVO searchVO;
+	private PagenationVO pagenationVO;
 	
 
 }
