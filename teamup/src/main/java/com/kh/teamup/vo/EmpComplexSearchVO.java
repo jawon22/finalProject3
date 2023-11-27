@@ -14,6 +14,7 @@ public class EmpComplexSearchVO {
 	private String empPositionNo;
 	private String empPositionName;
 	private String empName; 
+	private String empExit;
 	private String empId;
 	private String empTel;
 	private String empEmail;

@@ -83,6 +83,7 @@
 		e.emp_no,
 		e.emp_id,
 		e.EMP_NAME ,
+		e.emp_exit,
 		e.emp_tel,
 		e.emp_email
 		from
@@ -103,7 +104,7 @@
 			<if test="comName != null">
 				and c.com_name = #{comName}
 			</if>
-
+			
 		</where>
 
 

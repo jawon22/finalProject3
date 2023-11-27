@@ -152,9 +152,10 @@ public class ApproveRestController { //결재 테이블
 	@PutMapping("/pathNo/{pathNo}/receiver/{receiver}")
 	public ResponseEntity<Void> cancel(@PathVariable int pathNo, @PathVariable int receiver,
 			@RequestBody ReceiversDto receiversDto){
-		if(receiversDto.getReceiversReturnRs() ==null) {
+		if(receiversDto.getReceiversReturnRs() == null) {
 			receiversDto.setReceiversReturnRs("반려");
 		}
+		log.debug("dto = {}",receiversDto);
 		
 		boolean result = receiversDao.apprCancel(pathNo, receiver, receiversDto);
 		return result ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
