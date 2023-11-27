@@ -34,7 +34,7 @@
 			</if>
 			 RECEIVERS_CONFIRM_TIME = SYSDATE ,
 			<if test="dto.receiversReturnRs != null">
-			  receivers_return_rs= #{receiversReturnRs} 
+			  receivers_return_rs= #{dto.receiversReturnRs} 
 			</if>
 		</set> 
 		where path_no= #{pathNo} and receivers_receiver = #{receiversReceiver}
@@ -49,9 +49,9 @@
 			<if test="dto.receiversStatus !=null">
 				receivers_status ='N',	
 			</if>
-			 RECEIVERS_CONFIRM_TIME = SYSDATE ,
+			 	RECEIVERS_CONFIRM_TIME = SYSDATE ,
 			<if test="dto.receiversReturnRs != null">
-			  receivers_return_rs= #{receiversReturnRs} 
+			  receivers_return_rs= #{dto.receiversReturnRs} 
 			</if>
 		</set> 
 		where path_no= #{pathNo} and receivers_receiver = #{receiversReceiver}
