@@ -37,9 +37,6 @@ public class CalendarRestController {
 	
 	@PostMapping("/")
 	public void addcal(@RequestBody EmpCalDto empCalDto) {
-		
-		
-		log.debug("Dto={}", empCalDto);
 		calDao.insert(empCalDto);
 	}
 	
@@ -77,7 +74,6 @@ public class CalendarRestController {
 	
 	@PutMapping("/updateDeptCal/{calNo}")
 	public void updateDeptCal(@PathVariable int calNo,@RequestBody EmpCalDto empCalDto) {
-		log.debug("dto={}",empCalDto);
 		calDao.updateDeptCal(calNo, empCalDto);
 	}
 	

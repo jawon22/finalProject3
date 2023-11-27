@@ -29,16 +29,8 @@ public class EmpDaoImpl implements EmpDao {
 	
 	@Override
 	public void addEmp(EmpDto empDto) {
-		
-
-		
-		
 		sqlSession.insert("emp.addEmp",empDto);
 	}
-	
-	
-	
-	
 	
 	
 	
@@ -52,8 +44,7 @@ public class EmpDaoImpl implements EmpDao {
 	}
 	
 	@Override
-	public List<EmpDto> empList() {
-		
+	public List<EmpDto> empList() {	
 		return sqlSession.selectList("emp.empList");
 	}
 	
@@ -71,8 +62,7 @@ public class EmpDaoImpl implements EmpDao {
 	
 	
 	@Override
-	public List<EmpComplexSearchVO> complexSearch(EmpComplexSearchVO VO) {
-		
+	public List<EmpComplexSearchVO> complexSearch(EmpComplexSearchVO VO) {	
 		return sqlSession.selectList("emp.complexSearch",VO);
 	}
 	
@@ -104,7 +94,6 @@ public class EmpDaoImpl implements EmpDao {
 	@Override
 	public void updateDept(String empId, EmpDto empDto) {
 		Map<String, Object> params = Map.of("empId",empId ,"empDto",empDto);
-
 		sqlSession.update("emp.changeDetp",params);
 	}
 	
@@ -127,13 +116,12 @@ public class EmpDaoImpl implements EmpDao {
 		
 	};
 	@Override
-	public EmpToken findToken(String token) {
-		
+	public EmpToken findToken(String token) {		
 		return sqlSession.selectOne("emp.findtoken",token);
 	}
+	
 	@Override
-	public Integer count(String comId) {
-		
+	public Integer count(String comId) {		
 		return sqlSession.selectOne("search.count",comId);
 	}
 	
