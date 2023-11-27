@@ -80,7 +80,7 @@
 		 </update>
 		 
 		<!--공지사항 목록 페이지네이션 추가 -->
-		<select id="listPaged" resultType="BoardVO">
+	<select id="listPaged" resultType="BoardVO">
 			    select * from (
 			        select rownum as rnum, b.* from (
 			             SELECT 
@@ -99,10 +99,10 @@
 			        board.board_no DESC
 			        ) b where rownum &lt;= #{page} * #{size}
 			    ) where rnum &gt; (#{page} - 1) * #{size}
-			</select>
+			</select> 
 		
-<!-- 공지사항 목록 페이지네이션 추가
-<select id="listPaged" resultType="BoardVO">
+<!-- 공지사항 목록 페이지네이션 추가 -->
+<!-- <select id="listPaged" resultType="BoardVO">
     SELECT * FROM (
         SELECT ROWNUM rn, TMP.*
         FROM (
@@ -144,6 +144,34 @@
      ORDER BY  board.board_no DESC
 </select> -->
 
+
+		<!-- 검색 토탈 카운트 조회  -->
+		<select id="getSearchTotalCount" resultType="int">
+			 SELECT count(*)
+			    FROM (
+			        SELECT board.*
+			        FROM board
+			        JOIN emp ON board.emp_no = emp.emp_no
+			        JOIN dept ON emp.dept_no = dept.dept_no
+			        <where>
+			            <if test="keyword != null and select != null">
+			                ${select} LIKE CONCAT(#{keyword}, '%')
+			            </if>
+			            <if test="comId != null">
+			                and board.com_id = #{comId}
+			            </if>
+			            <if test="boardNo != 0">
+			                and board.board_no = #{boardNo}
+			            </if>
+			            <if test="deptName != null">
+			                AND INSTR(dept.dept_name, #{deptName}) > 0
+			            </if>
+			            <if test="empName != null">
+			                AND INSTR(emp.emp_name, #{empName}) > 0
+			            </if>
+			        </where>
+			    ) AS searchResults
+		</select>
 
 		
 		<!-- 토탈 카운트 조회 -->

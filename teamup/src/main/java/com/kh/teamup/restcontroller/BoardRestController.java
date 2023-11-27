@@ -106,8 +106,20 @@ public class BoardRestController {
 //	@Operation(description = "공지사항 목록+페이지네이션+복합검색(회사기준)")
 //	@PostMapping("/listPaged/")
 //	public List<BoardVO> listPaged(@RequestBody BoardVO boardVO) {
-//	    int totalCount = boardDao.getTotalCount(boardVO);
+//	    int totalCount;
+//
+//	    // 만약 검색어가 입력되었다면 검색 결과의 총 갯수 조회
+//	    if (boardVO.getKeyword() != null && boardVO.getSelect() != null) {
+//	        totalCount = boardDao.getSearchCount(boardVO);
+//	    } else {
+//	        // 검색어가 없으면 전체 공지사항의 총 갯수 조회
+//	        totalCount = boardDao.getTotalCount(boardVO);
+//	    }
+//
 //	    boardVO.setTotalCount(totalCount);
+//
+//	    // 나머지 페이징 및 목록 조회 로직은 여기에 추가
+//
 //	    return boardDao.listPaged(boardVO);
 //	}
 
