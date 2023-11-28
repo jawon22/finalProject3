@@ -45,19 +45,19 @@ public class TodoRestController {
 	}
 	
 	@Operation(description = "todo 사원별 상세 조회")
-	@GetMapping("/{todoNo}")
+	@GetMapping("/detail/{todoNo}")
 	public TodoDto find (@PathVariable int todoNo) {
 		return todoDao.selectOne(todoNo);
 	}
 
 	@Operation(description = "todo 삭제")
-	@DeleteMapping("/{todoNo}")
+	@DeleteMapping("/delete/{todoNo}")
 	public void delete(@PathVariable int todoNo) {
 		todoDao.deleteTodo(todoNo);
 	}
 	
 	@Operation(description = "todo 수정")
-	@PutMapping("/{todoNo}")
+	@PutMapping("/edit/{todoNo}")
 	public void update(@RequestBody TodoDto todoDto, @PathVariable int todoNo) {
 		todoDao.change(todoDto, todoNo);
 	}
