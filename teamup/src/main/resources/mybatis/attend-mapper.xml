@@ -153,7 +153,6 @@
    <!-- 사번별로 연월을 기준으로 해당 달의 총 근무시간이 나오는 구문 -->
    <select id="selectByEmpTotalWorkingTime" resultType="int">
        SELECT
-           -- TO_CHAR(TMP.DT, 'YYYY-MM') AS year_month,
     SUM(NVL(EXTRACT(HOUR FROM (CAST(ATT.attend_end AS TIMESTAMP) - CAST(ATT.attend_start AS TIMESTAMP) - NUMTODSINTERVAL(1, 'HOUR'))), 0)) AS total_working_times
        FROM (
            SELECT
