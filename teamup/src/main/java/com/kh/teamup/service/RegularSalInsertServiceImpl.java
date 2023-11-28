@@ -44,12 +44,11 @@ public class RegularSalInsertServiceImpl implements RegularSalInsertService{
 	
 	//스케줄러
 //	@Scheduled(cron = "0 0 10 * * ?")//매달 10일날 실행
-//	@Scheduled(fixedRate = 50000)//5초(1000ms/1초)에 한번씩 실행
+//	@Scheduled(fixedRate = 500000)//5초(1000ms/1초)에 한번씩 실행	
 	@Override
 		public void insertSalForAllEmp() {
 		
 			List<EmpDto> empList = empDao.empList();
-			
 			for(EmpDto empDto : empList) {
 				// 현재 연월 계산
 				LocalDate currentDate = LocalDate.now();
@@ -60,13 +59,12 @@ public class RegularSalInsertServiceImpl implements RegularSalInsertService{
 				LocalDate previousMonth = currentDate.minusMonths(1);
 				String previousYearMonth = previousMonth.format(dateFormatter);
 				
-				TotalWorkingTimeByMonthVO vo = new TotalWorkingTimeByMonthVO();
 				
+				TotalWorkingTimeByMonthVO vo = new TotalWorkingTimeByMonthVO();
 		        vo.setEmpNo(empDto.getEmpNo());
 		        vo.setYearMonth(previousYearMonth);
 		        
 		        SalDto salDto = salDao.selectOne(vo.getEmpNo());
-
 		        int annualPay = (int) salDto.getSalAnnual();
 		        int timePay = (int) salDto.getSalTime();
 
@@ -106,6 +104,7 @@ public class RegularSalInsertServiceImpl implements RegularSalInsertService{
 		        salListDto.setSalListLtcare(ltcare);
 		        salListDto.setSalListLocal(local);
 		        salListDto.setSalListWork(work);
+				salListDto.setSalListDate(vo.getYearMonth());
 
 		        salListDao.insert(salListDto);
 			}
