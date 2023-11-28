@@ -37,21 +37,21 @@ public class SockJsWebSocketServer extends TextWebSocketHandler {
 
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-		ClientVO client = new ClientVO(session);
-		
-
-		waitingRoom.enter(client);
-		log.debug("client!!={}",client);
-		log.debug("waitingRoom!!={}",waitingRoom);
-
-		log.debug("{}명",waitingRoom.getChatMembers().size());
+//		ClientVO client = new ClientVO(session);
+//		
+//
+//		waitingRoom.enter(client);
+//		log.debug("client!!={}",client);
+//		log.debug("waitingRoom!!={}",waitingRoom);
+//
+//		log.debug("{}명",waitingRoom.getChatMembers().size());
 
 	}
 
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-		ClientVO client = new ClientVO(session);
-		waitingRoom.exit(client);
+//		ClientVO client = new ClientVO(session);
+//		waitingRoom.exit(client);
 		
 	}
 
@@ -104,12 +104,12 @@ public class SockJsWebSocketServer extends TextWebSocketHandler {
 	@Override
 	protected void handleTextMessage(WebSocketSession sender, TextMessage message) throws Exception {
 		// ...
-		log.debug("sender={}",sender.getId());
+//		log.debug("sender={}",sender.getId());
 		Map params = mapper.readValue(message.getPayload(), Map.class); // JSON메세지 해석
 		
-		ClientVO client = new ClientVO(sender);
-		
-		log.debug("클라이언트={}",client.getEmpNo());
+//		ClientVO client = new ClientVO(sender);
+//		
+//		log.debug("클라이언트={}",client.getEmpNo());
 
 
 		// 클라이언트에서 전송한 데이터에서 type과 chatRoomNo 추출
@@ -123,31 +123,31 @@ public class SockJsWebSocketServer extends TextWebSocketHandler {
 		map.put("id", id);
 		map.put("content", content);
 
-		log.debug("type={}", type);
+//		log.debug("type={}", type);
 
 		// 나머지 로직 수행
 
 		if ("message".equals(type)) {
-			   log.debug("Received message content: {}", content);
+//			   log.debug("Received message content: {}", content);
 
 			    String messageJson = mapper.writeValueAsString(map);
 			    TextMessage tm = new TextMessage(messageJson);
-			    log.debug("tm={}", messageJson);
+//			    log.debug("tm={}", messageJson);
 
 			    // 이게 웨이팅 룸이 아니라 개별 방 번호로 전송
 			    List<ClientVO> roomMembers = chatRooms.get(chatRoomNo);
 			    if (roomMembers != null) {
 			        for (ClientVO c : roomMembers) {
 			            c.sendMessage(tm);
-			            log.debug("members",c);
+//			            log.debug("members",c);
 			        }
 			    }
 		}
 		// "enterRoom" 타입인 경우
 		else if ("enterRoom".equals(type)) {
 			String user = (String) params.get("empNo");
-			log.debug("client={}",client);
-			log.debug("User entered chat room: {}", chatRoomNo);
+//			log.debug("client={}",client);
+//			log.debug("User entered chat room: {}", chatRoomNo);
 
 			List<ClientVO> roomMembers = chatRooms.get(chatRoomNo);
 			if (roomMembers == null) {
@@ -156,22 +156,22 @@ public class SockJsWebSocketServer extends TextWebSocketHandler {
 			}
 
 			// 클라이언트가 이미 방에 속해 있는지 확인
-			if (!roomMembers.contains(client)) {
-			    // 클라이언트를 채팅방에 추가
-			    roomMembers.add(client);
-			    log.debug("User entered chat room: {}", chatRoomNo);
-			} else {
-			    log.debug("User is already in the chat room: {}", roomMembers.size());
-			}
+//			if (!roomMembers.contains(client)) {
+//			    // 클라이언트를 채팅방에 추가
+//			    roomMembers.add(client);
+//			    log.debug("User entered chat room: {}", chatRoomNo);
+//			} else {
+//			    log.debug("User is already in the chat room: {}", roomMembers.size());
+//			}
 			}
 		
 
 		// 그 외의 타입인 경우
-		else {
-			log.warn("Unknown message type: {}", type);
-			
+//		else {
+//			log.warn("Unknown message type: {}", type);
+//			
 			// 예외 처리 또는 로깅
-		}
+//		}
 
 	}
 
