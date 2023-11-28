@@ -82,6 +82,9 @@ public class EmpService {
 
 		Document doc = Jsoup.parse(text);
 		
+		Element number = doc.getElementById("number");
+		number.text(findDto.getEmpId());
+		
 		Element who = doc.getElementById("who");
 		who.text(findDto.getEmpName());
 		
