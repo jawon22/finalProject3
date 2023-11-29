@@ -20,7 +20,7 @@
     <style>
         @import url(https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Nanum+Gothic&display=swap);
     </style>
-    <script defer="defer" src="${pageContext.request.contextPath}/js/main.7cf78fa3.js"></script>
+    <script defer="defer" src="${pageContext.request.contextPath}/js/main.ca2398c9.js"></script>
     <link href="${pageContext.request.contextPath}/css/main.2664b3bc.css" rel="stylesheet">
 </head>
 
