@@ -328,7 +328,7 @@ public class EmpRestController {
 		
 		//검색한 갯수
 		int count = empDao.pageCount(pageRequestVO);
-		log.debug("몇개?={}",count);
+//		log.debug("몇개?={}",count);
 		
 		PagenationVO pagenationVO = new PagenationVO();
 		
