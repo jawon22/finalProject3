@@ -149,7 +149,7 @@ public class ApproveRestController { //결재 테이블
 		if(receiversDto.getReceiversReturnRs() == null) {
 			receiversDto.setReceiversReturnRs("반려");
 		}
-		log.debug("dto = {}",receiversDto);
+//		log.debug("dto = {}",receiversDto);
 		
 		boolean result = receiversDao.apprCancel(pathNo, receiver, receiversDto);
 		return result ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
